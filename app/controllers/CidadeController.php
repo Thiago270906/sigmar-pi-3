@@ -56,10 +56,10 @@ class CidadeController
         if (!$cidade) {
             die("Cidade não encontrada");
         }
-        require __DIR__ . '/../views/cidades/edi.php';
+        require __DIR__ . '/../views/cidades/edit.php';
     }
     
-    public function update()
+    public function update()    
     {
         $id = $_POST['id'];
         $nome = $_POST['nome'];
@@ -69,6 +69,21 @@ class CidadeController
             $cidade->setId($id);
             $this->repository->atualizar($cidade);
             header("Location: index.php?sucesso=2");
+            exit;
+        } catch (Exception $e) {
+            echo "Erro: " . $e->getMessage();
+        }
+    }
+
+    public function delete()
+    {
+        $id = $_GET['id'] ?? null;
+        if (!$id) {
+            die("ID não informado");
+        }
+        try {
+            $this->repository->excluir($id);
+            header("Location: index.php?sucesso=3");
             exit;
         } catch (Exception $e) {
             echo "Erro: " . $e->getMessage();

@@ -4,7 +4,7 @@
     <p style="color: green;">Cidade salva com sucesso!</p>
 <?php endif; ?>
 
-<form method="POST" action="">
+<form method="POST" action="index.php">
 
     <label>Nome: </label>
     <input type="text" name="nome" required>

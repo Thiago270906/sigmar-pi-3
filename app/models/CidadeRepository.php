@@ -28,7 +28,7 @@ class CidadeRepository
 
     public function listar()
     {
-        $stmt = $this->conn->query("SELECT * FROM cidades");
+        $stmt = $this->conn->query("SELECT * FROM cidades WHERE delete_at IS NULL");
         $dados = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $cidades = [];
 
@@ -68,6 +68,14 @@ class CidadeRepository
             $cidade->getEstado(),
             $cidade->getId()
         ]);
+    }
+
+    public function excluir($id)
+    {
+        $stmt = $this->conn->prepare(
+            "UPDATE cidades SET delete_at = NOW() WHERE id = ?"
+        );
+        $stmt->execute([$id]);
     }
 }
 ?>

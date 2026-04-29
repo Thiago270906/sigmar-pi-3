@@ -3,11 +3,21 @@ require_once __DIR__ . '/../app/controllers/CidadeController.php';
 
 $controller = new CidadeController();
 
+$action = $_GET['action'] ?? null;
+
 // Se for POST -> SALVAR
-if ($_SERVER['REQUEST_METHOD'] ==='POST') {
-    $controller->update();
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['id']) && !empty($_POST['id'])) {
+        $controller->update(); // edição
+    } else {
+        $controller->store(); // criação
+    }
+} elseif ($action === 'create') {
+    $controller->create(); 
+} elseif (isset($_GET['delete'])) {
+    $controller->delete(); 
 } elseif (isset($_GET['edit'])) {
-    $controller->edit($_GET['id']);
+    $controller->edit(); 
 } else {
     $controller->index();
 }
