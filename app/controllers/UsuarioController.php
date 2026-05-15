@@ -19,8 +19,15 @@ class UsuarioController
 
             $_SESSION['usuario'] = $usuario;
 
-            header("Location: ../app/views/administrador/dashboard");
+            
+            $_SESSION['usuario'] = [
+                'id' => $usuario['id_usuario'],
+                'nome' => $usuario['nome'],
+                'cargo' => $usuario['cargo']
+            ];
 
+            header("Location: index.php?acao=dashboard");
+                
         } else {
 
             echo "Senha inválida";
