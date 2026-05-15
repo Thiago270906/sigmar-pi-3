@@ -65,7 +65,7 @@ class Usuario
 
         // Simples validação
         if (empty($nome)) {
-            throw new Exception("O nome da cidade é obrigatório");
+            throw new Exception("Nome é um campo obrigatório");
         }
         $this->nome = $nome;
     }

@@ -1,16 +1,27 @@
 <?php
 
 require_once __DIR__ . '/../../config/database.php';
-require_once __DIR__ . '/../models/Cidade.php';
+require_once __DIR__ . '/../models/Usuario.php';
 
-class CidadeRepository
+class UsuarioRepository
 {
     private $conn;
 
     public function __construct()
     {
-        //Consegue conexão via Singleton
         $db = Database::getInstance();
+
         $this->conn = $db->getConnection();
+    }
+
+    public function buscarPorEmail($email)
+    {
+        $sql = "SELECT * FROM usuarios WHERE email = ?";
+
+        $stmt = $this->conn->prepare($sql);
+
+        $stmt->execute([$email]);
+
+        return $stmt->fetch();
     }
 }

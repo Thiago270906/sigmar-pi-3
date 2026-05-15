@@ -1,4 +1,5 @@
-CREATE DATABASE IF NOT EXISTS sigmar;
+DROP DATABASE sigmar;
+CREATE DATABASE sigmar;
 USE sigmar;
 
 -- =========================
@@ -196,6 +197,6 @@ VALUES
 (
 'Administrador',
 'admin@sigmar.com',
-'SENHA_HASH_AQUI',
+'$2y$10$rJLBU0YwQ1dzUasWKWXez.hmoUp4HFm5kZePYg.3830B3Rqf1RaHq',
 'admin'
 );

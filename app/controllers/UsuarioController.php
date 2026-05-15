@@ -1,14 +1,29 @@
 <?php
-
-require_once __DIR__ . '/../models/Cidade.php';
-require_once __DIR__ . '/../models/CidadeRepository.php';
-
-class CidadeController
+require_once __DIR__ . '/../models/UsuarioRepository.php';
+class UsuarioController
 {
-    private $repository;        //Guarda o objeto que acessa o banco de dados
-
-    public function __construct()
+    public function login()
     {
-        $this->repository =  new CidadeRepository();
+        $email = $_POST['email'];
+        $senha = $_POST['senha'];
+
+        $repo = new UsuarioRepository();
+
+        $usuario = $repo->buscarPorEmail($email);
+
+        if(!$usuario) {
+            die("Usuário inválido");
+        }
+
+        if(password_verify($senha, $usuario['senha_hash'])) {
+
+            $_SESSION['usuario'] = $usuario;
+
+            header("Location: ../app/views/administrador/dashboard");
+
+        } else {
+
+            echo "Senha inválida";
+        }
     }
 }
