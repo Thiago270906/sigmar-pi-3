@@ -6,6 +6,35 @@
     <title>Dashboard</title>
 </head>
 <body>
-    <h1>Olá Dashboard</h1>
+
+    <h1>Painel do Administrador</h1>
+
+    <hr>
+
+    <ul>
+
+        <li>
+            <a href="index.php?acao=maquinas">
+                Máquinas
+            </a>
+        </li>
+
+        <li>
+            <a href="index.php?acao=funcionarios">
+                Funcionários
+            </a>
+        </li>
+
+        <li>
+            <a href="index.php?acao=manutencoes">
+                Manutenções
+            </a>
+        </li>
+
+    </ul>
+
+    <a href="index.php?acao=logout">
+        Sair
+    </a>
 </body>
 </html>

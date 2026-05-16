@@ -20,6 +20,16 @@
             Entrar
         </button>
 
+        <?php if(isset($_SESSION['erro'])): ?>
+
+            <p>
+                <?= $_SESSION['erro'] ?>
+            </p>
+
+            <?php unset($_SESSION['erro']); ?>
+
+        <?php endif; ?>
+
     </form>
 
 </body>
