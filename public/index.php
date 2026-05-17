@@ -52,6 +52,22 @@ switch($acao)
 
     break;
 
+    case 'form-maquina':
+
+        $controller = new MaquinaController();
+
+        $controller->formCadastrar();
+
+    break;
+
+    case 'cadastrar-maquina':
+
+        $controller = new MaquinaController();
+
+        $controller->cadastrarMaquina();
+
+    break;
+
     // FUNCIONÁRIOS
     case 'funcionarios':
 

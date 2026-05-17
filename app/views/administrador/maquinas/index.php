@@ -1,19 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Máquinas</title>
 </head>
 <body>
+
 <h1>Máquinas</h1>
 
-<a href="">
+<a href="/pi-3/public/index.php?acao=form-maquina">
     Cadastrar Máquina
 </a>
 
 <hr>
 
-<p>Lista de máquinas aqui...</p>
+<?php if(isset($_SESSION['sucesso'])): ?>
+
+    <p>
+        <?= $_SESSION['sucesso']; ?>
+    </p>
+
+    <?php unset($_SESSION['sucesso']); ?>
+
+<?php endif; ?>
+
+<?php if(empty($maquinas)): ?>
+
+    <p>Nenhuma máquina cadastrada.</p>
+
+<?php else: ?>
+
+    <table border="1">
+
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Tipo</th>
+            <th>Status</th>
+            <th>Descrição</th>
+        </tr>
+
+        <?php foreach($maquinas as $maquina): ?>
+
+            <tr>
+
+                <td>
+                    <?= $maquina['id_maquina']; ?>
+                </td>
+
+                <td>
+                    <?= $maquina['nome']; ?>
+                </td>
+
+                <td>
+                    <?= $maquina['tipo']; ?>
+                </td>
+
+                <td>
+                    <?= $maquina['status']; ?>
+                </td>
+
+                <td>
+                    <?= $maquina['descricao']; ?>
+                </td>
+
+            </tr>
+
+        <?php endforeach; ?>
+
+    </table>
+
+<?php endif; ?>
+
 </body>
 </html>

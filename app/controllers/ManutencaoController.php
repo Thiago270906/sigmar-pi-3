@@ -1,6 +1,6 @@
 <?php
 
-require_once "../app/helpers/Auth.php";
+require_once __DIR__ . "/../helpers/Auth.php";
 
 class ManutencaoController
 {
@@ -8,6 +8,6 @@ class ManutencaoController
     {
         Auth::admin();
 
-        require_once "../app/views/administrador/manutencoes/index.php";
+        require_once __DIR__ . "/../views/administrador/manutencoes/index.php";
     }
 }

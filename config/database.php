@@ -20,7 +20,6 @@ class Database
                 $username, $password
             );
             $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            echo "Conexão realizada com sucesso!<br>";
         } catch (PDOException $e) {
             die("Erro na conexão: " . $e->getMessage());
         }

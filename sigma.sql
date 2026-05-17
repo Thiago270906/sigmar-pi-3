@@ -18,6 +18,10 @@ CREATE TABLE usuarios (
     telefone VARCHAR(20),
     
     ativo BOOLEAN DEFAULT TRUE,
+
+    criada_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    deleted_at DATETIME NULL 
 );
 
 -- =========================
@@ -57,14 +61,13 @@ CREATE TABLE maquinas (
         'critico'
     ) DEFAULT 'operando',
     
-    temperatura_limite DECIMAL(5,2),
-    vibracao_limite DECIMAL(5,2),
-    
-    localizacao VARCHAR(150),
+    descricao VARCHAR(150),
     
     ativa BOOLEAN DEFAULT TRUE,
     
-    criada_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    criada_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    deleted_at DATETIME NULL 
 );
 
 -- =========================
@@ -100,6 +103,8 @@ CREATE TABLE ordens_manutencao (
     data_abertura TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     data_agendada DATETIME,
     data_conclusao DATETIME,
+
+    deleted_at DATETIME NULL, 
     
     id_maquina INT NOT NULL,
     id_tecnico INT,
@@ -126,12 +131,13 @@ CREATE TABLE manutencoes (
     
     observacoes TEXT,
     
-    tempo_parada_minutos INT,
+    tempo_execucao_minutos INT,
     
     data_execucao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     
     id_ordem INT NOT NULL,
     id_tecnico INT NOT NULL,
+
     
     FOREIGN KEY (id_ordem)
         REFERENCES ordens_manutencao(id_ordem),
@@ -171,9 +177,32 @@ CREATE TABLE notificacoes (
         REFERENCES maquinas(id_maquina)
 );
 
--- =========================
--- HISTÓRICO DAS MÁQUINAS
--- =========================
+CREATE TABLE sensores (
+    id_sensor INT AUTO_INCREMENT PRIMARY KEY,
+
+    nome VARCHAR(100) NOT NULL,
+
+    tipo ENUM(
+        'temperatura',
+        'vibracao'
+    ) NOT NULL,
+
+    modelo VARCHAR(100),
+
+    unidade_medida VARCHAR(20),
+
+    limite_alerta DECIMAL(10,2),
+
+    limite_critico DECIMAL(10,2),
+
+    ativo BOOLEAN DEFAULT TRUE,
+
+    id_maquina INT NOT NULL,
+
+    FOREIGN KEY (id_maquina)
+        REFERENCES maquinas(id_maquina)
+        ON DELETE CASCADE
+);
 
 CREATE TABLE historico_status_maquina (
     id_historico INT AUTO_INCREMENT PRIMARY KEY,

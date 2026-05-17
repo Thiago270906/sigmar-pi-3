@@ -3,14 +3,18 @@
 require_once __DIR__ . '/../models/UsuarioRepository.php';
 class UsuarioController
 {
+    private $repository;        //Guarda o objeto que acessa o banco de dados
+
+    public function __construct()
+    {
+        $this->repository =  new UsuarioRepository();
+    }
     public function login()
     {
         $email = $_POST['email'];
         $senha = $_POST['senha'];
 
-        $repo = new UsuarioRepository();
-
-        $usuario = $repo->buscarPorEmail($email);
+        $usuario = $this->repository->buscarPorEmail($email);
 
         if(!$usuario) {
 
