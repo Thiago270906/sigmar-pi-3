@@ -11,28 +11,21 @@ require_once '../app/helpers/Auth.php';
 
 require_once '../app/controllers/UsuarioController.php';
 require_once '../app/controllers/MaquinaController.php';
-require_once '../app/controllers/FuncionarioController.php';
 require_once '../app/controllers/ManutencaoController.php';
 
 $acao = $_GET['acao'] ?? '';
 
 switch($acao)
 {
+    // =========================
     // LOGIN
+    // =========================
+
     case 'login':
 
         $controller = new UsuarioController();
 
         $controller->login();
-
-    break;
-
-    // DASHBOARD
-    case 'dashboard':
-
-        Auth::admin();
-
-        require '../app/views/administrador/dashboard/index.php';
 
     break;
 
@@ -44,7 +37,22 @@ switch($acao)
 
     break;
 
+    // =========================
+    // DASHBOARD
+    // =========================
+
+    case 'dashboard':
+
+        Auth::admin();
+
+        require '../app/views/administrador/dashboard/index.php';
+
+    break;
+
+    // =========================
     // MÁQUINAS
+    // =========================
+
     case 'maquinas':
 
         Auth::admin();
@@ -57,13 +65,17 @@ switch($acao)
 
     case 'form-maquina':
 
+        Auth::admin();
+
         $controller = new MaquinaController();
 
-        $controller->formCadastrar();
+        $controller->formCadastrarMaquina();
 
     break;
 
     case 'cadastrar-maquina':
+
+        Auth::admin();
 
         $controller = new MaquinaController();
 
@@ -71,18 +83,44 @@ switch($acao)
 
     break;
 
+    // =========================
     // FUNCIONÁRIOS
+    // =========================
+
     case 'funcionarios':
 
         Auth::admin();
 
-        $controller = new FuncionarioController();
+        $controller = new UsuarioController();
 
         $controller->index();
 
     break;
 
+    case 'form-funcionario':
+
+        Auth::admin();
+
+        $controller = new UsuarioController();
+
+        $controller->formCadastrarFuncionario();
+
+    break;
+
+    case 'cadastrar-funcionario':
+
+        Auth::admin();
+
+        $controller = new UsuarioController();
+
+        $controller->cadastrarFuncionario();
+
+    break;
+
+    // =========================
     // MANUTENÇÕES
+    // =========================
+
     case 'manutencoes':
 
         Auth::check();
@@ -93,7 +131,10 @@ switch($acao)
 
     break;
 
+    // =========================
     // PADRÃO
+    // =========================
+
     default:
 
         if(isset($_SESSION['usuario']))

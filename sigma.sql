@@ -145,10 +145,7 @@ CREATE TABLE manutencoes (
     FOREIGN KEY (id_tecnico)
         REFERENCES usuarios(id_usuario)
 );
-
--- =========================
--- NOTIFICAÇÕES
--- =========================
+    
 
 CREATE TABLE notificacoes (
     id_notificacao INT AUTO_INCREMENT PRIMARY KEY,

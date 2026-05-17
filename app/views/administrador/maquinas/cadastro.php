@@ -1,3 +1,13 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Máquinas</title>
+</head>
+<script src="assets/js/cep.js"></script>
+<body>
+
 <h1>Cadastrar Máquina</h1>
 
 <?php if(isset($_SESSION['erro'])): ?>
@@ -29,3 +39,5 @@
     </button>
 
 </form>
+</body>
+</html>

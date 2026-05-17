@@ -1,14 +1,18 @@
 <?php
 
+require_once __DIR__ . '/../models/Usuario.php';
+require_once __DIR__ . '/../models/Endereco.php';
 require_once __DIR__ . '/../models/UsuarioRepository.php';
+
 class UsuarioController
 {
-    private $repository;        //Guarda o objeto que acessa o banco de dados
+    private $repository;
 
     public function __construct()
     {
-        $this->repository =  new UsuarioRepository();
+        $this->repository = new UsuarioRepository();
     }
+
     public function login()
     {
         $email = $_POST['email'];
@@ -16,33 +20,36 @@ class UsuarioController
 
         $usuario = $this->repository->buscarPorEmail($email);
 
-        if(!$usuario) {
+        if (!$usuario) {
 
-            $_SESSION['erro'] = "Usuário incorreta";
+            $_SESSION['erro'] = "Usuário incorreto";
 
             header("Location: index.php");
-            
+
             exit;
         }
 
-        if(!password_verify($senha, $usuario['senha_hash'])) {
+        if (!password_verify($senha, $usuario['senha_hash'])) {
+
             $_SESSION['erro'] = "Senha incorreta";
-            
+
             header("Location: index.php");
-            } else {
-                
-            $_SESSION['usuario'] = $usuario;
-                
-                            
-                $_SESSION['usuario'] = [
-                    'id' => $usuario['id_usuario'],
-                    'nome' => $usuario['nome'],
-                    'cargo' => $usuario['cargo']
-                ];
-                
-                header("Location: index.php?acao=dashboard");
-            }
+
+            exit;
+
+        } else {
+
+            $_SESSION['usuario'] = [
+                'id' => $usuario['id_usuario'],
+                'nome' => $usuario['nome'],
+                'cargo' => $usuario['cargo']
+            ];
+
+            header("Location: index.php?acao=dashboard");
+
+            exit;
         }
+    }
 
     public function logout()
     {
@@ -51,5 +58,77 @@ class UsuarioController
         header("Location: index.php");
 
         exit;
+    }
+
+    public function index()
+    {
+        $usuarios = $this->repository->ListarFuncionarios();
+
+        require_once __DIR__ . '/../views/administrador/funcionarios/index.php';
+    }
+
+    public function formCadastrarFuncionario()
+    {
+        Auth::admin();
+
+        require_once __DIR__ . '/../views/administrador/funcionarios/cadastro.php'; 
+    }
+
+
+    public function cadastrarFuncionario()
+    {
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+
+            header("Location: index.php?acao=form-funcionario");
+
+            exit;
+        }
+
+        Auth::admin();
+
+        try {
+
+            $senhaHash = password_hash(
+                $_POST['senha'],
+                PASSWORD_DEFAULT
+            );
+
+            $usuario = new Usuario(
+                $_POST['nome'],
+                $_POST['email'],
+                $senhaHash,
+                $_POST['cargo'],
+                $_POST['telefone']
+            );
+
+            $endereco = new Endereco(
+                $_POST['cep'],
+                $_POST['cidade'],
+                $_POST['bairro'],
+                $_POST['rua'],
+                $_POST['estado'],
+                $_POST['numero']
+            );
+
+            $this->repository->createFuncionario(
+                $usuario,
+                $endereco
+            );
+
+            $_SESSION['sucesso'] = "Usuário cadastrado com sucesso";
+
+            header("Location: index.php?acao=funcionarios");
+
+            exit;
+
+        } catch (Exception $e) {
+
+            $_SESSION['erro'] = $e->getMessage();
+
+            header("Location: index.php?acao=cadastrar-funcionario");
+
+            exit;
+        }
     }
 }

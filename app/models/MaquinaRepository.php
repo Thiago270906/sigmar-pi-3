@@ -46,7 +46,7 @@ class MaquinaRepository
     }
 
     // READ ALL
-    public function findAll()
+    public function listarMaquinas()
     {
         $sql = "SELECT * FROM maquinas";
 

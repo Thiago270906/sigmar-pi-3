@@ -9,7 +9,7 @@ class Usuario
     private $cargo;
     private $telefone;
 
-    public function __construct(string $nome, string $email, string $senha, string $cargo, int $telefone)
+    public function __construct(string $nome, string $email, string $senha, string $cargo, string $telefone)
     {
         $this->setNome($nome);
         $this->setEmail($email);
@@ -97,11 +97,13 @@ class Usuario
         $this->cargo = $cargo;
     }
 
-    public function setTelefone(int $telefone) 
+    public function setTelefone(string $telefone) 
     {
         if (strlen($telefone) < 10 || strlen($telefone) > 11) {
             throw new Exception("Telefone inválido.");
         }
+
+        $this->telefone = $telefone;
     }
 }
 

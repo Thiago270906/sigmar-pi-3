@@ -18,12 +18,12 @@ class MaquinaController
     {
         Auth::admin();
 
-        $maquinas = $this->repository->findAll();
+        $maquinas = $this->repository->listarMaquinas();
 
         require_once __DIR__ . "/../views/administrador/maquinas/index.php";
     }
 
-    public function formCadastrar()
+    public function formCadastrarMaquina()
     {
         Auth::admin();
 
