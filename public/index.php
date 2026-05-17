@@ -2,7 +2,10 @@
 
 session_start();
 
-require_once '../config/Database.php';
+require_once "../vendor/autoload.php";
+
+require_once "../config/Database.php";
+require_once "../config/MongoConnection.php";
 
 require_once '../app/helpers/Auth.php';
 

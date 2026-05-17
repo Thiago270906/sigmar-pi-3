@@ -33,8 +33,6 @@
 
     </ul>
 
-    <?php phpinfo(); ?> 
-
     <a href="index.php?acao=logout">
         Sair
     </a>
