@@ -1,0 +1,12 @@
+{
+    "name": "thiago/sigmar",
+    "description": "Sistema Inteligente de Gestao de Maquinas Rotativas",
+    "authors": [
+        {
+            "name": "Thiago Lopes"
+        }
+    ],
+    "require": {
+        "mongodb/mongodb": "^2.3"
+    }
+}
