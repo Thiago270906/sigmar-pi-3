@@ -80,67 +80,31 @@ class Endereco
 
     public function setCep(string $cep)
     {
-        $cep = trim($cep);
-
-        if (empty($cep)) {
-            throw new Exception("CEP é um campo obrigatório");
-        }
-
         $this->cep = $cep;
     }
 
     public function setCidade(string $cidade)
     {
-        $cidade = trim($cidade);
-
-        if (empty($cidade)) {
-            throw new Exception("Cidade é um campo obrigatório");
-        }
-
         $this->cidade = $cidade;
     }
 
     public function setBairro(string $bairro)
     {
-        $bairro = trim($bairro);
-
-        if (empty($bairro)) {
-            throw new Exception("Bairro é um campo obrigatório");
-        }
-
         $this->bairro = $bairro;
     }
 
     public function setRua(string $rua)
     {
-        $rua = trim($rua);
-
-        if (empty($rua)) {
-            throw new Exception("Rua é um campo obrigatório");
-        }
-
         $this->rua = $rua;
     }
 
     public function setEstado(string $estado)
     {
-        $estado = strtoupper(trim($estado));
-
-        if (strlen($estado) != 2) {
-            throw new Exception("Estado inválido");
-        }
-
         $this->estado = $estado;
     }
 
     public function setNumero(string $numero)
     {
-        $numero = trim($numero);
-
-        if (empty($numero)) {
-            throw new Exception("Número é um campo obrigatório");
-        }
-
         $this->numero = $numero;
     }
 

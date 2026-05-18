@@ -7,16 +7,16 @@ class Usuario
     private $email;
     private $senha;
     private $cargo;
-    private $telefone;
+    private ?string $telefone;
 
-    public function __construct(string $nome, string $email, string $senha, string $cargo, string $telefone)
-    {
-        $this->setNome($nome);
-        $this->setEmail($email);
-        $this->setSenha($senha);
-        $this->setCargo($cargo);
-        $this->setTelefone($telefone);
-    }
+public function __construct(string $nome, string $email, string $senha, string $cargo, ?string $telefone = null)
+{
+    $this->setNome($nome);
+    $this->setEmail($email);
+    $this->setSenha($senha);
+    $this->setCargo($cargo);
+    $this->setTelefone($telefone);
+}
 
     // Getters
 
@@ -45,7 +45,7 @@ class Usuario
         return $this->cargo;
     }
 
-    public function getTelefone(): string
+    public function getTelefone(): ?string
     {
         return $this->telefone;
     }
@@ -61,23 +61,11 @@ class Usuario
 
     public function setNome(string $nome)
     {
-        $nome = trim($nome);
-
-        // Simples validação
-        if (empty($nome)) {
-            throw new Exception("Nome é um campo obrigatório");
-        }
         $this->nome = $nome;
     }
 
     public function setEmail(string $email)
     {
-        $email = trim($email);
-
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new Exception("Email inválido.");
-        }
-
         $this->email = $email;
     }
 
@@ -88,21 +76,11 @@ class Usuario
 
     public function setCargo(string $cargo)
     {
-        $cargo = strtolower(trim($cargo));
-
-        if ($cargo != 'tecnico' && $cargo != 'administrador') {
-            throw new Exception("Cargo inválido.");
-        }
-
         $this->cargo = $cargo;
     }
 
-    public function setTelefone(string $telefone) 
+    public function setTelefone(?string $telefone)
     {
-        if (strlen($telefone) < 10 || strlen($telefone) > 11) {
-            throw new Exception("Telefone inválido.");
-        }
-
         $this->telefone = $telefone;
     }
 }

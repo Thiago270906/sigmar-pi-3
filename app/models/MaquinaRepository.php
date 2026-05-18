@@ -14,26 +14,27 @@ class MaquinaRepository
         $this->conn = $db->getConnection();
     }
 
+    // CREATE
     public function createMaquina(Maquina $maquina)
     {
-        $sql = "
-            INSERT INTO maquinas
-            (
-                nome,
-                tipo,
-                status,
-                descricao
-            )
-            VALUES
-            (
-                ?,
-                ?,
-                ?,
-                ?
-            )
-        ";
-
-        $stmt = $this->conn->prepare($sql);
+        $stmt = $this->conn->prepare(
+            "
+                INSERT INTO maquinas
+                (
+                    nome,
+                    tipo,
+                    status,
+                    descricao
+                )
+                VALUES
+                (
+                    ?,
+                    ?,
+                    ?,
+                    ?
+                )
+            "
+        );
 
         $stmt->execute([
             $maquina->getNome(),
@@ -41,50 +42,89 @@ class MaquinaRepository
             $maquina->getStatus(),
             $maquina->getDescricao()
         ]);
-
-        return $this->conn->lastInsertId();
     }
 
     // READ ALL
     public function listarMaquinas()
     {
-        $sql = "SELECT * FROM maquinas";
+        $stmt = $this->conn->query(
+            "
+                SELECT *
+                FROM maquinas
+                WHERE deleted_at IS NULL
+            "
+        );
 
-        $stmt = $this->conn->prepare($sql);
+        $dados = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        $stmt->execute();
+        $maquinas = [];
 
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        foreach($dados as $linha)
+        {
+            $maquina = new Maquina(
+                $linha['nome'],
+                $linha['tipo'],
+                $linha['status'],
+                $linha['descricao']
+            );
+
+            $maquina->setId($linha['id_maquina']);
+
+            $maquinas[] = $maquina;
+        }
+
+        return $maquinas;
     }
 
-    // READ BY ID
-    public function findById(int $id)
+    // READ ONE
+    public function buscarIdMaquina($id)
     {
-        $sql = "SELECT * FROM maquinas WHERE id_maquina = ?";
-
-        $stmt = $this->conn->prepare($sql);
+        $stmt = $this->conn->prepare(
+            "
+                SELECT *
+                FROM maquinas
+                WHERE id_maquina = ?
+                AND deleted_at IS NULL
+            "
+        );
 
         $stmt->execute([$id]);
 
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $dados = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if(!$dados)
+        {
+            return null;
+        }
+
+        $maquina = new Maquina(
+            $dados['nome'],
+            $dados['tipo'],
+            $dados['status'],
+            $dados['descricao']
+        );
+
+        $maquina->setId($dados['id_maquina']);
+
+        return $maquina;
     }
 
     // UPDATE
-    public function updateMaquinas(Maquina $maquina)
+    public function atualizarMaquina(Maquina $maquina)
     {
-        $sql = "
-            UPDATE maquinas
-            SET
-                nome = ?,
-                tipo = ?,
-                status = ?,
-                descricao = ?
-            WHERE id_maquina = ?
-        ";
+        $stmt = $this->conn->prepare(
+            "
+                UPDATE maquinas
+                SET
+                    nome = ?,
+                    tipo = ?,
+                    status = ?,
+                    descricao = ?
+                WHERE id_maquina = ?
+            "
+        );
 
-        $stmt = $this->conn->prepare($sql);
-
-        return $stmt->execute([
+        $stmt->execute([
             $maquina->getNome(),
             $maquina->getTipo(),
             $maquina->getStatus(),
@@ -93,12 +133,18 @@ class MaquinaRepository
         ]);
     }
 
-    // DELETE
-    public function deleteMaquinas(int $id)
+    // DELETE LÓGICO
+    public function excluirMaquina($id)
     {
         $stmt = $this->conn->prepare(
-            "UPDATE cidades SET delete_at = NOW() WHERE id = ?"
+            "
+                UPDATE maquinas
+                SET deleted_at = NOW()
+                WHERE id_maquina = ?
+            "
         );
+
         $stmt->execute([$id]);
     }
 }
+?>

@@ -31,7 +31,7 @@
 
 <?php else: ?>
 
-    <table border="1">
+    <table border="1" cellpadding="10">
 
         <tr>
             <th>ID</th>
@@ -46,23 +46,23 @@
             <tr>
 
                 <td>
-                    <?= $maquina['id_maquina']; ?>
+                    <?= $maquina->getId(); ?>
                 </td>
 
                 <td>
-                    <?= $maquina['nome']; ?>
+                    <?= $maquina->getNome(); ?>
                 </td>
 
                 <td>
-                    <?= $maquina['tipo']; ?>
+                    <?= $maquina->getTipo(); ?>
                 </td>
 
                 <td>
-                    <?= $maquina['status']; ?>
+                    <?= $maquina->getStatus(); ?>
                 </td>
 
                 <td>
-                    <?= $maquina['descricao']; ?>
+                    <?= $maquina->getDescricao(); ?>
                 </td>
 
             </tr>

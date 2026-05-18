@@ -107,16 +107,12 @@ CREATE TABLE ordens_manutencao (
     deleted_at DATETIME NULL, 
     
     id_maquina INT NOT NULL,
-    id_tecnico INT,
-    id_admin INT NOT NULL,
+    id_usuario INT,
     
     FOREIGN KEY (id_maquina)
         REFERENCES maquinas(id_maquina),
         
-    FOREIGN KEY (id_tecnico)
-        REFERENCES usuarios(id_usuario),
-        
-    FOREIGN KEY (id_admin)
+    FOREIGN KEY (id_usuario)
         REFERENCES usuarios(id_usuario)
 );
 
@@ -136,13 +132,13 @@ CREATE TABLE manutencoes (
     data_execucao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     
     id_ordem INT NOT NULL,
-    id_tecnico INT NOT NULL,
+    id_usuario INT NOT NULL,
 
     
     FOREIGN KEY (id_ordem)
         REFERENCES ordens_manutencao(id_ordem),
         
-    FOREIGN KEY (id_tecnico)
+    FOREIGN KEY (id_usuario)
         REFERENCES usuarios(id_usuario)
 );
     

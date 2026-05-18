@@ -122,7 +122,7 @@
             <div class="flex flex-col items-center">
 
                 <!-- Imagem da logo -->
-                <img src="./assets/img/logo-sigmar.png">
+                <img src="/sigmar-pi-3-main/public/assets/img/sigmar-logo.png">
 
             </div>
         </div>
@@ -138,7 +138,7 @@
             <a href="index.php?acao=maquinas"
                class="text-white/70 hover:bg-white/10 hover:text-white rounded-lg px-4 py-3 flex items-center gap-4 transition-all">
                 <span class="material-symbols-outlined">settings_input_component</span>
-                <span class="font-medium text-sm">Máquinas</span>
+                <span class="font-medium text-sm">Equipamentos</span>
             </a>
 
             <a href="index.php?acao=manutencoes"
@@ -184,7 +184,7 @@
 
             <div href="index.php?acao=notificacoes" class="flex items-center gap-6 ml-4">
                 <button class="relative text-on-surface-variant hover:text-primary transition-colors">
-                    <img src="./assets/img/notificacao.png" width="25px" height="30px">
+                    <img src="/sigmar-pi-3-main/public/assets/img/notificacao.png" width="25px" height="30px">
                 </button>
                 <div href="index.php?acao=perfil" class="flex items-center gap-3">
                     <button>

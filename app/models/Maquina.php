@@ -54,12 +54,6 @@ class Maquina
 
     public function setNome(string $nome)
     {
-        $nome = trim($nome);
-
-        // Simples validação
-        if (empty($nome)) {
-            throw new Exception("Nome é um campo obrigatório");
-        }
         $this->nome = $nome;
     }
 

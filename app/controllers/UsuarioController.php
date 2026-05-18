@@ -15,37 +15,37 @@ class UsuarioController
 
     public function login()
     {
-        $email = $_POST['email'];
-        $senha = $_POST['senha'];
+        try {
 
-        $usuario = $this->repository->buscarPorEmail($email);
+            $email = trim($_POST['email']);
+            $senha = trim($_POST['senha']);
 
-        if (!$usuario) {
+            $usuario = $this->repository->buscarPorEmail($email);
 
-            $_SESSION['erro'] = "Usuário incorreto";
+            if(!$usuario) {
+                throw new Exception("Email ou senha inválidos.");
+            }
 
-            header("Location: index.php");
-
-            exit;
-        }
-
-        if (!password_verify($senha, $usuario['senha_hash'])) {
-
-            $_SESSION['erro'] = "Senha incorreta";
-
-            header("Location: index.php");
-
-            exit;
-
-        } else {
+            if(!password_verify($senha, $usuario->getSenha())) {
+                throw new Exception("Email ou senha inválidos.");
+            }
 
             $_SESSION['usuario'] = [
-                'id' => $usuario['id_usuario'],
-                'nome' => $usuario['nome'],
-                'cargo' => $usuario['cargo']
+                'id' => $usuario->getId(),
+                'nome' => $usuario->getNome(),
+                'email' => $usuario->getEmail(),
+                'cargo' => $usuario->getCargo()
             ];
 
             header("Location: index.php?acao=dashboard");
+
+            exit;
+
+        } catch(Exception $e) {
+
+            $_SESSION['erro'] = $e->getMessage();
+
+            header("Location: index.php");
 
             exit;
         }

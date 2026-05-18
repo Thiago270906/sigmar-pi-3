@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../models/Usuario.php';
+require_once __DIR__ . '/../models/Endereco.php';
 
 class UsuarioRepository
 {
@@ -16,13 +17,30 @@ class UsuarioRepository
 
     public function buscarPorEmail($email)
     {
-        $sql = "SELECT * FROM usuarios WHERE email = ?";
-
-        $stmt = $this->conn->prepare($sql);
+        $stmt = $this->conn->prepare(
+            "SELECT * FROM usuarios WHERE email = ?"
+        );
 
         $stmt->execute([$email]);
 
-        return $stmt->fetch();
+        $dados = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if(!$dados)
+        {
+            return null;
+        }
+
+        $usuario = new Usuario(
+            $dados['nome'],
+            $dados['email'],
+            $dados['senha_hash'],
+            $dados['cargo'],
+            $dados['telefone']
+        );
+
+        $usuario->setId($dados['id_usuario']);
+
+        return $usuario;
     }
 
     public function createFuncionario(Usuario $usuario, Endereco $endereco)
@@ -31,8 +49,8 @@ class UsuarioRepository
 
             $this->conn->beginTransaction();
 
-            $sqlUsuario = "
-                INSERT INTO usuarios
+            $stmtUsuario = $this->conn->prepare(
+                "INSERT INTO usuarios
                 (
                     nome,
                     email,
@@ -42,28 +60,26 @@ class UsuarioRepository
                 )
                 VALUES
                 (
-                    :nome,
-                    :email,
-                    :senha,
-                    :cargo,
-                    :telefone
-                )
-            ";
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?
+                )"
+            );
 
-            $stmtUsuario = $this->conn->prepare($sqlUsuario);
-
-            $stmtUsuario->bindValue(':nome', $usuario->getNome());
-            $stmtUsuario->bindValue(':email', $usuario->getEmail());
-            $stmtUsuario->bindValue(':senha', $usuario->getSenha());
-            $stmtUsuario->bindValue(':cargo', $usuario->getCargo());
-            $stmtUsuario->bindValue(':telefone', $usuario->getTelefone());
-
-            $stmtUsuario->execute();
+            $stmtUsuario->execute([
+                $usuario->getNome(),
+                $usuario->getEmail(),
+                $usuario->getSenha(),
+                $usuario->getCargo(),
+                $usuario->getTelefone()
+            ]);
 
             $idUsuario = $this->conn->lastInsertId();
 
-            $sqlEndereco = "
-                INSERT INTO enderecos
+            $stmtEndereco = $this->conn->prepare(
+                "INSERT INTO enderecos
                 (
                     cep,
                     cidade,
@@ -75,27 +91,25 @@ class UsuarioRepository
                 )
                 VALUES
                 (
-                    :cep,
-                    :cidade,
-                    :bairro,
-                    :rua,
-                    :estado,
-                    :numero,
-                    :id_usuario
-                )
-            ";
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?
+                )"
+            );
 
-            $stmtEndereco = $this->conn->prepare($sqlEndereco);
-
-            $stmtEndereco->bindValue(':cep', $endereco->getCep());
-            $stmtEndereco->bindValue(':cidade', $endereco->getCidade());
-            $stmtEndereco->bindValue(':bairro', $endereco->getBairro());
-            $stmtEndereco->bindValue(':rua', $endereco->getRua());
-            $stmtEndereco->bindValue(':estado', $endereco->getEstado());
-            $stmtEndereco->bindValue(':numero', $endereco->getNumero());
-            $stmtEndereco->bindValue(':id_usuario', $idUsuario);
-
-            $stmtEndereco->execute();
+            $stmtEndereco->execute([
+                $endereco->getCep(),
+                $endereco->getCidade(),
+                $endereco->getBairro(),
+                $endereco->getRua(),
+                $endereco->getEstado(),
+                $endereco->getNumero(),
+                $idUsuario
+            ]);
 
             $this->conn->commit();
 
@@ -106,41 +120,97 @@ class UsuarioRepository
             $this->conn->rollBack();
 
             throw new Exception(
-                "Erro ao cadastrar usuário: " . $e->getMessage()
+                "Erro ao cadastrar funcionário: " . $e->getMessage()
             );
         }
     }
 
     public function listarFuncionarios()
     {
-        $sql = "
-            SELECT
-                usuarios.id_usuario,
-                usuarios.nome,
-                usuarios.email,
-                usuarios.cargo,
-                usuarios.telefone,
-                usuarios.ativo,
+        $stmt = $this->conn->query(
+            "SELECT * FROM usuarios WHERE deleted_at IS NULL"
+        );
 
-                enderecos.cep,
-                enderecos.cidade,
-                enderecos.bairro,
-                enderecos.rua,
-                enderecos.estado,
-                enderecos.numero
+        $dados = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            FROM usuarios
+        $usuarios = [];
 
-            INNER JOIN enderecos
-                ON usuarios.id_usuario = enderecos.id_usuario
+        foreach($dados as $linha)
+        {
+            $usuario = new Usuario(
+                $linha['nome'],
+                $linha['email'],
+                $linha['senha_hash'],
+                $linha['cargo'],
+                $linha['telefone']
+            );
 
-            WHERE usuarios.deleted_at IS NULL
-        ";
+            $usuario->setId($linha['id_usuario']);
 
-        $stmt = $this->conn->prepare($sql);
+            $usuarios[] = $usuario;
+        }
 
-        $stmt->execute();
+        return $usuarios;
+    }
 
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    public function buscarIdFuncionario($id)
+    {
+        $stmt = $this->conn->prepare(
+            "SELECT * FROM usuarios WHERE id_usuario = ?"
+        );
+
+        $stmt->execute([$id]);
+
+        $dados = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if(!$dados)
+        {
+            return null;
+        }
+
+        $usuario = new Usuario(
+            $dados['nome'],
+            $dados['email'],
+            $dados['senha_hash'],
+            $dados['cargo'],
+            $dados['telefone']
+        );
+
+        $usuario->setId($dados['id_usuario']);
+
+        return $usuario;
+    }
+
+    public function atualizarFuncionario(Usuario $usuario)
+    {
+        $stmt = $this->conn->prepare(
+            "UPDATE usuarios
+            SET
+                nome = ?,
+                email = ?,
+                cargo = ?,
+                telefone = ?
+            WHERE id_usuario = ?"
+        );
+
+        $stmt->execute([
+            $usuario->getNome(),
+            $usuario->getEmail(),
+            $usuario->getCargo(),
+            $usuario->getTelefone(),
+            $usuario->getId()
+        ]);
+    }
+
+    public function excluirFuncionario($id)
+    {
+        $stmt = $this->conn->prepare(
+            "UPDATE usuarios
+            SET deleted_at = NOW()
+            WHERE id_usuario = ?"
+        );
+
+        $stmt->execute([$id]);
     }
 }
+?>

@@ -131,6 +131,46 @@ switch($acao)
 
     break;
 
+    case 'form-ordem':
+
+        Auth::check();
+
+        $controller = new ManutencaoController();
+
+        $controller->formCadastrarOrdem();
+
+    break;
+
+    case 'cadastrar-ordem':
+
+        Auth::check();
+
+        $controller = new ManutencaoController();
+
+        $controller->cadastrarOrdem();
+
+    break;
+
+    case 'form-manutencao':
+
+        Auth::check();
+
+        $controller = new ManutencaoController();
+
+        $controller->formCadastrarManutencao();
+
+    break;
+
+    case 'cadastrar-manutencao':
+
+        Auth::check();
+
+        $controller = new ManutencaoController();
+
+        $controller->cadastrarManutencao();
+
+    break;
+
     // =========================
     // PADRÃO
     // =========================

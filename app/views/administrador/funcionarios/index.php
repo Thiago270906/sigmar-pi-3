@@ -44,16 +44,15 @@
     <table border="1" cellpadding="10">
 
         <thead>
+
             <tr>
                 <th>ID</th>
                 <th>Nome</th>
                 <th>Email</th>
                 <th>Cargo</th>
                 <th>Telefone</th>
-                <th>Cidade</th>
-                <th>Estado</th>
-                <th>Status</th>
             </tr>
+
         </thead>
 
         <tbody>
@@ -63,45 +62,23 @@
                 <tr>
 
                     <td>
-                        <?= $usuario['id_usuario'] ?>
+                        <?= $usuario->getId() ?>
                     </td>
 
                     <td>
-                        <?= $usuario['nome'] ?>
+                        <?= $usuario->getNome() ?>
                     </td>
 
                     <td>
-                        <?= $usuario['email'] ?>
+                        <?= $usuario->getEmail() ?>
                     </td>
 
                     <td>
-                        <?= ucfirst($usuario['cargo']) ?>
+                        <?= ucfirst($usuario->getCargo()) ?>
                     </td>
 
                     <td>
-                        <?= $usuario['telefone'] ?>
-                    </td>
-
-                    <td>
-                        <?= $usuario['cidade'] ?>
-                    </td>
-
-                    <td>
-                        <?= $usuario['estado'] ?>
-                    </td>
-
-                    <td>
-
-                        <?php if($usuario['ativo']): ?>
-
-                            Ativo
-
-                        <?php else: ?>
-
-                            Inativo
-
-                        <?php endif; ?>
-
+                        <?= $usuario->getTelefone() ?? 'Não informado' ?>
                     </td>
 
                 </tr>
