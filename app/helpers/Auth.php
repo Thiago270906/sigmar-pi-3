@@ -12,13 +12,25 @@ class Auth
         }
     }
 
-        public static function admin()
+    public static function admin()
     {
         self::check();
 
         if($_SESSION['usuario']['cargo'] != 'admin')
         {
             die("Acesso negado");
+        }
+    }
+
+    public static function tecnico()
+    {
+        self::check();
+
+        if($_SESSION['usuario']['cargo'] !== 'tecnico') {
+
+            header("Location: index.php");
+
+            exit;
         }
     }
 

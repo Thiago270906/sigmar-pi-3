@@ -43,9 +43,17 @@ switch($acao)
 
     case 'dashboard':
 
-        Auth::admin();
+        Auth::check();
 
-        require '../app/views/administrador/dashboard/index.php';
+        if($_SESSION['usuario']['cargo'] === 'admin') {
+
+            require '../app/views/administrador/dashboard/index.php';
+
+        } else {
+
+            require '../app/views/tecnico/dashboard/index.php';
+
+        }
 
     break;
 
@@ -118,12 +126,12 @@ switch($acao)
     break;
 
     // =========================
-    // MANUTENÇÕES
+    // ORDEM DE MANUTENÇÕES
     // =========================
 
     case 'manutencoes':
 
-        Auth::check();
+        Auth::admin();
 
         $controller = new ManutencaoController();
 
@@ -133,7 +141,7 @@ switch($acao)
 
     case 'form-ordem':
 
-        Auth::check();
+        Auth::admin();
 
         $controller = new ManutencaoController();
 
@@ -143,7 +151,7 @@ switch($acao)
 
     case 'cadastrar-ordem':
 
-        Auth::check();
+        Auth::admin();
 
         $controller = new ManutencaoController();
 

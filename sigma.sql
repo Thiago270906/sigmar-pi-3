@@ -217,8 +217,18 @@ INSERT INTO usuarios
 (nome, email, senha_hash, cargo)
 VALUES
 (
-'Administrador',
+'Administrador Tester',
 'admin@sigmar.com',
 '$2y$10$rJLBU0YwQ1dzUasWKWXez.hmoUp4HFm5kZePYg.3830B3Rqf1RaHq',
 'admin'
+);
+
+INSERT INTO usuarios
+(nome, email, senha_hash, cargo)
+VALUES
+(
+'Técnico Tester',
+'tecnico@sigmar.com',
+'$2y$10$rJLBU0YwQ1dzUasWKWXez.hmoUp4HFm5kZePYg.3830B3Rqf1RaHq',
+'tecnico'
 );
