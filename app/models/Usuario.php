@@ -135,7 +135,7 @@ class Usuario
 
         // opcional:
         // hash automático da senha
-        $this->senha = password_hash($senha, PASSWORD_DEFAULT);
+        $this->senha = ($senha);
     }
 
     public function setCargo(string $cargo)

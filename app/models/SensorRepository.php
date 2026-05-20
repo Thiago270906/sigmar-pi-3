@@ -55,6 +55,10 @@ class SensorRepository
             $sensor->getStatus(),
             $sensor->getIdMaquina()
         ]);
+
+        $sensor->setId(
+            $this->conn->lastInsertId()
+        );
     }
 
     // READ ONE
@@ -173,6 +177,28 @@ class SensorRepository
                 'sort' => ['timestamp' => -1]
             ]
         );
+    }
+    public function createMongoSensores(Sensor $sensor)
+    {
+        $unidade = '';
+
+        $tipo = strtolower($sensor->getTipo());
+
+        if($tipo === 'temperatura')
+        {
+            $unidade = '°C';
+        }
+        elseif($tipo === 'vibracao')
+        {
+            $unidade = 'Hz';
+        }
+
+        $this->mongoCollection->insertOne([
+            'id_sensor' => $sensor->getId(),
+            'valor' => 0,
+            'unidade' => $unidade,
+            'timestamp' => date('Y-m-d H:i:s')
+        ]);
     }
 }
 

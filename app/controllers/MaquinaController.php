@@ -82,6 +82,7 @@ class MaquinaController
                     );
 
                     $this->sensorRepository->createSensor($sensor);
+                    $this->sensorRepository->createMongoSensores($sensor);
                 }
 
                 unset($_SESSION['sensores']);
