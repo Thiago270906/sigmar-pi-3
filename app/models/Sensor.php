@@ -172,9 +172,15 @@ class Sensor
     {
         $dataInstalacao = trim($dataInstalacao);
 
-        $data = DateTime::createFromFormat('Y-m-d', $dataInstalacao);
+        $data = DateTime::createFromFormat('Y-m-d H:i:s', $dataInstalacao);
 
-        if (!$data || $data->format('Y-m-d') !== $dataInstalacao)
+        if (!$data)
+        {
+            // tenta apenas data simples
+            $data = DateTime::createFromFormat('Y-m-d', $dataInstalacao);
+        }
+
+        if (!$data)
         {
             throw new Exception("Data de instalação inválida.");
         }
@@ -192,9 +198,14 @@ class Sensor
 
         $dataTroca = trim($dataTroca);
 
-        $data = DateTime::createFromFormat('Y-m-d', $dataTroca);
+        $data = DateTime::createFromFormat('Y-m-d H:i:s', $dataTroca);
 
-        if (!$data || $data->format('Y-m-d') !== $dataTroca)
+        if (!$data)
+        {
+            $data = DateTime::createFromFormat('Y-m-d', $dataTroca);
+        }
+
+        if (!$data)
         {
             throw new Exception("Data de troca inválida.");
         }
