@@ -7,7 +7,7 @@ class OrdemManutencao
     private $descricao;
     private $tipo;
     private $prioridade;
-    private $status;
+    private $status = 'agendado';
     private $dataAgendada;
     private $idMaquina;
     private $idUsuario;
@@ -19,6 +19,7 @@ class OrdemManutencao
         string $descricao,
         string $tipo,
         string $prioridade,
+        string $status,
         string $dataAgendada,
         int $idMaquina,
         int $idUsuario
@@ -28,10 +29,7 @@ class OrdemManutencao
         $this->setDescricao($descricao);
         $this->setTipo($tipo);
         $this->setPrioridade($prioridade);
-
-        // status automático
-        $this->status = 'agendada';
-
+        $this->setStatus($status);
         $this->setDataAgendada($dataAgendada);
         $this->setIdMaquina($idMaquina);
         $this->setIdUsuario($idUsuario);

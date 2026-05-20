@@ -26,13 +26,63 @@
 
     <input type="text" name="tipo" placeholder="Tipo">
 
-    <select name="status">
-        <option value="operando">Operando</option>
-        <option value="alerta">Alerta</option>
-        <option value="critico">Crítico</option>
-    </select>
-
     <textarea name="descricao"></textarea>
+
+    <h3>Sensores</h3>
+
+    <a href="index.php?acao=form-sensor">
+        Cadastrar Sensor
+    </a>
+
+    <br><br>
+
+    <?php if(!empty($_SESSION['sensores'])): ?>
+
+        <table border="1" cellpadding="10">
+
+            <tr>
+                <th>Modelo</th>
+                <th>Tipo</th>
+                <th>Alerta</th>
+                <th>Crítico</th>
+                <th>Ação</th>
+            </tr>
+
+            <?php foreach($_SESSION['sensores'] as $index => $sensor): ?>
+
+                <tr>
+
+                    <td>
+                        <?= $sensor['modelo'] ?>
+                    </td>
+
+                    <td>
+                        <?= ucfirst($sensor['tipo']) ?>
+                    </td>
+
+                    <td>
+                        <?= $sensor['limite_alerta'] ?>
+                    </td>
+
+                    <td>
+                        <?= $sensor['limite_critico'] ?>
+                    </td>
+
+                    <td>
+
+                        <a href="index.php?acao=remover-sensor&index=<?= $index ?>">
+                            Remover
+                        </a>
+
+                    </td>
+
+                </tr>
+
+            <?php endforeach; ?>
+
+        </table>
+
+    <?php endif; ?>
 
     <button type="submit">
         Cadastrar

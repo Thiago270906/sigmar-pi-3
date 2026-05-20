@@ -63,6 +63,7 @@ class ManutencaoController
             $descricao = trim($_POST['descricao']);
             $tipo = trim($_POST['tipo']);
             $prioridade = trim($_POST['prioridade']);
+            $status = 'agendada';
             $dataAgendada = $_POST['data_agendada'];
 
             $idMaquina = $_POST['id_maquina'];
@@ -74,6 +75,7 @@ class ManutencaoController
                 $descricao,
                 $tipo,
                 $prioridade,
+                $status,
                 $dataAgendada,
                 $idMaquina,
                 $idUsuario

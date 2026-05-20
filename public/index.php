@@ -11,6 +11,7 @@ require_once '../app/helpers/Auth.php';
 
 require_once '../app/controllers/UsuarioController.php';
 require_once '../app/controllers/MaquinaController.php';
+require_once '../app/controllers/SensorController.php';
 require_once '../app/controllers/ManutencaoController.php';
 
 $acao = $_GET['acao'] ?? '';
@@ -57,6 +58,7 @@ switch($acao)
 
     break;
 
+
     // =========================
     // MÁQUINAS
     // =========================
@@ -88,6 +90,37 @@ switch($acao)
         $controller = new MaquinaController();
 
         $controller->cadastrarMaquina();
+
+    break;
+
+
+    case 'form-sensor':
+
+        Auth::admin();
+
+        $controller = new SensorController();
+
+        $controller->formCadastrarSensor();
+
+    break;
+
+    case 'adicionar-sensor':
+
+        Auth::admin();
+
+        $controller = new SensorController();
+
+        $controller->adicionarSensorSessao();
+
+    break;
+
+    case 'remover-sensor':
+
+        Auth::admin();
+
+        $controller = new SensorController();
+
+        $controller->removerSensorSessao();
 
     break;
 

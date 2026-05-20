@@ -25,6 +25,16 @@
 
 <?php endif; ?>
 
+<?php if(isset($_SESSION['erro'])): ?>
+
+    <p>
+        <?= $_SESSION['erro']; ?>
+    </p>
+
+    <?php unset($_SESSION['erro']); ?>
+
+<?php endif; ?>
+
 <?php if(empty($maquinas)): ?>
 
     <p>Nenhuma máquina cadastrada.</p>
@@ -33,41 +43,87 @@
 
     <table border="1" cellpadding="10">
 
-        <tr>
-            <th>ID</th>
-            <th>Nome</th>
-            <th>Tipo</th>
-            <th>Status</th>
-            <th>Descrição</th>
-        </tr>
-
-        <?php foreach($maquinas as $maquina): ?>
+        <thead>
 
             <tr>
-
-                <td>
-                    <?= $maquina->getId(); ?>
-                </td>
-
-                <td>
-                    <?= $maquina->getNome(); ?>
-                </td>
-
-                <td>
-                    <?= $maquina->getTipo(); ?>
-                </td>
-
-                <td>
-                    <?= $maquina->getStatus(); ?>
-                </td>
-
-                <td>
-                    <?= $maquina->getDescricao(); ?>
-                </td>
-
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Tipo</th>
+                <th>Status</th>
+                <th>Sensor Temperatura</th>
+                <th>Sensor Vibração</th>
+                <th>Detalhes</th>
             </tr>
 
-        <?php endforeach; ?>
+        </thead>
+
+        <tbody>
+
+            <?php foreach($maquinas as $maquina): ?>
+
+                <tr>
+
+                    <td>
+                        <?= $maquina->getId(); ?>
+                    </td>
+
+                    <td>
+                        <?= $maquina->getNome(); ?>
+                    </td>
+
+                    <td>
+                        <?= ucfirst($maquina->getTipo()); ?>
+                    </td>
+
+                    <td>
+                        <?= ucfirst($maquina->getStatus()); ?>
+                    </td>
+
+                    <!-- SENSOR TEMPERATURA -->
+
+                    <td>
+
+                        <?php if($maquina->getSensorTemperatura()): ?>
+
+                            <?= $maquina->getSensorTemperatura()->getModelo(); ?>
+
+                        <?php else: ?>
+
+                            Nenhum sensor
+
+                        <?php endif; ?>
+
+                    </td>
+
+                    <!-- SENSOR VIBRAÇÃO -->
+
+                    <td>
+
+                        <?php if($maquina->getSensorVibracao()): ?>
+
+                            <?= $maquina->getSensorVibracao()->getModelo(); ?>
+
+                        <?php else: ?>
+
+                            Nenhum sensor
+
+                        <?php endif; ?>
+
+                    </td>
+
+                    <td>
+
+                        <a href="/pi-3/public/index.php?acao=detalhes-maquina&id=<?= $maquina->getId(); ?>">
+                            Ver detalhes
+                        </a>
+
+                    </td>
+
+                </tr>
+
+            <?php endforeach; ?>
+
+        </tbody>
 
     </table>
 

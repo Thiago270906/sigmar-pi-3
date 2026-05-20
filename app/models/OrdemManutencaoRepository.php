@@ -85,6 +85,7 @@ class OrdemManutencaoRepository
                 $linha['descricao'],
                 $linha['tipo'],
                 $linha['prioridade'],
+                $linha['status'],
                 $linha['data_agendada'],
                 $linha['id_maquina'],
                 $linha['id_usuario']
@@ -130,6 +131,7 @@ class OrdemManutencaoRepository
                 $linha['descricao'],
                 $linha['tipo'],
                 $linha['prioridade'],
+                $linha['status'],
                 $linha['data_agendada'],
                 $linha['id_maquina'],
                 $linha['id_usuario']
@@ -168,6 +170,7 @@ class OrdemManutencaoRepository
             $dados['descricao'],
             $dados['tipo'],
             $dados['prioridade'],
+            $dados['status'],
             $dados['data_agendada'],
             $dados['id_maquina'],
             $dados['id_usuario']

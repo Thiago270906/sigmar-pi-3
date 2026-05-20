@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../../config/Database.php';
 require_once __DIR__ . '/../models/Maquina.php';
+require_once __DIR__ . '/../models/SensorRepository.php';
 
 class MaquinaRepository
 {
@@ -42,6 +43,8 @@ class MaquinaRepository
             $maquina->getStatus(),
             $maquina->getDescricao()
         ]);
+        
+        return $this->conn->lastInsertId();
     }
 
     // READ ALL
@@ -59,6 +62,8 @@ class MaquinaRepository
 
         $maquinas = [];
 
+        $sensorRepository = new SensorRepository();
+
         foreach($dados as $linha)
         {
             $maquina = new Maquina(
@@ -69,6 +74,27 @@ class MaquinaRepository
             );
 
             $maquina->setId($linha['id_maquina']);
+
+            // =========================
+            // BUSCA SENSORES DA MÁQUINA
+            // =========================
+
+            $sensores = $sensorRepository->listarSensoresMaquina(
+                $linha['id_maquina']
+            );
+
+            foreach($sensores as $sensor)
+            {
+                if($sensor->getTipo() == 'temperatura')
+                {
+                    $maquina->setSensorTemperatura($sensor);
+                }
+
+                if($sensor->getTipo() == 'vibracao')
+                {
+                    $maquina->setSensorVibracao($sensor);
+                }
+            }
 
             $maquinas[] = $maquina;
         }

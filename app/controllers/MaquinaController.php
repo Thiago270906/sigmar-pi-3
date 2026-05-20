@@ -5,13 +5,20 @@ require_once __DIR__ . "/../helpers/Auth.php";
 require_once __DIR__ . "/../models/Maquina.php";
 require_once __DIR__ . "/../models/MaquinaRepository.php";
 
+require_once __DIR__ . "/../models/Sensor.php";
+require_once __DIR__ . "/../models/SensorRepository.php";
+
 class MaquinaController
 {
     private $repository;
 
+    private $sensorRepository;
+
     public function __construct()
     {
         $this->repository = new MaquinaRepository();
+
+        $this->sensorRepository = new SensorRepository();
     }
 
     public function index()
@@ -38,8 +45,12 @@ class MaquinaController
         {
             $nome = trim($_POST['nome']);
             $tipo = trim($_POST['tipo']);
-            $status = trim($_POST['status']);
+            $status = 'operando';
             $descricao = trim($_POST['descricao']);
+
+            // =========================
+            // CRIA OBJETO MÁQUINA
+            // =========================
 
             $maquina = new Maquina(
                 $nome,
@@ -48,7 +59,33 @@ class MaquinaController
                 $descricao
             );
 
-            $this->repository->createMaquina($maquina);
+            // =========================
+            // SALVA MÁQUINA
+            // =========================
+
+            $idMaquina = (int) $this->repository->createMaquina($maquina);
+
+            // =========================
+            // SALVA SENSORES DA SESSÃO
+            // =========================
+
+            if(isset($_SESSION['sensores']))
+            {
+                foreach($_SESSION['sensores'] as $sensorTemp)
+                {
+                    $sensor = new Sensor(
+                        $sensorTemp['modelo'],
+                        $sensorTemp['tipo'],
+                        $sensorTemp['limite_alerta'],
+                        $sensorTemp['limite_critico'],
+                        $idMaquina
+                    );
+
+                    $this->sensorRepository->createSensor($sensor);
+                }
+
+                unset($_SESSION['sensores']);
+            }
 
             $_SESSION['sucesso'] = "Máquina cadastrada com sucesso.";
 

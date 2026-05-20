@@ -170,36 +170,35 @@
             REFERENCES maquinas(id_maquina)
     );
 
-CREATE TABLE sensores (
-    id_sensor INT AUTO_INCREMENT PRIMARY KEY,
+    CREATE TABLE sensores (
+        id_sensor INT AUTO_INCREMENT PRIMARY KEY,
 
-    modelo VARCHAR(100),
+        modelo VARCHAR(100),
 
-    tipo ENUM(
-        'temperatura',
-        'vibracao'
-    ) NOT NULL,
+        tipo ENUM(
+            'temperatura',
+            'vibracao'
+        ) NOT NULL,
 
-    limite_alerta DECIMAL(10,2),
+        limite_alerta DECIMAL(10,2),
 
-    limite_critico DECIMAL(10,2),
-    
-    status ENUM(
-        'ativo',
-        'inativo',
-        'manutencao'
-    ) DEFAULT 'ativo',
+        limite_critico DECIMAL(10,2),
+        
+        status ENUM(
+            'ativo',
+            'inativo'
+        ) DEFAULT 'ativo',
 
-    data_instalacao DATETIME DEFAULT CURRENT_TIMESTAMP,
+        data_instalacao DATETIME DEFAULT CURRENT_TIMESTAMP,
 
-    data_troca DATETIME NULL,
+        data_troca DATETIME NULL,
 
-    id_maquina INT NOT NULL,
+        id_maquina INT NOT NULL,
 
-    FOREIGN KEY (id_maquina)
-        REFERENCES maquinas(id_maquina)
-        ON DELETE CASCADE
-);
+        FOREIGN KEY (id_maquina)
+            REFERENCES maquinas(id_maquina)
+            ON DELETE CASCADE
+    );
 
     CREATE TABLE historico_status_maquina (
         id_historico INT AUTO_INCREMENT PRIMARY KEY,

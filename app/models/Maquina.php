@@ -1,14 +1,22 @@
-<?php 
+<?php
 
 class Maquina
 {
     private $id;
     private $nome;
     private $tipo;
-    private $status;
+    private $status = 'operando';
     private $descricao;
 
-    public function __construct(string $nome, string $tipo, string $status, string $descricao)
+    private $sensorTemperatura;
+    private $sensorVibracao;
+
+    public function __construct(
+        string $nome,
+        string $tipo,
+        string $status,
+        string $descricao
+    )
     {
         $this->setNome($nome);
         $this->setTipo($tipo);
@@ -16,7 +24,7 @@ class Maquina
         $this->setDescricao($descricao);
     }
 
-    // Getters
+    // GETTERS
 
     public function getId(): ?int
     {
@@ -43,11 +51,22 @@ class Maquina
         return $this->descricao;
     }
 
-    // Setters
+    public function getSensorTemperatura()
+    {
+        return $this->sensorTemperatura;
+    }
+
+    public function getSensorVibracao()
+    {
+        return $this->sensorVibracao;
+    }
+
+    // SETTERS
 
     public function setId(int $id)
     {
-        if ($this->id === null) {
+        if($this->id === null)
+        {
             $this->id = $id;
         }
     }
@@ -65,12 +84,20 @@ class Maquina
     public function setStatus(string $status)
     {
         $this->status = $status;
-    }    
+    }
 
     public function setDescricao(string $descricao)
     {
         $this->descricao = $descricao;
     }
-}
 
-?>
+    public function setSensorTemperatura($sensor)
+    {
+        $this->sensorTemperatura = $sensor;
+    }
+
+    public function setSensorVibracao($sensor)
+    {
+        $this->sensorVibracao = $sensor;
+    }
+}
