@@ -5,7 +5,7 @@ class Maquina
     private $id;
     private $nome;
     private $tipo;
-    private $status = 'operando';
+    private $status;
     private $descricao;
 
     private $sensorTemperatura;
@@ -65,39 +65,100 @@ class Maquina
 
     public function setId(int $id)
     {
-        if($this->id === null)
+        if ($this->id === null && $id > 0)
         {
             $this->id = $id;
+        }
+        else
+        {
+            throw new Exception("ID inválido.");
         }
     }
 
     public function setNome(string $nome)
     {
+        $nome = trim($nome);
+
+        if (empty($nome))
+        {
+            throw new Exception("Nome da máquina obrigatório.");
+        }
+
+        if (strlen($nome) < 2 || strlen($nome) > 100)
+        {
+            throw new Exception("Nome da máquina inválido.");
+        }
+
         $this->nome = $nome;
     }
 
     public function setTipo(string $tipo)
     {
+        $tipo = trim($tipo);
+
+        if (empty($tipo))
+        {
+            throw new Exception("Tipo da máquina obrigatório.");
+        }
+
+        if (strlen($tipo) < 2 || strlen($tipo) > 50)
+        {
+            throw new Exception("Tipo da máquina inválido.");
+        }
+
         $this->tipo = $tipo;
     }
 
     public function setStatus(string $status)
     {
+        $status = strtolower(trim($status));
+
+        $statusValidos = [
+            'operando',
+            'alerta',
+            'critico',
+            'manutencao',
+            'inativo'
+        ];
+
+        if (!in_array($status, $statusValidos))
+        {
+            throw new Exception("Status inválido.");
+        }
+
         $this->status = $status;
     }
 
     public function setDescricao(string $descricao)
     {
+        $descricao = trim($descricao);
+
+        // descrição opcional
+        if (strlen($descricao) > 1000)
+        {
+            throw new Exception("Descrição muito longa.");
+        }
+
         $this->descricao = $descricao;
     }
 
     public function setSensorTemperatura($sensor)
     {
+        if ($sensor === null)
+        {
+            throw new Exception("Sensor de temperatura inválido.");
+        }
+
         $this->sensorTemperatura = $sensor;
     }
 
     public function setSensorVibracao($sensor)
     {
+        if ($sensor === null)
+        {
+            throw new Exception("Sensor de vibração inválido.");
+        }
+
         $this->sensorVibracao = $sensor;
     }
 }

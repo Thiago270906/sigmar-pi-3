@@ -82,49 +82,133 @@ class Sensor
 
     public function setId(int $id)
     {
-        if($this->id === null)
+        if ($this->id === null && $id > 0)
         {
             $this->id = $id;
+        }
+        else
+        {
+            throw new Exception("ID inválido.");
         }
     }
 
     public function setModelo(string $modelo)
     {
+        $modelo = trim($modelo);
+
+        if (empty($modelo))
+        {
+            throw new Exception("Modelo do sensor obrigatório.");
+        }
+
+        if (strlen($modelo) < 2 || strlen($modelo) > 100)
+        {
+            throw new Exception("Modelo do sensor inválido.");
+        }
+
         $this->modelo = $modelo;
     }
 
     public function setTipo(string $tipo)
     {
+        $tipo = strtolower(trim($tipo));
+
+        $tiposValidos = [
+            'temperatura',
+            'vibracao'
+        ];
+
+        if (!in_array($tipo, $tiposValidos))
+        {
+            throw new Exception("Tipo de sensor inválido.");
+        }
+
         $this->tipo = $tipo;
     }
 
     public function setLimiteAlerta(float $limiteAlerta)
     {
+        if ($limiteAlerta <= 0)
+        {
+            throw new Exception("Limite de alerta inválido.");
+        }
+
         $this->limiteAlerta = $limiteAlerta;
     }
 
     public function setLimiteCritico(float $limiteCritico)
     {
+        if ($limiteCritico <= 0)
+        {
+            throw new Exception("Limite crítico inválido.");
+        }
+
+        if ($limiteCritico <= $this->limiteAlerta)
+        {
+            throw new Exception("Limite crítico deve ser maior que o alerta.");
+        }
+
         $this->limiteCritico = $limiteCritico;
     }
 
     public function setStatus(string $status)
     {
+        $status = strtolower(trim($status));
+
+        $statusValidos = [
+            'ativo',
+            'inativo'
+        ];
+
+        if (!in_array($status, $statusValidos))
+        {
+            throw new Exception("Status do sensor inválido.");
+        }
+
         $this->status = $status;
     }
 
     public function setDataInstalacao($dataInstalacao)
     {
+        $dataInstalacao = trim($dataInstalacao);
+
+        $data = DateTime::createFromFormat('Y-m-d', $dataInstalacao);
+
+        if (!$data || $data->format('Y-m-d') !== $dataInstalacao)
+        {
+            throw new Exception("Data de instalação inválida.");
+        }
+
         $this->dataInstalacao = $dataInstalacao;
     }
 
     public function setDataTroca($dataTroca)
     {
+        if (empty($dataTroca))
+        {
+            $this->dataTroca = null;
+            return;
+        }
+
+        $dataTroca = trim($dataTroca);
+
+        $data = DateTime::createFromFormat('Y-m-d', $dataTroca);
+
+        if (!$data || $data->format('Y-m-d') !== $dataTroca)
+        {
+            throw new Exception("Data de troca inválida.");
+        }
+
         $this->dataTroca = $dataTroca;
     }
 
     public function setIdMaquina(int $idMaquina)
     {
+        if ($idMaquina <= 0)
+        {
+            throw new Exception("ID da máquina inválido.");
+        }
+
         $this->idMaquina = $idMaquina;
     }
 }

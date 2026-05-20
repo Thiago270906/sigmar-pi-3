@@ -60,33 +60,69 @@ class Manutencao
 
     public function setId(int $id)
     {
-        if($this->id === null) {
+        if ($this->id === null && $id > 0) {
             $this->id = $id;
+        } else {
+            throw new Exception("ID inválido.");
         }
     }
 
     public function setDescricaoServico(string $descricaoServico)
     {
+        $descricaoServico = trim($descricaoServico);
+
+        if (empty($descricaoServico)) {
+            throw new Exception("Descrição do serviço obrigatória.");
+        }
+
+        if (strlen($descricaoServico) < 5 || strlen($descricaoServico) > 500) {
+            throw new Exception("Descrição do serviço inválida.");
+        }
+
         $this->descricaoServico = $descricaoServico;
     }
 
     public function setObservacoes(string $observacoes)
     {
+        $observacoes = trim($observacoes);
+
+        // observação pode ser vazia
+        if (strlen($observacoes) > 1000) {
+            throw new Exception("Observações muito longas.");
+        }
+
         $this->observacoes = $observacoes;
     }
 
     public function setTempoExecucao(int $tempoExecucao)
     {
+        if ($tempoExecucao <= 0) {
+            throw new Exception("Tempo de execução inválido.");
+        }
+
+        // limite opcional: máximo 72 horas
+        if ($tempoExecucao > 4320) {
+            throw new Exception("Tempo de execução muito alto.");
+        }
+
         $this->tempoExecucao = $tempoExecucao;
     }
 
     public function setIdOrdem(int $idOrdem)
     {
+        if ($idOrdem <= 0) {
+            throw new Exception("ID da ordem inválido.");
+        }
+
         $this->idOrdem = $idOrdem;
     }
 
     public function setIdUsuario(int $idUsuario)
     {
+        if ($idUsuario <= 0) {
+            throw new Exception("ID do usuário inválido.");
+        }
+
         $this->idUsuario = $idUsuario;
     }
 }
