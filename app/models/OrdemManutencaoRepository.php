@@ -105,8 +105,45 @@ class OrdemManutencaoRepository
         return $ordens;
     }
 
-    // READ ONE
-    public function buscarIdOrdem($id)
+        public function listarOrdemTecnico($idUsuario)
+    {
+        $stmt = $this->conn->prepare(
+            "
+                SELECT *
+                FROM ordens_manutencao
+                WHERE id_usuario = ?
+                AND deleted_at IS NULL
+                AND status != 'concluida'
+            "
+        );
+
+        $stmt->execute([$idUsuario]);
+
+        $dados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $ordens = [];
+
+        foreach($dados as $linha)
+        {
+            $ordem = new OrdemManutencao(
+                $linha['titulo'],
+                $linha['descricao'],
+                $linha['tipo'],
+                $linha['prioridade'],
+                $linha['data_agendada'],
+                $linha['id_maquina'],
+                $linha['id_usuario']
+            );
+
+            $ordem->setId($linha['id_ordem']);
+
+            $ordens[] = $ordem;
+        }
+
+        return $ordens;
+    }
+
+    public function BuscarId($id)
     {
         $stmt = $this->conn->prepare(
             "
@@ -131,7 +168,6 @@ class OrdemManutencaoRepository
             $dados['descricao'],
             $dados['tipo'],
             $dados['prioridade'],
-            $dados['status'],
             $dados['data_agendada'],
             $dados['id_maquina'],
             $dados['id_usuario']

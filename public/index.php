@@ -131,11 +131,21 @@ switch($acao)
 
     case 'manutencoes':
 
-        Auth::admin();
+        
+        if($_SESSION['usuario']['cargo'] === 'admin') {
+            
+            Auth::admin();
+            $controller = new ManutencaoController();
 
-        $controller = new ManutencaoController();
+                $controller->indexAdmin();
 
-        $controller->index();
+        } else {
+
+            Auth::tecnico();
+            $controller = new ManutencaoController();
+
+                $controller->indexTecnico();
+        }
 
     break;
 

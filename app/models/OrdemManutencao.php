@@ -143,12 +143,12 @@ class OrdemManutencao
         $this->idUsuario = $idUsuario;
     }
 
-    public function setNomeTecnico($nomeTecnico)
+    public function setNomeTecnico(string $nomeTecnico)
     {
         $this->nomeTecnico = $nomeTecnico;
     }
 
-    public function setNomeMaquina($nomeMaquina)
+    public function setNomeMaquina(string $nomeMaquina)
     {
         $this->nomeMaquina = $nomeMaquina;
     }

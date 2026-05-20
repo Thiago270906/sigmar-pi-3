@@ -24,15 +24,26 @@ class ManutencaoController
     // ORDENS DE MANUTENÇÃO
     // =========================
 
-    public function index()
+    public function indexAdmin()
     {
-        Auth::check();
+        Auth::admin();
 
         $this->ordemRepository->ordensPendentes();
 
         $ordens = $this->ordemRepository->listarOrdens();
 
         require_once __DIR__ . '/../views/administrador/manutencoes/index.php';
+    }
+
+    public function indexTecnico()
+    {   
+        Auth::tecnico();
+
+        $idUsuario = $_SESSION['usuario']['id'];
+
+        $ordens = $this->ordemRepository->listarOrdemTecnico($idUsuario);
+
+        require_once __DIR__ . '/../views/tecnico/manutencoes/index.php';
     }
 
     public function formCadastrarOrdem()
@@ -56,7 +67,7 @@ class ManutencaoController
 
             $idMaquina = $_POST['id_maquina'];
 
-            $idUsuario = $_SESSION['usuario']['id'];
+            $idUsuario = $_POST['id_usuario'];
 
             $ordem = new OrdemManutencao(
                 $titulo,
@@ -78,7 +89,9 @@ class ManutencaoController
 
         } catch(Exception $e) {
 
-            die($e->getMessage());
+            $_SESSION['erro'] = $e->getMessage();
+
+            header("Location: index.php?acao=form-Ordem");
 
             exit;
         }
@@ -92,7 +105,7 @@ class ManutencaoController
     {
         Auth::check();
 
-        require_once __DIR__ . "/../views/administrador/manutencoes/cadastro-manutencao.php";
+        require_once __DIR__ . "/../views/administrador/manutencoes/cadastro.php";
     }
 
     public function cadastrarManutencao()
@@ -128,7 +141,9 @@ class ManutencaoController
             exit;
 
         } catch(Exception $e) {
-            die($e->getMessage());
+            $_SESSION['erro'] = $e->getMessage();
+
+            header("Location: index.php?acao=form-manutencao");
             exit;
         }
     }
