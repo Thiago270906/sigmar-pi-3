@@ -1,17 +1,24 @@
 <?php
 
 require_once __DIR__ . '/../../config/Database.php';
+require_once __DIR__ . '/../../config/MongoConnection.php';
 require_once __DIR__ . '/../models/Sensor.php';
 
 class SensorRepository
 {
     private $conn;
 
+    private $mongoCollection;
+
     public function __construct()
     {
         $db = Database::getInstance();
 
         $this->conn = $db->getConnection();
+
+        $this->mongoCollection = MongoConnection::getCollection(
+            'leituras_sensores'
+        );
     }
 
     // CREATE
@@ -82,6 +89,15 @@ class SensorRepository
         $sensor->setStatus($dados['status']);
         $sensor->setDataInstalacao($dados['data_instalacao']);
         $sensor->setDataTroca($dados['data_troca']);
+        $leitura = $this->buscarUltimaLeitura($sensor->getId());
+
+        if ($leitura) {
+
+            $leitura = (array) $leitura;
+
+            $sensor->setValorAtual($leitura['valor']);
+            $sensor->setUnidade($leitura['unidade']);
+        }
 
         return $sensor;
     }
@@ -117,6 +133,15 @@ class SensorRepository
             $sensor->setStatus($linha['status']);
             $sensor->setDataInstalacao($linha['data_instalacao']);
             $sensor->setDataTroca($linha['data_troca']);
+            $leitura = $this->buscarUltimaLeitura($sensor->getId());
+
+            if ($leitura) {
+
+                $leitura = (array) $leitura;
+
+                $sensor->setValorAtual($leitura['valor']);
+                $sensor->setUnidade($leitura['unidade']);
+            }
 
             $sensores[] = $sensor;
         }
@@ -136,6 +161,18 @@ class SensorRepository
         );
 
         $stmt->execute([$id]);
+    }
+
+    private function buscarUltimaLeitura($idSensor)
+    {
+        return $this->mongoCollection->findOne(
+            [
+                'id_sensor' => (int)$idSensor
+            ],
+            [
+                'sort' => ['timestamp' => -1]
+            ]
+        );
     }
 }
 

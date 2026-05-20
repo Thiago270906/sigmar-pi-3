@@ -50,8 +50,8 @@
                 <th>Nome</th>
                 <th>Tipo</th>
                 <th>Status</th>
-                <th>Sensor Temperatura</th>
-                <th>Sensor Vibração</th>
+                <th>Temperatura</th>
+                <th>Vibração</th>
                 <th>Detalhes</th>
             </tr>
 
@@ -79,33 +79,35 @@
                         <?= ucfirst($maquina->getStatus()); ?>
                     </td>
 
-                    <!-- SENSOR TEMPERATURA -->
+                    <!-- TEMPERATURA -->
 
                     <td>
 
                         <?php if($maquina->getSensorTemperatura()): ?>
 
-                            <?= $maquina->getSensorTemperatura()->getModelo(); ?>
+                            <?= $maquina->getSensorTemperatura()->getValorAtual(); ?>
+                            <?= $maquina->getSensorTemperatura()->getUnidade(); ?>
 
                         <?php else: ?>
 
-                            Nenhum sensor
+                            --
 
                         <?php endif; ?>
 
                     </td>
 
-                    <!-- SENSOR VIBRAÇÃO -->
+                    <!-- VIBRAÇÃO -->
 
                     <td>
 
                         <?php if($maquina->getSensorVibracao()): ?>
 
-                            <?= $maquina->getSensorVibracao()->getModelo(); ?>
+                            <?= $maquina->getSensorVibracao()->getValorAtual(); ?>
+                            <?= $maquina->getSensorVibracao()->getUnidade(); ?>
 
                         <?php else: ?>
 
-                            Nenhum sensor
+                            --
 
                         <?php endif; ?>
 

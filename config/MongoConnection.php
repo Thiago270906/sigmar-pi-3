@@ -17,4 +17,13 @@ class MongoConnection
 
         return self::$client;
     }
+
+    public static function getCollection($collection)
+    {
+        $client = self::getConnection();
+
+        return $client
+            ->maquinas
+            ->selectCollection($collection);
+    }
 }

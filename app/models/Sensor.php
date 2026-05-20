@@ -11,6 +11,8 @@ class Sensor
     private $dataInstalacao;
     private $dataTroca;
     private $idMaquina;
+    private $valorAtual;
+    private $unidade;
 
     public function __construct(
         string $modelo,
@@ -74,6 +76,15 @@ class Sensor
     public function getIdMaquina(): int
     {
         return $this->idMaquina;
+    }
+    public function getValorAtual()
+    {
+        return $this->valorAtual;
+    }
+
+    public function getUnidade()
+    {
+        return $this->unidade;
     }
 
     // =========================
@@ -221,6 +232,16 @@ class Sensor
         }
 
         $this->idMaquina = $idMaquina;
+    }
+
+    public function setValorAtual($valor)
+    {
+        $this->valorAtual = $valor;
+    }
+
+    public function setUnidade($unidade)
+    {
+        $this->unidade = $unidade;
     }
 }
 
