@@ -104,7 +104,7 @@ class OrdemManutencaoRepository
         return $ordens;
     }
 
-        public function listarOrdemTecnico($idUsuario)
+    public function listarOrdemTecnico($idUsuario)
     {
         $stmt = $this->conn->prepare(
             "
@@ -141,42 +141,6 @@ class OrdemManutencaoRepository
         }
 
         return $ordens;
-    }
-
-    public function BuscarId($id)
-    {
-        $stmt = $this->conn->prepare(
-            "
-                SELECT *
-                FROM ordens_manutencao
-                WHERE id_ordem = ?
-                AND deleted_at IS NULL
-            "
-        );
-
-        $stmt->execute([$id]);
-
-        $dados = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if(!$dados)
-        {
-            return null;
-        }
-
-        $ordem = new OrdemManutencao(
-            $dados['titulo'],
-            $dados['descricao'],
-            $dados['tipo'],
-            $dados['prioridade'],
-            $dados['status'],
-            $dados['data_agendada'],
-            $dados['id_maquina'],
-            $dados['id_usuario']
-        );
-
-        $ordem->setId($dados['id_ordem']);
-
-        return $ordem;
     }
 
     // UPDATE
@@ -223,6 +187,19 @@ class OrdemManutencaoRepository
         $stmt = $this->conn->prepare($sql);
 
         $stmt->execute();
+    }
+
+    public function andamentoOrdem($id)
+    {
+        $sql = "
+            UPDATE ordens_manutencao
+            SET status = 'em_andamento'
+            WHERE id_ordem = ?
+        ";
+
+        $stmt = $this->conn->prepare($sql);
+
+        $stmt->execute([$id]);
     }
 
     public function concluirOrdem($id)

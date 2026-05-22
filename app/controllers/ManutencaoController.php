@@ -132,8 +132,6 @@ class ManutencaoController
 
             $observacoes = trim($_POST['observacoes']);
 
-            $tempoExecucao = $_POST['tempo_execucao_segundos'];
-
             $idOrdem = $_POST['id_ordem'];
 
             $idUsuario = $_SESSION['usuario']['id'];
@@ -141,7 +139,6 @@ class ManutencaoController
             $manutencao = new Manutencao(
                 $descricaoServico,
                 $observacoes,
-                $tempoExecucao,
                 $idOrdem,
                 $idUsuario
             );
@@ -164,7 +161,7 @@ class ManutencaoController
         }
     }
 
-    public function endManutencao($id)
+    public function finalizarManutencao($id)
     {
         Auth::check();
 

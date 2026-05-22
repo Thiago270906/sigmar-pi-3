@@ -13,6 +13,7 @@ class OrdemManutencao
     private $idUsuario;
     private ?string $nomeTecnico = null;
     private ?string $nomeMaquina = null;
+    
     public function __construct(
         string $titulo,
         string $descricao,
@@ -174,6 +175,7 @@ class OrdemManutencao
         $statusValidos = [
             'agendada',
             'pendente',
+            'em_andamento',
             'concluida',
             'cancelada'
         ];

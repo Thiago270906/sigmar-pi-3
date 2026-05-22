@@ -23,7 +23,6 @@ class ManutencaoRepository
                 (
                     descricao_servico,
                     observacoes,
-                    tempo_execucao_segundos,
                     id_ordem,
                     id_usuario
                 )
@@ -41,42 +40,9 @@ class ManutencaoRepository
         $stmt->execute([
             $manutencao->getDescricaoServico(),
             $manutencao->getObservacoes(),
-            $manutencao->getTempoExecucao(),
             $manutencao->getIdOrdem(),
             $manutencao->getIdUsuario()
         ]);
-    }
-
-    // READ ALL
-    public function listarManutencao()
-    {
-        $stmt = $this->conn->query(
-            "
-                SELECT *
-                FROM manutencoes
-            "
-        );
-
-        $dados = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        $manutencoes = [];
-
-        foreach($dados as $linha)
-        {
-            $manutencao = new Manutencao(
-                $linha['descricao_servico'],
-                $linha['observacoes'],
-                $linha['tempo_execucao_segundos'],
-                $linha['id_ordem'],
-                $linha['id_usuario']
-            );
-
-            $manutencao->setId($linha['id_manutencao']);
-
-            $manutencoes[] = $manutencao;
-        }
-
-        return $manutencoes;
     }
 
     // READ ONE
@@ -102,7 +68,6 @@ class ManutencaoRepository
         $manutencao = new Manutencao(
             $dados['descricao_servico'],
             $dados['observacoes'],
-            $dados['tempo_execucao_segundos'],
             $dados['id_ordem'],
             $dados['id_usuario']
         );
@@ -110,47 +75,6 @@ class ManutencaoRepository
         $manutencao->setId($dados['id_manutencao']);
 
         return $manutencao;
-    }
-
-    // UPDATE
-    public function atualizar(Manutencao $manutencao)
-    {
-        $stmt = $this->conn->prepare(
-            "
-                UPDATE manutencoes
-                SET
-                    descricao_servico = ?,
-                    observacoes = ?,
-                    tempo_execucao_segundos = ?,
-                    id_ordem = ?,
-                    id_usuario = ?
-                WHERE id_manutencao = ?
-            "
-        );
-
-        $stmt->execute([
-            $manutencao->getDescricaoServico(),
-            $manutencao->getObservacoes(),
-            $manutencao->getTempoExecucao(),
-            $manutencao->getIdOrdem(),
-            $manutencao->getIdUsuario(),
-            $manutencao->getId()
-        ]);
-    }
-
-    
-
-    // DELETE
-    public function excluir($id)
-    {
-        $stmt = $this->conn->prepare(
-            "
-                DELETE FROM manutencoes
-                WHERE id_manutencao = ?
-            "
-        );
-
-        $stmt->execute([$id]);
     }
 }
 ?>

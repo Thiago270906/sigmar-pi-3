@@ -5,21 +5,18 @@ class Manutencao
     private $id;
     private $descricaoServico;
     private $observacoes;
-    private $tempoExecucao;
     private $idOrdem;
     private $idUsuario;
 
     public function __construct(
         string $descricaoServico,
         string $observacoes,
-        int $tempoExecucao,
         int $idOrdem,
         int $idUsuario
     )
     {
         $this->setDescricaoServico($descricaoServico);
         $this->setObservacoes($observacoes);
-        $this->setTempoExecucao($tempoExecucao);
         $this->setIdOrdem($idOrdem);
         $this->setIdUsuario($idUsuario);
     }
@@ -39,11 +36,6 @@ class Manutencao
     public function getObservacoes(): string
     {
         return $this->observacoes;
-    }
-
-    public function getTempoExecucao(): int
-    {
-        return $this->tempoExecucao;
     }
 
     public function getIdOrdem(): int
@@ -92,19 +84,6 @@ class Manutencao
         }
 
         $this->observacoes = $observacoes;
-    }
-
-    public function setTempoExecucao(int $tempoExecucao)
-    {
-        if ($tempoExecucao <= 0) {
-            throw new Exception("Tempo de execução inválido.");
-        }
-
-        if ($tempoExecucao > 259200) {
-            throw new Exception("Tempo de execução muito alto.");
-        }
-
-        $this->tempoExecucao = $tempoExecucao;
     }
 
     public function setIdOrdem(int $idOrdem)

@@ -96,13 +96,15 @@
         status ENUM(
             'agendada',
             'pendente',
+            'em_andamento',
             'concluida',
             'cancelada'
         ) DEFAULT 'agendada',
         
         data_abertura TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         data_agendada DATE,
-        data_conclusao DATE,
+        data_inicio DATETIME,
+        data_conclusao DATETIME,
 
         deleted_at DATETIME NULL, 
         
@@ -126,10 +128,6 @@
         descricao_servico TEXT NOT NULL,
         
         observacoes TEXT,
-        
-        tempo_execucao_segundos INT,
-        
-        data_execucao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         
         id_ordem INT NOT NULL,
         id_usuario INT NOT NULL,
