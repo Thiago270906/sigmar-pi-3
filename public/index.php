@@ -48,6 +48,10 @@ switch($acao)
 
         if($_SESSION['usuario']['cargo'] === 'admin') {
 
+            $maquinaRepository = new MaquinaRepository();
+
+            $maquinas = $maquinaRepository->listarMaquinas();
+
             require '../app/views/administrador/dashboard/index.php';
 
         } else {

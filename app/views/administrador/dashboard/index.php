@@ -344,64 +344,69 @@
                         <!-- Cabeçalho da tabela (fixo, não rola) -->
                         <div class="flex-shrink-0 grid grid-cols-2 text-[11px] text-outline uppercase tracking-wider border-b border-outline-variant/30 pb-2 mb-1">
                             <span class="font-semibold">Equipamento</span>
-                            <span class="font-semibold">Status</span>
+                            <span class="font-semibold text-right">Status</span>
                         </div>
 
                         <!-- Lista de equipamentos com scroll e hover clicável -->
                         <div class="flex-1 overflow-y-auto min-h-0 space-y-1">
 
-                            <!-- Equipamento 1: Compressor — redireciona para detalhes -->
-                            <a href="index.php?acao=equipamentos&id=1"
-                               class="flex items-center justify-between p-3 rounded-lg border border-outline-variant/20 hover:bg-surface-container-low transition-colors cursor-pointer">
-                                <div class="min-w-0 flex-1">
-                                    <p class="text-sm font-medium text-on-surface">Compressor C-12</p>
-                                    <p class="text-xs text-outline">Setor de Produção</p>
-                                </div>
-                                <div class="flex items-center gap-2 flex-shrink-0">
-                                    <span class="px-2 py-1 rounded-full bg-green-100 text-green-700 text-[10px] font-bold uppercase">Operacional</span>
-                                    <span class="material-symbols-outlined text-outline text-[16px]">chevron_right</span>
-                                </div>
-                            </a>
+                            <div class="flex-1 overflow-y-auto min-h-0 space-y-1">
 
-                            <!-- Equipamento 2: Gerador — redireciona para detalhes -->
-                            <a href="index.php?acao=equipamentos&id=2"
-                               class="flex items-center justify-between p-3 rounded-lg border border-outline-variant/20 hover:bg-surface-container-low transition-colors cursor-pointer">
-                                <div class="min-w-0 flex-1">
-                                    <p class="text-sm font-medium text-on-surface">Gerador G-04</p>
-                                    <p class="text-xs text-outline">Manutenção Central</p>
-                                </div>
-                                <div class="flex items-center gap-2 flex-shrink-0">
-                                    <span class="px-2 py-1 rounded-full bg-yellow-100 text-yellow-700 text-[10px] font-bold uppercase">ALERTA</span>
-                                    <span class="material-symbols-outlined text-outline text-[16px]">chevron_right</span>
-                                </div>
-                            </a>
+                                <?php if(empty($maquinas)): ?>
 
-                            <!-- Equipamento 3: Bomba — redireciona para detalhes -->
-                            <a href="index.php?acao=equipamentos&id=3"
-                               class="flex items-center justify-between p-3 rounded-lg border border-outline-variant/20 hover:bg-surface-container-low transition-colors cursor-pointer">
-                                <div class="min-w-0 flex-1">
-                                    <p class="text-sm font-medium text-on-surface">Bomba B-01</p>
-                                    <p class="text-xs text-outline">Tanque Norte</p>
-                                </div>
-                                <div class="flex items-center gap-2 flex-shrink-0">
-                                    <span class="px-2 py-1 rounded-full bg-green-100 text-green-700 text-[10px] font-bold uppercase">Operacional</span>
-                                    <span class="material-symbols-outlined text-outline text-[16px]">chevron_right</span>
-                                </div>
-                            </a>
+                                    <div class="flex items-center justify-center h-full py-10">
+                                        <p class="text-sm text-outline">
+                                            Nenhuma máquina cadastrada.
+                                        </p>
+                                    </div>
 
-                            <!-- Equipamento 4: Exaustor — redireciona para detalhes -->
-                            <a href="index.php?acao=equipamentos&id=4"
-                               class="flex items-center justify-between p-3 rounded-lg border border-outline-variant/20 hover:bg-surface-container-low transition-colors cursor-pointer">
-                                <div class="min-w-0 flex-1">
-                                    <p class="text-sm font-medium text-on-surface">Exaustor E-09</p>
-                                    <p class="text-xs text-outline">Ventilação</p>
-                                </div>
-                                <div class="flex items-center gap-2 flex-shrink-0">
-                                    <span class="px-2 py-1 rounded-full bg-error-container/50 text-error text-[10px] font-bold uppercase">Crítico</span>
-                                    <span class="material-symbols-outlined text-outline text-[16px]">chevron_right</span>
-                                </div>
-                            </a>
+                                <?php else: ?>
 
+                                    <?php foreach($maquinas as $maquina): ?>
+
+                                        <?php
+                                            $status = $maquina->getStatus();
+
+                                            $classeStatus = match($status) {
+                                                'operando' => 'bg-green-100 text-green-700',
+                                                'alerta' => 'bg-yellow-100 text-yellow-700',
+                                                'critico' => 'bg-red-100 text-red-700',
+                                                'manutencao' => 'bg-blue-100 text-blue-700',
+                                                default => 'bg-gray-100 text-gray-700'
+                                            };
+                                        ?>
+
+                                        <a href="index.php?acao=detalhes-maquina&id=<?= $maquina->getId(); ?>"
+                                        class="flex items-center justify-between p-3 rounded-lg border border-outline-variant/20 hover:bg-surface-container-low transition-colors cursor-pointer">
+
+                                            <div class="min-w-0 flex-1">
+                                                <p class="text-sm font-medium text-on-surface">
+                                                    <?= htmlspecialchars($maquina->getNome()); ?>
+                                                </p>
+
+                                                <p class="text-xs text-outline">
+                                                    <?= htmlspecialchars($maquina->getTipo()); ?>
+                                                </p>
+                                            </div>
+
+                                            <div class="flex items-center gap-2 flex-shrink-0">
+
+                                                <span class="px-2 py-1 rounded-full text-[10px] font-bold uppercase <?= $classeStatus ?>">
+                                                    <?= htmlspecialchars($status); ?>
+                                                </span>
+
+                                                <span class="material-symbols-outlined text-outline text-[16px]">
+                                                    chevron_right
+                                                </span>
+
+                                            </div>
+                                        </a>
+
+                                    <?php endforeach; ?>
+
+                                <?php endif; ?>
+
+                            </div>
                         </div>
                         <!-- Fim: Lista de equipamentos -->
 
