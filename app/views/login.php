@@ -105,12 +105,12 @@
     </style>
 </head>
 
-<body class="bg-background min-h-screen flex flex-col items-center justify-between">
+<body class="bg-background min-h-screen flex flex-col"> <!-- responsividade pro body -->
 
     <!-- ==============================
          SUA PARTE ESTÁ AQUI THIAGO, O QUE MUDEI FOI SÓ O ESTILO EM CLASS DO TAILWIND, O RESTO É O MESMO DO SEU CÓDIGO
     ============================== -->
-    <main class="flex-grow flex items-center justify-center w-full px-gutter">
+    <main class="flex-grow flex items-center justify-center w-full px-4 sm:px-6 md:px-8 py-6">  <!-- responsividade no main -->
 
         <!-- Card central de login -->
         <div class="bg-surface-container-lowest w-full max-w-[420px] rounded-lg overflow-hidden shadow-[0_2px_4px_rgba(0,0,0,0.04)] border border-outline-variant">
@@ -146,15 +146,9 @@
                 </div>
                 <br>
 
-                <!-- botão de 'lembre de mim' e o de 'esqueci a senha' (não funciona ainda) -->
+                <!-- botão de 'esqueci a senha' (não funciona ainda) -->
 
-                <div class="flex items-center justify-between">
-                    <label class="flex items-center gap-2 cursor-pointer group">
-                        <input type="checkbox" class="w-4 h-4 rounded border-outline-variant text-secondary focus:ring-secondary"/>
-                        
-                        <span class="text-caption font-caption text-on-surface-variant group-hover:text-on-surface">Lembrar de mim</span>
-                    </label>
-
+                <div class="flex items-center justify-between">              
                     <!--o href não existe ainda-->
                     <a href="senharecuperacao.php" class="text-caption font-caption text-secondary font-medium hover:underline">Esqueci minha senha</a>
                 </div>

@@ -206,9 +206,19 @@ switch($acao)
 
     break;
 
+    case 'detalhes-ordem':
+
+        Auth::admin();
+
+        $controller = new ManutencaoController();
+
+        $controller->detalhesOrdem();
+
+    break;
+
     case 'form-manutencao':
 
-        Auth::check();
+        Auth::tecnico();
 
         $controller = new ManutencaoController();
 
@@ -218,7 +228,7 @@ switch($acao)
 
     case 'cadastrar-manutencao':
 
-        Auth::check();
+        Auth::tecnico();
 
         $controller = new ManutencaoController();
 

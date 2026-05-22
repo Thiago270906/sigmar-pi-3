@@ -104,6 +104,64 @@ class OrdemManutencaoRepository
         return $ordens;
     }
 
+    public function buscarIdOrdem($id)
+    {
+        $stmt = $this->conn->prepare(
+            "
+            SELECT 
+                om.*,
+                u.nome AS nome_tecnico,
+                m.nome AS nome_maquina,
+                m.tipo AS tipo_maquina,
+                m.status AS status_maquina
+
+                FROM ordens_manutencao om
+
+                INNER JOIN usuarios u
+                    ON om.id_usuario = u.id_usuario
+
+                INNER JOIN maquinas m
+                    ON om.id_maquina = m.id_maquina
+
+                WHERE om.id_ordem = ?
+                AND om.deleted_at IS NULL
+            "
+        );
+
+        $stmt->execute([$id]);
+
+        $dados = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if(!$dados)
+        {
+            return null;
+        }
+
+        $ordem = new OrdemManutencao(
+            $dados['titulo'],
+            $dados['descricao'],
+            $dados['tipo'],
+            $dados['prioridade'],
+            $dados['status'],
+            $dados['data_agendada'],
+            $dados['id_maquina'],
+            $dados['id_usuario']
+        );
+
+        $ordem->setId($dados['id_ordem']);
+
+        // NOVOS DADOS
+        $ordem->setNomeTecnico($dados['nome_tecnico']);
+
+        $ordem->setNomeMaquina($dados['nome_maquina']);
+
+        $ordem->setTipoMaquina($dados['tipo_maquina']);
+
+        $ordem->setStatusMaquina($dados['status_maquina']);
+
+        return $ordem;
+    }
+
     public function listarOrdemTecnico($idUsuario)
     {
         $stmt = $this->conn->prepare(

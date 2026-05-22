@@ -99,7 +99,7 @@
 
                 <option value="<?= $maquina->getId(); ?>">
 
-                    <?= $maquina->getNome(); ?>
+                    <?= $maquina->getId() . "# ". $maquina->getNome(); ?>
 
                 </option>
 
@@ -123,7 +123,7 @@
 
                 <option value="<?= $tecnico['id_usuario']; ?>">
 
-                    <?= $tecnico['nome']; ?>
+                    <?= $maquina->getId() . "# ".  $tecnico['nome']; ?>
 
                 </option>
 

@@ -110,12 +110,11 @@
     </style>
 </head>
 
-<body class="bg-background text-on-background font-body-main antialiased min-h-screen flex">
-
+<body class="bg-background text-on-background font-body-main antialiased min-h-screen flex flex-col lg:flex-row">
     <!-- ==============================
          NAVBAR LATERAL
     ============================== -->
-    <aside class="w-[260px] bg-primary h-screen sticky top-0 flex flex-col py-8 flex-shrink-0">
+    <aside class="w-full lg:w-[260px] bg-primary lg:h-screen lg:sticky top-0 flex flex-col py-4 lg:py-8 flex-shrink-0">
 
         <!-- Logo -->
         <div class="px-6 mb-12">
@@ -172,16 +171,6 @@
 
         <!-- Barra Superior -->
         <header class="h-16 flex items-center justify-between px-8 bg-white border-b border-outline-variant/30">
-            <div class="flex-1 max-w-xl">
-                <div class="relative">
-                    <input
-                        type="text"
-                        placeholder="Buscar equipamentos..."
-                        class="w-full bg-white border border-outline-variant/50 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all"
-                    />
-                </div>
-            </div>
-
             <div href="index.php?acao=notificacoes" class="flex items-center gap-6 ml-4">
                 <button class="relative text-on-surface-variant hover:text-primary transition-colors">
                     <img src="./assets/img/notificacao.png" width="25px" height="30px">
@@ -196,7 +185,7 @@
             </div>
         </header>
 
-        <main class="flex-1 p-8 space-y-8 overflow-y-auto">
+        <main class="flex-1 p-4 md:p-8 space-y-8 overflow-y-auto">
 
             <!-- Título da Página -->
             <div class="space-y-1">
@@ -207,10 +196,10 @@
             <!-- ==============================
                  LINHA DO MEIO — Gráfico + Notificações
             ============================== -->
-            <div class="grid grid-cols-12 gap-6">
+            <div class="grid grid-cols-1 xl:grid-cols-12 gap-6"> 
 
                 <!-- tabela do gráfico -->
-                <div class="col-span-8 bg-white border border-outline-variant/50 rounded-xl p-6">
+                <div class="xl:col-span-8 bg-white border border-outline-variant/50 rounded-xl p-4 md:p-6 overflow-x-auto">
                     <div class="flex justify-between items-center mb-10">
                         <h3 class="font-bold text-primary">Manutenções ao longo do tempo</h3>
                         <button class="flex items-center gap-2 border border-outline-variant/50 px-4 py-1.5 rounded-lg text-xs text-on-surface-variant hover:bg-surface-container transition-colors">
@@ -219,7 +208,7 @@
                         </button>
                     </div>
 
-                    <div class="h-64 relative w-full pr-4 pb-8">
+                    <div class="h-64 relative w-full overflow-x-auto"> 
                         <svg class="w-full h-full overflow-visible" viewBox="0 0 800 240">
                             <!-- Linhas de grade -->
                             <line stroke="#f0f1f2" stroke-width="1" x1="0" x2="800" y1="0"   y2="0"></line>
@@ -276,7 +265,7 @@
                 </div>
 
                 <!-- tabela de Últimas Notificações ---- -->
-                <div class="col-span-4 bg-white border border-outline-variant/50 rounded-xl flex flex-col" style="height: 100%;">
+                <div class="xl:col-span-4 bg-white border border-outline-variant/50 rounded-xl flex flex-col">
                     <div class="p-6 flex flex-col h-full">
 
                         <h3 class="font-bold text-primary mb-4">Últimas Notificações</h3>
@@ -344,7 +333,7 @@
             <!-- ==============================
                  LINHA INFERIOR: Equipamentos e Manutenções
             ============================== -->
-            <div class="grid grid-cols-2 gap-6 pb-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 pb-8">
 
                 <!-- ---- Card: Equipamentos Registrados ---- -->
                 <div class="bg-white border border-outline-variant/50 rounded-xl flex flex-col" style="height: 400px;">

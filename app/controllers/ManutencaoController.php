@@ -111,6 +111,35 @@ class ManutencaoController
         }
     }
 
+    public function detalhesOrdem()
+    {
+        Auth::admin();
+
+        if(!isset($_GET['id']))
+        {
+            $_SESSION['erro'] = "Ordem não encontrada.";
+
+            header("Location: index.php?acao=manutencoes");
+
+            exit;
+        }
+
+        $id = (int) $_GET['id'];
+
+        $ordem = $this->ordemRepository->buscarIdOrdem($id);
+
+        if(!$ordem)
+        {
+            $_SESSION['erro'] = "Ordem não encontrada.";
+
+            header("Location: index.php?acao=manutencoes");
+
+            exit;
+        }
+
+        require_once __DIR__ . "/../views/administrador/manutencoes/detalhes.php";
+    }
+
     // =========================
     // MANUTENÇÕES EXECUTADAS
     // =========================

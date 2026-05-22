@@ -13,6 +13,8 @@ class OrdemManutencao
     private $idUsuario;
     private ?string $nomeTecnico = null;
     private ?string $nomeMaquina = null;
+    private ?string $tipoMaquina = null;
+    private ?string $statusMaquina = null;
     
     public function __construct(
         string $titulo,
@@ -77,6 +79,21 @@ class OrdemManutencao
         return $this->idMaquina;
     }
 
+    public function getNomeMaquina(): ?string
+    {
+        return $this->nomeMaquina;
+    }
+
+    public function getTipoMaquina(): ?string
+    {
+        return $this->tipoMaquina;
+    }
+
+    public function getStatusMaquina(): ?string
+    {
+        return $this->statusMaquina;
+    }
+
     public function getIdUsuario(): int
     {
         return $this->idUsuario;
@@ -85,11 +102,6 @@ class OrdemManutencao
     public function getNomeTecnico(): ?string
     {
         return $this->nomeTecnico;
-    }
-
-    public function getNomeMaquina(): ?string
-    {
-        return $this->nomeMaquina;
     }
 
     // SETTERS
@@ -253,5 +265,29 @@ class OrdemManutencao
         }
 
         $this->nomeMaquina = $nomeMaquina;
+    }
+
+    public function setTipoMaquina(string $tipoMaquina)
+    {
+        $tipoMaquina = trim($tipoMaquina);
+
+        if(empty($tipoMaquina))
+        {
+            throw new Exception("Tipo da máquina inválido.");
+        }
+
+        $this->tipoMaquina = $tipoMaquina;
+    }
+
+    public function setStatusMaquina(string $statusMaquina)
+    {
+        $statusMaquina = trim($statusMaquina);
+
+        if(empty($statusMaquina))
+        {
+            throw new Exception("Status da máquina inválido.");
+        }
+
+        $this->statusMaquina = $statusMaquina;
     }
 }
