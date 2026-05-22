@@ -93,6 +93,10 @@ switch($acao)
 
     break;
 
+    case 'detalhes-maquina':
+        $controller = new MaquinaController();
+        $controller->detalhesMaquina();
+    break;
 
     case 'form-sensor':
 

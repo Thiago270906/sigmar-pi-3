@@ -11,9 +11,8 @@ class OrdemManutencao
     private $dataAgendada;
     private $idMaquina;
     private $idUsuario;
-    private $nomeTecnico;
-    private $nomeMaquina;
-
+    private ?string $nomeTecnico = null;
+    private ?string $nomeMaquina = null;
     public function __construct(
         string $titulo,
         string $descricao,
@@ -82,12 +81,12 @@ class OrdemManutencao
         return $this->idUsuario;
     }
 
-    public function getNomeTecnico()
+    public function getNomeTecnico(): ?string
     {
         return $this->nomeTecnico;
     }
 
-    public function getNomeMaquina()
+    public function getNomeMaquina(): ?string
     {
         return $this->nomeMaquina;
     }
@@ -140,8 +139,7 @@ class OrdemManutencao
         $tiposValidos = [
             'preventiva',
             'corretiva',
-            'preditiva',
-            'inspecao'
+            'preditiva'
         ];
 
         if (!in_array($tipo, $tiposValidos)) {
@@ -159,7 +157,7 @@ class OrdemManutencao
             'baixa',
             'media',
             'alta',
-            'critica'
+            'urgente'
         ];
 
         if (!in_array($prioridade, $prioridadesValidas)) {
@@ -174,10 +172,10 @@ class OrdemManutencao
         $status = strtolower(trim($status));
 
         $statusValidos = [
-            'agendado',
-            'em andamento',
-            'concluido',
-            'cancelado'
+            'agendada',
+            'pendente',
+            'concluida',
+            'cancelada'
         ];
 
         if (!in_array($status, $statusValidos)) {
@@ -195,13 +193,16 @@ class OrdemManutencao
             throw new Exception("Data agendada obrigatória.");
         }
 
-        $data = DateTime::createFromFormat('Y-m-d', $dataAgendada);
+        $data = DateTime::createFromFormat(
+            'Y-m-d',
+            $dataAgendada
+        );
 
-        if (!$data || $data->format('Y-m-d') !== $dataAgendada) {
+        if (!$data) {
             throw new Exception("Data agendada inválida.");
         }
 
-        $this->dataAgendada = $dataAgendada;
+        $this->dataAgendada = $data->format('Y-m-d');
     }
 
     public function setIdMaquina(int $idMaquina)

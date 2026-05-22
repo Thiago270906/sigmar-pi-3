@@ -23,7 +23,7 @@ class ManutencaoRepository
                 (
                     descricao_servico,
                     observacoes,
-                    tempo_execucao_minutos,
+                    tempo_execucao_segundos,
                     id_ordem,
                     id_usuario
                 )
@@ -66,7 +66,7 @@ class ManutencaoRepository
             $manutencao = new Manutencao(
                 $linha['descricao_servico'],
                 $linha['observacoes'],
-                $linha['tempo_execucao_minutos'],
+                $linha['tempo_execucao_segundos'],
                 $linha['id_ordem'],
                 $linha['id_usuario']
             );
@@ -102,7 +102,7 @@ class ManutencaoRepository
         $manutencao = new Manutencao(
             $dados['descricao_servico'],
             $dados['observacoes'],
-            $dados['tempo_execucao_minutos'],
+            $dados['tempo_execucao_segundos'],
             $dados['id_ordem'],
             $dados['id_usuario']
         );
@@ -121,7 +121,7 @@ class ManutencaoRepository
                 SET
                     descricao_servico = ?,
                     observacoes = ?,
-                    tempo_execucao_minutos = ?,
+                    tempo_execucao_segundos = ?,
                     id_ordem = ?,
                     id_usuario = ?
                 WHERE id_manutencao = ?

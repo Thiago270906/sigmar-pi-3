@@ -101,8 +101,8 @@
         ) DEFAULT 'agendada',
         
         data_abertura TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        data_agendada DATETIME,
-        data_conclusao DATETIME,
+        data_agendada DATE,
+        data_conclusao DATE,
 
         deleted_at DATETIME NULL, 
         
@@ -198,22 +198,6 @@
         FOREIGN KEY (id_maquina)
             REFERENCES maquinas(id_maquina)
             ON DELETE CASCADE
-    );
-
-    CREATE TABLE historico_status_maquina (
-        id_historico INT AUTO_INCREMENT PRIMARY KEY,
-        
-        status_anterior VARCHAR(50),
-        status_novo VARCHAR(50),
-        
-        descricao TEXT,
-        
-        data_alteracao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        
-        id_maquina INT NOT NULL,
-        
-        FOREIGN KEY (id_maquina)
-            REFERENCES maquinas(id_maquina)
     );
 
     INSERT INTO usuarios

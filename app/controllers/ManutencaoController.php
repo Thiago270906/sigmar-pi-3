@@ -7,17 +7,25 @@ require_once __DIR__ . "/../models/Manutencao.php";
 
 require_once __DIR__ . "/../models/OrdemManutencaoRepository.php";
 require_once __DIR__ . "/../models/ManutencaoRepository.php";
+require_once __DIR__ . "/../models/MaquinaRepository.php";
+require_once __DIR__ . "/../models/UsuarioRepository.php";
 
 class ManutencaoController
 {
     private $ordemRepository;
     private $manutencaoRepository;
+    private $maquinaRepository;
+    private $usuarioRepository;
 
     public function __construct()
     {
         $this->ordemRepository = new OrdemManutencaoRepository();
 
         $this->manutencaoRepository = new ManutencaoRepository();
+
+        $this->maquinaRepository = new MaquinaRepository();
+
+        $this->usuarioRepository = new UsuarioRepository();
     }
 
     // =========================
@@ -49,6 +57,10 @@ class ManutencaoController
     public function formCadastrarOrdem()
     {
         Auth::admin();
+
+        $maquinas = $this->maquinaRepository->listarMaquinas();
+
+        $tecnicos = $this->usuarioRepository->listarTecnicos();
 
         require_once __DIR__ . "/../views/administrador/manutencoes/cadastro.php";
     }
@@ -107,7 +119,7 @@ class ManutencaoController
     {
         Auth::check();
 
-        require_once __DIR__ . "/../views/administrador/manutencoes/cadastro.php";
+        require_once __DIR__ . "/../views/tecnico/manutencoes/cadastro.php";
     }
 
     public function cadastrarManutencao()
@@ -120,7 +132,7 @@ class ManutencaoController
 
             $observacoes = trim($_POST['observacoes']);
 
-            $tempoExecucao = $_POST['tempo_execucao_minutos'];
+            $tempoExecucao = $_POST['tempo_execucao_segundos'];
 
             $idOrdem = $_POST['id_ordem'];
 
@@ -135,6 +147,8 @@ class ManutencaoController
             );
 
             $this->manutencaoRepository->createManutencao($manutencao);
+
+            $this->ordemRepository->concluirOrdem($idOrdem);
 
             $_SESSION['sucesso'] = "Manutenção cadastrada com sucesso.";
 
@@ -152,8 +166,14 @@ class ManutencaoController
 
     public function endManutencao($id)
     {
+        Auth::check();
+
         $this->ordemRepository->concluirOrdem($id);
 
+        $_SESSION['sucesso'] = "Ordem concluída com sucesso.";
+
         header("Location: index.php?acao=manutencoes");
+
+        exit;
     }
 }

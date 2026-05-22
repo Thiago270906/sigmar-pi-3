@@ -100,8 +100,7 @@ class Manutencao
             throw new Exception("Tempo de execução inválido.");
         }
 
-        // limite opcional: máximo 72 horas
-        if ($tempoExecucao > 4320) {
+        if ($tempoExecucao > 259200) {
             throw new Exception("Tempo de execução muito alto.");
         }
 

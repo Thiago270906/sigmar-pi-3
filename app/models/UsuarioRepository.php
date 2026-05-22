@@ -153,6 +153,20 @@ class UsuarioRepository
         return $usuarios;
     }
 
+    public function listarTecnicos()
+    {
+        $stmt = $this->conn->query(
+            "
+                SELECT *
+                FROM usuarios
+                WHERE cargo = 'tecnico'
+                AND ativo = 1
+            "
+        );
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function buscarIdFuncionario($id)
     {
         $stmt = $this->conn->prepare(

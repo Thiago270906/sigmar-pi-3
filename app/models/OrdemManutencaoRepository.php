@@ -93,8 +93,6 @@ class OrdemManutencaoRepository
 
             $ordem->setId($linha['id_ordem']);
 
-            $ordem->setStatus($linha['status']);
-
             // NOVOS DADOS
             $ordem->setNomeTecnico($linha['nome_tecnico']);
 
@@ -219,7 +217,7 @@ class OrdemManutencaoRepository
             UPDATE ordens_manutencao
             SET status = 'pendente'
             WHERE status = 'agendada'
-            AND data_agendada < NOW()
+            AND data_agendada < CURDATE()
         ";
 
         $stmt = $this->conn->prepare($sql);
@@ -233,7 +231,7 @@ class OrdemManutencaoRepository
             UPDATE ordens_manutencao
             SET
                 status = 'concluida',
-                data_conclusao = NOW()
+                data_conclusao = CURDATE()
             WHERE id_ordem = ?
         ";
 

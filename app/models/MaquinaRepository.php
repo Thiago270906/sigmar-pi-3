@@ -132,6 +132,29 @@ class MaquinaRepository
 
         $maquina->setId($dados['id_maquina']);
 
+        // =========================
+        // BUSCA SENSORES
+        // =========================
+
+        $sensorRepository = new SensorRepository();
+
+        $sensores = $sensorRepository->listarSensoresMaquina(
+            $dados['id_maquina']
+        );
+
+        foreach($sensores as $sensor)
+        {
+            if($sensor->getTipo() == 'temperatura')
+            {
+                $maquina->setSensorTemperatura($sensor);
+            }
+
+            if($sensor->getTipo() == 'vibracao')
+            {
+                $maquina->setSensorVibracao($sensor);
+            }
+        }
+
         return $maquina;
     }
 

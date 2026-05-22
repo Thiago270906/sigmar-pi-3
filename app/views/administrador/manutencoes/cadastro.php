@@ -1,13 +1,32 @@
+<!-- views/administrador/manutencoes/index.php -->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ordens de Manutenção</title>
+</head>
+<body>
+
+<h1>Ordens de Manutenção</h1>
+
 <form action="index.php?acao=cadastrar-ordem" method="POST">
 
-    <input type="text" name="titulo" placeholder="Título" required>
+    <input 
+        type="text"
+        name="titulo"
+        placeholder="Título"
+        required
+    >
 
     <br><br>
 
     <textarea 
         name="descricao"
-        placeholder="Descrição">
-    </textarea>
+        placeholder="Descrição"
+        required
+    ></textarea>
 
     <br><br>
 
@@ -60,28 +79,59 @@
     <br><br>
 
     <input 
-        type="datetime-local"
+        type="date"
         name="data_agendada"
+        min="<?= date('Y-m-d'); ?>"
         required
     >
 
     <br><br>
 
-    <input 
-        type="number"
-        name="id_maquina"
-        placeholder="ID da máquina"
-        required
-    >
+    <select name="id_maquina" required>
+
+        <option value="">
+            Selecione a máquina
+        </option>
+
+        <?php if(!empty($maquinas)): ?>
+
+            <?php foreach($maquinas as $maquina): ?>
+
+                <option value="<?= $maquina->getId(); ?>">
+
+                    <?= $maquina->getNome(); ?>
+
+                </option>
+
+            <?php endforeach; ?>
+
+        <?php endif; ?>
+
+    </select>
 
     <br><br>
 
-    <input 
-        type="number"
-        name="id_usuario"
-        placeholder="ID do Usuário"
-        required
-    >
+    <select name="id_usuario" required>
+
+        <option value="">
+            Selecione o técnico
+        </option>
+
+        <?php if(!empty($tecnicos)): ?>
+
+            <?php foreach($tecnicos as $tecnico): ?>
+
+                <option value="<?= $tecnico['id_usuario']; ?>">
+
+                    <?= $tecnico['nome']; ?>
+
+                </option>
+
+            <?php endforeach; ?>
+
+        <?php endif; ?>
+
+    </select>
 
     <br><br>
 
@@ -90,3 +140,6 @@
     </button>
 
 </form>
+
+</body>
+</html>
