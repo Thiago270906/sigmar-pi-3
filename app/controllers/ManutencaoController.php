@@ -137,14 +137,19 @@ class ManutencaoController
             exit;
         }
 
+        // NOVO
+        $manutencao = null;
+
+        if($ordem->getStatus() === 'concluida')
+        {
+            $manutencao = $this->manutencaoRepository->buscarPorOrdem($id);
+        }
+
         if($_SESSION['usuario']['cargo'] === 'admin') {
 
-        Auth::admin();
+            require_once __DIR__ . "/../views/administrador/manutencoes/detalhes.php";
 
-        require_once __DIR__ . "/../views/administrador/manutencoes/detalhes.php";
         } else {
-
-        Auth::tecnico();
 
             require_once __DIR__ . "/../views/tecnico/manutencoes/detalhes.php";
         }
@@ -246,7 +251,18 @@ class ManutencaoController
             exit;
         }
 
-        require_once __DIR__ . "/../views/tecnico/manutencoes/detalhes.php";
+        if($_SESSION['usuario']['cargo'] === 'admin') {
+
+            Auth::admin();
+
+            require_once __DIR__ . "/../views/administrador/manutencoes/detalhes.php";
+
+        } else {
+
+            Auth::tecnico();
+
+            require_once __DIR__ . "/../views/tecnico/manutencoes/detalhes.php";
+        }
     }
 
     public function iniciarManutencao()

@@ -3,6 +3,7 @@
 require_once __DIR__ . '/../../../models/OrdemManutencao.php';
 
 /** @var OrdemManutencao $ordem */
+/** @var Manutenccao $manutencao */
 
 ?>
 
@@ -82,6 +83,34 @@ require_once __DIR__ . '/../../../models/OrdemManutencao.php';
             <?= $ordem->getStatusMaquina(); ?>
         </p>
     </div>
+
+    <?php if($manutencao): ?>
+
+        <hr>
+
+        <h2>Manutenção Executada</h2>
+
+        <p>
+            <strong>Serviço:</strong>
+            <?= $manutencao->getDescricaoServico(); ?>
+        </p>
+
+        <p>
+            <strong>Observações:</strong>
+            <?= $manutencao->getObservacoes(); ?>
+        </p>
+
+        <p>
+            <strong>Data Início:</strong>
+            <?=  $ordem->getDataInicio() ?>
+        </p>
+
+        <p>
+            <strong>Data Início:</strong>
+            <?=  $ordem->getDataConclusao() ?>
+        </p>
+
+    <?php endif; ?>
 
     <a href="index.php?acao=manutencoes">
         Voltar

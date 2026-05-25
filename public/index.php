@@ -219,7 +219,6 @@ switch($acao)
         $controller = new ManutencaoController();
 
         $controller->detalhesOrdem();
-        $controller->detalhesManutencao();
 
     break;
 

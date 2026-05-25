@@ -75,5 +75,36 @@ class ManutencaoRepository
 
         return $manutencao;
     }
+    
+    public function buscarPorOrdem($idOrdem)
+    {
+        $stmt = $this->conn->prepare(
+            "
+                SELECT *
+                FROM manutencoes
+                WHERE id_ordem = ?
+            "
+        );
+
+        $stmt->execute([$idOrdem]);
+
+        $dados = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if(!$dados)
+        {
+            return null;
+        }
+
+        $manutencao = new Manutencao(
+            $dados['descricao_servico'],
+            $dados['observacoes'],
+            $dados['id_ordem'],
+            $dados['id_usuario']
+        );
+
+        $manutencao->setId($dados['id_manutencao']);
+
+        return $manutencao;
+    }
 }
 ?>
