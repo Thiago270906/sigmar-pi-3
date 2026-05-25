@@ -86,7 +86,7 @@
 
                     <td>
 
-                        <a href="index.php?acao=detalhes-ordem&id=<?= $ordem->getId() ?>">
+                        <a href="index.php?acao=detalhes-manutencao&id=<?= $ordem->getId() ?>">
                             Ver detalhes
                         </a>
 

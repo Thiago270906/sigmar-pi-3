@@ -6,7 +6,6 @@ class Maquina
     private $nome;
     private $tipo;
     private $status;
-    private $descricao;
 
     private $sensorTemperatura;
     private $sensorVibracao;
@@ -15,13 +14,11 @@ class Maquina
         string $nome,
         string $tipo,
         string $status,
-        string $descricao
     )
     {
         $this->setNome($nome);
         $this->setTipo($tipo);
         $this->setStatus($status);
-        $this->setDescricao($descricao);
     }
 
     // GETTERS
@@ -44,11 +41,6 @@ class Maquina
     public function getStatus(): string
     {
         return $this->status;
-    }
-
-    public function getDescricao(): string
-    {
-        return $this->descricao;
     }
 
     public function getSensorTemperatura()
@@ -127,19 +119,6 @@ class Maquina
         }
 
         $this->status = $status;
-    }
-
-    public function setDescricao(string $descricao)
-    {
-        $descricao = trim($descricao);
-
-        // descrição opcional
-        if (strlen($descricao) > 1000)
-        {
-            throw new Exception("Descrição muito longa.");
-        }
-
-        $this->descricao = $descricao;
     }
 
     public function setSensorTemperatura($sensor)

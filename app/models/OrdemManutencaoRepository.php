@@ -247,11 +247,13 @@ class OrdemManutencaoRepository
         $stmt->execute();
     }
 
-    public function andamentoOrdem($id)
+    public function comecarOrdem($id)
     {
         $sql = "
             UPDATE ordens_manutencao
-            SET status = 'em_andamento'
+            SET 
+                status = 'em_andamento',
+                data_inicio = CURRENT_TIMESTAMP
             WHERE id_ordem = ?
         ";
 

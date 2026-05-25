@@ -24,12 +24,10 @@ class MaquinaRepository
                 (
                     nome,
                     tipo,
-                    status,
-                    descricao
+                    status
                 )
                 VALUES
                 (
-                    ?,
                     ?,
                     ?,
                     ?
@@ -41,7 +39,6 @@ class MaquinaRepository
             $maquina->getNome(),
             $maquina->getTipo(),
             $maquina->getStatus(),
-            $maquina->getDescricao()
         ]);
         
         return $this->conn->lastInsertId();
@@ -69,8 +66,7 @@ class MaquinaRepository
             $maquina = new Maquina(
                 $linha['nome'],
                 $linha['tipo'],
-                $linha['status'],
-                $linha['descricao']
+                $linha['status']
             );
 
             $maquina->setId($linha['id_maquina']);
@@ -126,8 +122,7 @@ class MaquinaRepository
         $maquina = new Maquina(
             $dados['nome'],
             $dados['tipo'],
-            $dados['status'],
-            $dados['descricao']
+            $dados['status']
         );
 
         $maquina->setId($dados['id_maquina']);
@@ -168,7 +163,6 @@ class MaquinaRepository
                     nome = ?,
                     tipo = ?,
                     status = ?,
-                    descricao = ?
                 WHERE id_maquina = ?
             "
         );
@@ -177,7 +171,6 @@ class MaquinaRepository
             $maquina->getNome(),
             $maquina->getTipo(),
             $maquina->getStatus(),
-            $maquina->getDescricao(),
             $maquina->getId()
         ]);
     }

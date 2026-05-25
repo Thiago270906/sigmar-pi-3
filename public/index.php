@@ -167,7 +167,7 @@ switch($acao)
     break;
 
     // =========================
-    // ORDEM DE MANUTENÇÕES
+    // MANUTENÇÕES
     // =========================
 
     case 'manutencoes':
@@ -217,6 +217,7 @@ switch($acao)
         $controller = new ManutencaoController();
 
         $controller->detalhesOrdem();
+        $controller->detalhesManutencao();
 
     break;
 
@@ -238,6 +239,26 @@ switch($acao)
 
         $controller->cadastrarManutencao();
 
+    break;
+
+    case 'detalhes-manutencao':
+
+        Auth::tecnico();
+
+        $controller = new ManutencaoController();
+
+        $controller->detalhesOrdem();
+
+    break;
+
+    case 'iniciar-manutencao';
+
+        Auth::tecnico();
+
+        $controller = new ManutencaoController();
+
+        $controller->iniciarManutencao();
+        
     break;
 
     // =========================

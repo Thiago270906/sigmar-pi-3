@@ -46,7 +46,7 @@ class ManutencaoRepository
     }
 
     // READ ONE
-    public function buscarPorId($id)
+    public function buscarIdManutencao($id)
     {
         $stmt = $this->conn->prepare(
             "

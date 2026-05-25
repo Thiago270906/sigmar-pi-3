@@ -39,11 +39,6 @@ require_once __DIR__ . '/../../../models/Maquina.php';
             <strong>Status:</strong>
             <?= $maquina->getStatus(); ?>
         </p>
-
-        <p>
-            <strong>Descrição:</strong>
-            <?= $maquina->getDescricao(); ?>
-        </p>
     </div>
 
     <div class="card">

@@ -46,7 +46,6 @@ class MaquinaController
             $nome = trim($_POST['nome']);
             $tipo = trim($_POST['tipo']);
             $status = 'operando';
-            $descricao = trim($_POST['descricao']);
 
             // =========================
             // CRIA OBJETO MÁQUINA
@@ -55,8 +54,7 @@ class MaquinaController
             $maquina = new Maquina(
                 $nome,
                 $tipo,
-                $status,
-                $descricao
+                $status
             );
 
             // =========================

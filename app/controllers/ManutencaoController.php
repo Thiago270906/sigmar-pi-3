@@ -113,7 +113,7 @@ class ManutencaoController
 
     public function detalhesOrdem()
     {
-        Auth::admin();
+        Auth::check();
 
         if(!isset($_GET['id']))
         {
@@ -137,7 +137,17 @@ class ManutencaoController
             exit;
         }
 
+        if($_SESSION['usuario']['cargo'] === 'admin') {
+
+        Auth::admin();
+
         require_once __DIR__ . "/../views/administrador/manutencoes/detalhes.php";
+        } else {
+
+        Auth::tecnico();
+
+            require_once __DIR__ . "/../views/tecnico/manutencoes/detalhes.php";
+        }
     }
 
     // =========================
@@ -190,16 +200,76 @@ class ManutencaoController
         }
     }
 
-    public function finalizarManutencao($id)
+    public function detalhesManutencao()
     {
         Auth::check();
 
-        $this->ordemRepository->concluirOrdem($id);
+        if(!isset($_GET['id']))
+        {
+            $_SESSION['erro'] = "Ordem não encontrada.";
 
-        $_SESSION['sucesso'] = "Ordem concluída com sucesso.";
+            header("Location: index.php?acao=manutencoes");
 
-        header("Location: index.php?acao=manutencoes");
+            exit;
+        }
 
-        exit;
+        $id = (int) $_GET['id'];
+
+        $manutencao = $this->manutencaoRepository->buscarIdManutencao($id);
+
+        if(!$manutencao)
+        {
+            $_SESSION['erro'] = "Ordem não encontrada.";
+
+            header("Location: index.php?acao=manutencoes");
+
+            exit;
+        }
+
+        require_once __DIR__ . "/../views/tecnico/manutencoes/detalhes.php";
+    }
+
+    public function iniciarManutencao()
+    {
+        Auth::check();
+
+        if(!isset($_GET['id']))
+        {
+            $_SESSION['erro'] = "Ordem não encontrada.";
+
+            header("Location: index.php?acao=manutencoes");
+
+            exit;
+        }
+
+        $id = (int) $_GET['id'];
+
+        $this->ordemRepository->comecarOrdem($id);
+
+        $_SESSION['sucesso'] = "Manutenção Iniciada com sucesso!";
+
+        header("Location: index.php?acao=detalhes-manutencao");
+    }
+
+    public function finalizarManutencao()
+    {
+        Auth::check();
+
+        if(!isset($_GET['id']))
+        {
+            $_SESSION['erro'] = "Ordem não encontrada.";
+
+            header("Location: index.php?acao=manutencoes");
+
+            exit;
+        }
+
+        $id = (int) $_GET['id'];
+
+        $this->ordemRepository->comecarOrdem($id);
+
+        $_SESSION['sucesso'] = "Manutenção Finalizada com sucesso!";
+
+        header("Location: index.php?acao=manutencao");
     }
 }
