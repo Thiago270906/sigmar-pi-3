@@ -168,6 +168,14 @@ switch($acao)
 
     break;
 
+    case 'detalhes-funcionario':
+        Auth::admin();
+
+        $controller = new UsuarioController();
+
+        $controller->detalhesFuncionario();
+        
+    break;
     // =========================
     // MANUTENÇÕES
     // =========================

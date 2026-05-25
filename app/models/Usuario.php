@@ -8,6 +8,8 @@ class Usuario
     private $senha;
     private $cargo;
     private ?string $telefone;
+    private $criadaEm;
+    private ?Endereco $endereco = null;
 
     public function __construct(
         string $nome,
@@ -56,6 +58,16 @@ class Usuario
         return $this->telefone;
     }
 
+    public function getCriadaEm(): ?string
+    {
+        return $this->criadaEm;
+    }
+
+    public function getEndereco(): ?Endereco
+    {
+        return $this->endereco;
+    }
+
     // Setters
 
     public function setId(int $id)
@@ -84,7 +96,7 @@ class Usuario
             throw new Exception("Nome inválido.");
         }
 
-        if (!preg_match("/^[a-zA-ZÀ-ÿ\s]+$/u", $nome))
+        if (!preg_match("/^[a-zA-ZÀ-ÿ\s\-]+$/u", $nome))
         {
             throw new Exception("Nome contém caracteres inválidos.");
         }
@@ -171,6 +183,16 @@ class Usuario
         }
 
         $this->telefone = $telefone;
+    }
+
+    public function setCriadaEm(string $criadaEm)
+    {
+        $this->criadaEm = $criadaEm;
+    }
+
+    public function setEndereco(Endereco $endereco)
+    {
+        $this->endereco = $endereco;
     }
 }
 

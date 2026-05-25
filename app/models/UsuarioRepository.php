@@ -170,7 +170,26 @@ class UsuarioRepository
     public function buscarIdFuncionario($id)
     {
         $stmt = $this->conn->prepare(
-            "SELECT * FROM usuarios WHERE id_usuario = ?"
+            "
+                SELECT 
+                    u.*,
+
+                    e.id_endereco,
+                    e.cep,
+                    e.cidade,
+                    e.bairro,
+                    e.rua,
+                    e.estado,
+                    e.numero
+
+                FROM usuarios u
+
+                LEFT JOIN enderecos e
+                    ON e.id_usuario = u.id_usuario
+
+                WHERE u.id_usuario = ?
+                AND u.deleted_at IS NULL
+            "
         );
 
         $stmt->execute([$id]);
@@ -182,17 +201,42 @@ class UsuarioRepository
             return null;
         }
 
-        $usuario = new Usuario(
-            $dados['nome'],
-            $dados['email'],
-            $dados['senha_hash'],
-            $dados['cargo'],
-            $dados['telefone']
-        );
+        try {
 
-        $usuario->setId($dados['id_usuario']);
+            $usuario = new Usuario(
+                $dados['nome'],
+                $dados['email'],
+                $dados['senha_hash'],
+                $dados['cargo'],
+                $dados['telefone']
+            );
 
-        return $usuario;
+            $usuario->setId($dados['id_usuario']);
+            $usuario->setCriadaEm($dados['criada_em']);
+
+            // ENDEREÇO
+            if($dados['cep'])
+            {
+                $endereco = new Endereco(
+                    $dados['cep'],
+                    $dados['cidade'],
+                    $dados['bairro'],
+                    $dados['rua'],
+                    $dados['estado'],
+                    $dados['numero']
+                );
+
+                $endereco->setId($dados['id_endereco']);
+
+                $usuario->setEndereco($endereco);
+            }
+
+            return $usuario;
+
+        } catch(Exception $e) {
+
+            die($e->getMessage());
+        }
     }
 
     public function atualizarFuncionario(Usuario $usuario)

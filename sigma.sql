@@ -16,8 +16,6 @@
         cargo ENUM('admin', 'tecnico') NOT NULL,
         
         telefone VARCHAR(20),
-        
-        ativo BOOLEAN DEFAULT TRUE,
 
         criada_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 

@@ -131,4 +131,33 @@ class UsuarioController
             exit;
         }
     }
+
+    public function detalhesFuncionario()
+    {
+        Auth::admin();
+
+        if(!isset($_GET['id']))
+        {
+            $_SESSION['erro'] = "Funcionário não encontrado.";
+
+            header("Location: index.php?acao=funcionarios");
+
+            exit;
+        }
+
+        $id = (int) $_GET['id'];
+
+        $usuario = $this->repository->buscarIdFuncionario($id);
+
+        if(!$usuario)
+        {
+            $_SESSION['erro'] = "Funcionário não encontrado.";
+
+            header("Location: index.php?acao=funcionarios");
+
+            exit;
+        }
+
+        require_once __DIR__ . "/../views/administrador/funcionarios/detalhes.php";
+    }
 }

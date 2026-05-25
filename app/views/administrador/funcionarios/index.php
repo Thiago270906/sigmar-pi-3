@@ -51,6 +51,7 @@
                 <th>Email</th>
                 <th>Cargo</th>
                 <th>Telefone</th>
+                <th>Detalhes</th>
             </tr>
 
         </thead>
@@ -79,6 +80,12 @@
 
                     <td>
                         <?= $usuario->getTelefone() ?? 'Não informado' ?>
+                    </td>
+
+                    <td>
+                        <a href="index.php?acao=detalhes-funcionario&id=<?= $usuario->getId() ?>">
+                            Detalhes
+                        </a>
                     </td>
 
                 </tr>
