@@ -159,6 +159,9 @@ class OrdemManutencaoRepository
 
         $ordem->setStatusMaquina($dados['status_maquina']);
 
+        $ordem->setDataInicio($dados['data_inicio']);
+
+        $ordem->setDataConclusao($dados['data_conclusao']);
         return $ordem;
     }
 
@@ -266,9 +269,9 @@ class OrdemManutencaoRepository
     {
         $sql = "
             UPDATE ordens_manutencao
-            SET
+            SET 
                 status = 'concluida',
-                data_conclusao = CURDATE()
+                data_conclusao = CURRENT_TIMESTAMP
             WHERE id_ordem = ?
         ";
 

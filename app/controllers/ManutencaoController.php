@@ -158,6 +158,19 @@ class ManutencaoController
     {
         Auth::check();
 
+        if(!isset($_SESSION['ordem_finalizada']))
+        {
+            $_SESSION['erro'] = "Nenhuma ordem finalizada.";
+
+            header("Location: index.php?acao=manutencoes");
+
+            exit;
+        }
+
+        $idOrdem = $_SESSION['ordem_finalizada'];
+
+        $ordem = $this->ordemRepository->buscarIdOrdem($idOrdem);
+
         require_once __DIR__ . "/../views/tecnico/manutencoes/cadastro.php";
     }
 
@@ -167,11 +180,16 @@ class ManutencaoController
 
         try {
 
+            if(!isset($_SESSION['ordem_finalizada']))
+            {
+                throw new Exception("Nenhuma ordem finalizada.");
+            }
+
             $descricaoServico = trim($_POST['descricao_servico']);
 
             $observacoes = trim($_POST['observacoes']);
 
-            $idOrdem = $_POST['id_ordem'];
+            $idOrdem = $_SESSION['ordem_finalizada'];
 
             $idUsuario = $_SESSION['usuario']['id'];
 
@@ -184,7 +202,7 @@ class ManutencaoController
 
             $this->manutencaoRepository->createManutencao($manutencao);
 
-            $this->ordemRepository->concluirOrdem($idOrdem);
+            unset($_SESSION['ordem_finalizada']);
 
             $_SESSION['sucesso'] = "Manutenção cadastrada com sucesso.";
 
@@ -193,9 +211,11 @@ class ManutencaoController
             exit;
 
         } catch(Exception $e) {
+
             $_SESSION['erro'] = $e->getMessage();
 
             header("Location: index.php?acao=form-manutencao");
+
             exit;
         }
     }
@@ -248,7 +268,7 @@ class ManutencaoController
 
         $_SESSION['sucesso'] = "Manutenção Iniciada com sucesso!";
 
-        header("Location: index.php?acao=detalhes-manutencao");
+        header("Location: index.php?acao=detalhes-manutencao&id=" . $id);
     }
 
     public function finalizarManutencao()
@@ -266,10 +286,15 @@ class ManutencaoController
 
         $id = (int) $_GET['id'];
 
-        $this->ordemRepository->comecarOrdem($id);
+        $this->ordemRepository->concluirOrdem($id);
 
-        $_SESSION['sucesso'] = "Manutenção Finalizada com sucesso!";
+        $_SESSION['ordem_finalizada'] = $id;
 
-        header("Location: index.php?acao=manutencao");
+        // ESSA LINHA FALTAVA
+        $_SESSION['data_conclusao'] = date('Y-m-d H:i:s');
+
+        header("Location: index.php?acao=form-manutencao");
+
+        exit;
     }
 }

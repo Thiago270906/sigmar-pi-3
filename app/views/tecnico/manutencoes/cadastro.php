@@ -1,102 +1,123 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+
+    <meta 
+        name="viewport" 
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Cadastro de Manutenção
+    </title>
 </head>
+
 <body>
-    <form action="index.php?acao=cadastrar-ordem" method="POST">
 
-        <input type="text" name="titulo" placeholder="Título" required>
+    <h1>
+        Registrar Manutenção
+    </h1>
 
-        <br><br>
+    <?php if(isset($_SESSION['erro'])): ?>
 
-        <textarea 
-            name="descricao"
-            placeholder="Descrição">
-        </textarea>
+        <p>
+            <?= $_SESSION['erro']; ?>
+        </p>
 
-        <br><br>
+        <?php unset($_SESSION['erro']); ?>
 
-        <select name="tipo" required>
+    <?php endif; ?>
 
-            <option value="">
-                Tipo da manutenção
-            </option>
+    <?php if(isset($_SESSION['sucesso'])): ?>
 
-            <option value="preventiva">
-                Preventiva
-            </option>
+        <p>
+            <?= $_SESSION['sucesso']; ?>
+        </p>
 
-            <option value="corretiva">
-                Corretiva
-            </option>
+        <?php unset($_SESSION['sucesso']); ?>
 
-            <option value="preditiva">
-                Preditiva
-            </option>
+    <?php endif; ?>
 
-        </select>
+    <form 
+        action="index.php?acao=cadastrar-manutencao"
+        method="POST"
+    >
 
-        <br><br>
+    <?php if(isset($ordem) && $ordem->getDataInicio()): ?>
 
-        <select name="prioridade" required>
+        <p>
+            <strong>Data de início:</strong>
 
-            <option value="">
-                Prioridade
-            </option>
+            <?= date(
+                'd/m/Y H:i',
+                strtotime($ordem->getDataInicio())
+            ); ?>
+        </p>
 
-            <option value="baixa">
-                Baixa
-            </option>
+    <?php endif; ?>
 
-            <option value="media">
-                Média
-            </option>
+    <?php if(isset($_SESSION['data_conclusao'])): ?>
 
-            <option value="alta">
-                Alta
-            </option>
+        <p>
+            <strong>Data de término:</strong>
 
-            <option value="urgente">
-                Urgente
-            </option>
+            <?= date(
+                'd/m/Y H:i',
+                strtotime($_SESSION['data_conclusao'])
+                
+            ); ?>
+        </p>
 
-        </select>
+    <?php endif; ?>
+        <br>
 
-        <br><br>
-
-        <input 
-            type="datetime-local"
-            name="data_agendada"
+        <textarea
+            name="descricao_servico"
+            placeholder="Descrição do serviço realizado"
             required
-        >
+        ></textarea>
 
         <br><br>
 
-        <input 
-            type="number"
-            name="id_maquina"
-            placeholder="ID da máquina"
-            required
-        >
+        <textarea
+            name="observacoes"
+            placeholder="Observações"
+        ></textarea>
 
         <br><br>
 
-        <input 
-            type="number"
-            name="id_usuario"
-            placeholder="ID do Usuário"
-            required
-        >
+        <?php if(isset($_SESSION['ordem_finalizada'])): ?>
+
+            <input
+                type="hidden"
+                name="id_ordem"
+                value="<?= $_SESSION['ordem_finalizada']; ?>"
+            >
+
+            <p>
+                Ordem vinculada:
+                #<?= $_SESSION['ordem_finalizada']; ?>
+            </p>
+
+        <?php else: ?>
+
+            <input
+                type="number"
+                name="id_ordem"
+                placeholder="ID da Ordem"
+                required
+            >
+
+        <?php endif; ?>
 
         <br><br>
 
         <button type="submit">
-            Cadastrar Ordem
+            Cadastrar Manutenção
         </button>
 
     </form>
+
 </body>
 </html>

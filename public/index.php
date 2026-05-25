@@ -2,6 +2,8 @@
 
 session_start();
 
+date_default_timezone_set('America/Sao_Paulo');
+
 require_once "../vendor/autoload.php";
 
 require_once "../config/Database.php";
@@ -251,13 +253,23 @@ switch($acao)
 
     break;
 
-    case 'iniciar-manutencao';
+    case 'iniciar-manutencao':
 
         Auth::tecnico();
 
         $controller = new ManutencaoController();
 
         $controller->iniciarManutencao();
+        
+    break;
+
+    case 'finalizar-manutencao':
+
+        Auth::tecnico();
+
+        $controller = new ManutencaoController();
+
+        $controller->finalizarManutencao();
         
     break;
 

@@ -82,9 +82,34 @@ require_once __DIR__ . '/../../../models/OrdemManutencao.php';
             <?= $ordem->getStatusMaquina(); ?>
         </p>
 
-        <form action="index.php?acao=iniciar-manutencao&id=<?= $ordem->getId(); ?>" method="POST">
-            <button type="submit">Iniciar Manutenção</button>
-        </form>
+        <?php
+
+        $status = $ordem->getStatus();
+
+        if($status === 'agendada' || $status === 'pendente'):
+        ?>
+
+            <form 
+                action="index.php?acao=iniciar-manutencao&id=<?= $ordem->getId(); ?>" 
+                method="POST"
+            >
+                <button type="submit">
+                    Iniciar Manutenção
+                </button>
+            </form>
+
+        <?php elseif($status === 'em_andamento'): ?>
+
+            <form 
+                action="index.php?acao=finalizar-manutencao&id=<?= $ordem->getId(); ?>" 
+                method="POST"
+            >
+                <button type="submit">
+                    Finalizar Manutenção
+                </button>
+            </form>
+
+        <?php endif; ?>
 
 
     </div>

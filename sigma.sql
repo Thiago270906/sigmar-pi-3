@@ -123,15 +123,9 @@
     CREATE TABLE manutencoes (
         id_manutencao INT AUTO_INCREMENT PRIMARY KEY,
 
-        diagnostico TEXT NOT NULL,
-
         descricao_servico TEXT NOT NULL,
 
-        pecas_trocadas TEXT,
-
         observacoes TEXT,
-
-        data_execucao DATETIME DEFAULT CURRENT_TIMESTAMP,
 
         id_ordem INT NOT NULL,
         id_usuario INT NOT NULL,

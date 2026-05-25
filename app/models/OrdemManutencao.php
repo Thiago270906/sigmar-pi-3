@@ -15,6 +15,8 @@ class OrdemManutencao
     private ?string $nomeMaquina = null;
     private ?string $tipoMaquina = null;
     private ?string $statusMaquina = null;
+    private ?string $dataInicio = null;
+    private ?string $dataConclusao = null;
     
     public function __construct(
         string $titulo,
@@ -102,6 +104,16 @@ class OrdemManutencao
     public function getNomeTecnico(): ?string
     {
         return $this->nomeTecnico;
+    }
+
+    public function getDataInicio(): ?string
+    {
+        return $this->dataInicio;
+    }
+
+    public function getDataConclusao(): ?string
+    {
+        return $this->dataConclusao;
     }
 
     // SETTERS
@@ -289,5 +301,15 @@ class OrdemManutencao
         }
 
         $this->statusMaquina = $statusMaquina;
+    }
+
+    public function setDataInicio(?string $dataInicio)
+    {
+        $this->dataInicio = $dataInicio;
+    }
+
+    public function setDataConclusao(?string $dataConclusao)
+    {
+        $this->dataConclusao = $dataConclusao;
     }
 }
