@@ -9,7 +9,7 @@
 
 <h1>Máquinas</h1>
 
-<a href="/pi-3/public/index.php?acao=form-maquina">
+<a href="index.php?acao=form-maquina">
     Cadastrar Máquina
 </a>
 
@@ -115,7 +115,7 @@
 
                     <td>
 
-                        <a href="/pi-3/public/index.php?acao=detalhes-maquina&id=<?= $maquina->getId(); ?>">
+                        <a href="index.php?acao=detalhes-maquina&id=<?= $maquina->getId(); ?>">
                             Ver detalhes
                         </a>
 
