@@ -153,6 +153,59 @@ class MaquinaRepository
         return $maquina;
     }
 
+    public function filtrarStatus($status)
+    {
+        $stmt = $this->conn->prepare(
+            "
+                SELECT *
+                FROM maquinas
+                WHERE status = ?
+                AND deleted_at IS NULL
+            "
+        );
+
+        $stmt->execute([$status]);
+
+        $dados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $maquinas = [];
+
+        $sensorRepository = new SensorRepository();
+
+        foreach($dados as $linha)
+        {
+            $maquina = new Maquina(
+                $linha['nome'],
+                $linha['tipo'],
+                $linha['status']
+            );
+
+            $maquina->setId($linha['id_maquina']);
+
+            // BUSCA SENSORES
+            $sensores = $sensorRepository->listarSensoresMaquina(
+                $linha['id_maquina']
+            );
+
+            foreach($sensores as $sensor)
+            {
+                if($sensor->getTipo() == 'temperatura')
+                {
+                    $maquina->setSensorTemperatura($sensor);
+                }
+
+                if($sensor->getTipo() == 'vibracao')
+                {
+                    $maquina->setSensorVibracao($sensor);
+                }
+            }
+
+            $maquinas[] = $maquina;
+        }
+
+        return $maquinas;
+    }
+
     // UPDATE
     public function upadateMaquina(Maquina $maquina)
     {

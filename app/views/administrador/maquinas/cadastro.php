@@ -168,22 +168,6 @@
          CONTEÚDO PRINCIPAL
     ============================== -->
     <div class="flex-1 flex flex-col min-w-0 bg-white">
-
-        <!-- Barra Superior -->
-        <header class="h-16 flex items-center justify-between px-8 bg-white border-b border-outline-variant/30">
-            <div href="index.php?acao=notificacoes" class="flex items-center gap-6 ml-4">
-                <button class="relative text-on-surface-variant hover:text-primary transition-colors">
-                    <img src="./assets/img/notificacao.png" width="25px" height="30px">
-                </button>
-                <div href="index.php?acao=perfil" class="flex items-center gap-3">
-                    <button>
-                        <div class="w-10 h-10 rounded-full border border-outline-variant/50 flex items-center justify-center overflow-hidden bg-surface-container">
-                            <span class="material-symbols-outlined text-outline">person</span>
-                        </div>
-                    </button>
-                </div>
-            </div>
-        </header>
     
         <main class="flex-1 p-6 lg:p-10">
 

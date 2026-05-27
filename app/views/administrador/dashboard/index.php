@@ -1,14 +1,12 @@
-
 <!DOCTYPE html>
 <html lang="en">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIGMAR - Dashboard de Manutenção Preventiva</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIGMAR - Dashboard de Manutenção Preventiva</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-
     <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -116,41 +114,51 @@
     ============================== -->
     <aside class="w-full lg:w-[260px] bg-primary lg:h-screen lg:sticky top-0 flex flex-col py-4 lg:py-8 flex-shrink-0">
 
-        <!-- Logo -->
+        <!-- Logo da empresa -->
         <div class="px-6 mb-12">
             <div class="flex flex-col items-center">
-                <img src="./assets/img/logo-sigmar.png" alt="Logo SIGMAR" class="w-36 h-auto mb-2">
+                <img
+                    src="./assets/img/logo-sigmar.png"
+                    alt="Logo SIGMAR"
+                    class="w-36 h-auto mb-2"
+                />
             </div>
         </div>
 
-        <!-- Menu de Navegação -->
+        <!-- Links de navegação principal -->
         <nav class="flex-1 px-3 space-y-2">
+
+            <!-- Link: Dashboard -->
             <a href="index.php?acao=dashboard"
                class="bg-secondary text-white rounded-lg px-4 py-3 flex items-center gap-4 transition-all">
                 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
                 <span class="font-medium text-sm">Dashboard</span>
             </a>
 
+            <!-- Link ativo: Máquinas -->
             <a href="index.php?acao=maquinas"
                class="text-white/70 hover:bg-white/10 hover:text-white rounded-lg px-4 py-3 flex items-center gap-4 transition-all">
                 <span class="material-symbols-outlined">settings_input_component</span>
                 <span class="font-medium text-sm">Máquinas</span>
             </a>
 
+            <!-- Link: Manutenções -->
             <a href="index.php?acao=manutencoes"
                class="text-white/70 hover:bg-white/10 hover:text-white rounded-lg px-4 py-3 flex items-center gap-4 transition-all">
                 <span class="material-symbols-outlined">description</span>
                 <span class="font-medium text-sm">Manutenções</span>
             </a>
 
+            <!-- Link: Funcionários -->
             <a href="index.php?acao=funcionarios"
                class="text-white/70 hover:bg-white/10 hover:text-white rounded-lg px-4 py-3 flex items-center gap-4 transition-all">
                 <span class="material-symbols-outlined">group</span>
                 <span class="font-medium text-sm">Funcionários</span>
             </a>
+
         </nav>
 
-        <!-- Logout -->
+        <!-- Botão de logout no rodapé da sidebar -->
         <div class="mt-auto px-3 border-t border-white/10 pt-4">
             <a href="index.php?acao=logout"
                class="text-white/70 hover:text-white px-4 py-3 flex items-center gap-4 transition-all">
@@ -160,28 +168,17 @@
         </div>
 
     </aside>
+    <!-- Fim: Navbar Lateral -->
 
     <!-- ==============================
-         CONTEÚDO PRINCIPAL
+         BARRA SUPERIOR
     ============================== -->
     <div class="flex-1 flex flex-col min-w-0 bg-white">
 
-        <!-- Barra Superior -->
-        <header class="h-16 flex items-center justify-between px-8 bg-white border-b border-outline-variant/30">
-            <div href="index.php?acao=notificacoes" class="flex items-center gap-6 ml-4">
-                <button class="relative text-on-surface-variant hover:text-primary transition-colors">
-                    <img src="./assets/img/notificacao.png" width="25px" height="30px">
-                </button>
-                <div href="index.php?acao=perfil" class="flex items-center gap-3">
-                    <button>
-                        <div class="w-10 h-10 rounded-full border border-outline-variant/50 flex items-center justify-center overflow-hidden bg-surface-container">
-                            <span class="material-symbols-outlined text-outline">person</span>
-                        </div>
-                    </button>
-                </div>
-            </div>
-        </header>
-
+        <!-- ==============================
+             CONTEÚDO PRINCIPAL
+        ============================== -->
+        
         <main class="flex-1 p-4 md:p-8 space-y-8 overflow-y-auto">
 
             <!-- Título da Página -->
@@ -193,19 +190,15 @@
             <!-- ==============================
                  LINHA DO MEIO — Gráfico + Notificações
             ============================== -->
-            <div class="grid grid-cols-1 xl:grid-cols-12 gap-6"> 
+            <div class="grid grid-cols-1 gap-6"> <!-- responsividade -->
 
                 <!-- tabela do gráfico -->
-                <div class="xl:col-span-8 bg-white border border-outline-variant/50 rounded-xl p-4 md:p-6 overflow-x-auto">
+                <div class="w-full bg-white border border-outline-variant/50 rounded-xl p-4 md:p-6 overflow-x-auto">
                     <div class="flex justify-between items-center mb-10">
                         <h3 class="font-bold text-primary">Manutenções ao longo do tempo</h3>
-                        <button class="flex items-center gap-2 border border-outline-variant/50 px-4 py-1.5 rounded-lg text-xs text-on-surface-variant hover:bg-surface-container transition-colors">
-                            Últimos 7 dias
-                            <span class="material-symbols-outlined text-[16px]">expand_more</span>
-                        </button>
                     </div>
 
-                    <div class="h-64 relative w-full overflow-x-auto"> 
+                    <div class="h-80 relative w-full overflow-x-auto"> 
                         <svg class="w-full h-full overflow-visible" viewBox="0 0 800 240">
                             <!-- Linhas de grade -->
                             <line stroke="#f0f1f2" stroke-width="1" x1="0" x2="800" y1="0"   y2="0"></line>
@@ -260,71 +253,6 @@
                         </svg>
                     </div>
                 </div>
-
-                <!-- tabela de Últimas Notificações ---- -->
-                <div class="xl:col-span-4 bg-white border border-outline-variant/50 rounded-xl flex flex-col">
-                    <div class="p-6 flex flex-col h-full">
-
-                        <h3 class="font-bold text-primary mb-4">Últimas Notificações</h3>
-
-                        <!-- Lista de notificações com scroll e hover clicável -->
-                        <div class="flex-1 overflow-y-auto min-h-0 space-y-2">
-
-                            <!-- Notificação de Falha-->
-                            <a href="index.php?acao=notificacoes&id=1"
-                               class="flex items-center gap-3 p-3 rounded-lg border border-outline-variant/20 hover:bg-surface-container-low transition-colors cursor-pointer">
-                                <div class="flex-shrink-0 w-8 h-8 rounded-full bg-error-container flex items-center justify-center">
-                                    <span class="material-symbols-outlined text-error text-[18px]">error</span>
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <p class="text-sm font-medium text-on-surface truncate">Falha detectada no Motor A1</p>
-                                    <p class="text-[11px] text-outline">Há 15 minutos</p>
-                                </div>
-                                <span class="material-symbols-outlined text-outline text-[16px] flex-shrink-0">chevron_right</span>
-                            </a>
-
-                            <!-- Notificação demanutenção agendada -->
-                            <a href="index.php?acao=notificacoes&id=2"
-                               class="flex items-center gap-3 p-3 rounded-lg border border-outline-variant/20 hover:bg-surface-container-low transition-colors cursor-pointer">
-                                <div class="flex-shrink-0 w-8 h-8 rounded-full bg-secondary-container/20 flex items-center justify-center">
-                                    <span class="material-symbols-outlined text-secondary text-[18px]">calendar_today</span>
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <p class="text-sm font-medium text-on-surface truncate">Manutenção agendada para amanhã</p>
-                                    <p class="text-[11px] text-outline">Há 2 horas</p>
-                                </div>
-                                <span class="material-symbols-outlined text-outline text-[16px] flex-shrink-0">chevron_right</span>
-                            </a>
-
-                            <!-- Notificação do sistema -->
-                            <a href="index.php?acao=notificacoes&id=3"
-                               class="flex items-center gap-3 p-3 rounded-lg border border-outline-variant/20 hover:bg-surface-container-low transition-colors cursor-pointer">
-                                <div class="flex-shrink-0 w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center">
-                                    <span class="material-symbols-outlined text-on-surface-variant text-[18px]">info</span>
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <p class="text-sm font-medium text-on-surface truncate">Sistema atualizado para v2.4.1</p>
-                                    <p class="text-[11px] text-outline">Há 5 horas</p>
-                                </div>
-                                <span class="material-symbols-outlined text-outline text-[16px] flex-shrink-0">chevron_right</span>
-                            </a>
-
-
-                        </div>
-                        <!-- Fim: Lista de notificações -->
-
-                        <!-- Rodapé fixo: link para todas as notificações -->
-                        <div class="mt-4 pt-4 border-t border-outline-variant/30 flex-shrink-0">
-                            <a href="index.php?acao=notificacoes"
-                               class="text-secondary text-xs font-semibold hover:underline flex items-center justify-center gap-1">
-                                Ver mais
-                                <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
-                            </a>
-                        </div>
-
-                    </div>
-                </div>
-
             </div>
 
             <!-- ==============================

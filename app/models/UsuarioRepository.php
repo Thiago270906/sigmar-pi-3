@@ -163,7 +163,26 @@ class UsuarioRepository
             "
         );
 
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $dados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $usuarios = [];
+
+        foreach($dados as $linha)
+        {
+            $usuario = new Usuario(
+                $linha['nome'],
+                $linha['email'],
+                $linha['senha'],
+                $linha['cargo'],
+                $linha['telefone']
+            );
+
+            $usuario->setId($linha['id_usuario']);
+
+            $usuarios[] = $usuario;
+        }
+
+        return $usuarios;
     }
 
     public function buscarIdFuncionario($id)

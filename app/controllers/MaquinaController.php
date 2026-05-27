@@ -21,14 +21,23 @@ class MaquinaController
         $this->sensorRepository = new SensorRepository();
     }
 
-    public function index()
+public function index()
+{
+    Auth::admin();
+
+    $status = $_GET['status'] ?? null;
+
+    if($status)
     {
-        Auth::admin();
-
-        $maquinas = $this->repository->listarMaquinas();
-
-        require_once __DIR__ . "/../views/administrador/maquinas/index.php";
+        $maquinas = $this->repository->filtrarStatus($status);
     }
+    else
+    {
+        $maquinas = $this->repository->listarMaquinas();
+    }
+
+    require_once __DIR__ . "/../views/administrador/maquinas/index.php";
+}
 
     public function formCadastrarMaquina()
     {

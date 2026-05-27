@@ -123,6 +123,22 @@ class SensorRepository
 
         $sensores = [];
 
+        $statusMaquina = 'operando';
+
+        $idSensorResponsavel = $dados[0]['id_sensor'] ?? null;
+
+        $stmtMaquina = $this->conn->prepare(
+            "
+                SELECT status
+                FROM maquinas
+                WHERE id_maquina = ?
+            "
+        );
+
+        $stmtMaquina->execute([$idMaquina]);
+
+        $statusAtualMaquina = $stmtMaquina->fetchColumn();
+
         foreach($dados as $linha)
         {
             $sensor = new Sensor(
@@ -137,20 +153,105 @@ class SensorRepository
             $sensor->setStatus($linha['status']);
             $sensor->setDataInstalacao($linha['data_instalacao']);
             $sensor->setDataTroca($linha['data_troca']);
+
             $leitura = $this->buscarUltimaLeitura($sensor->getId());
 
-            if ($leitura) {
-
+            if ($leitura)
+            {
                 $leitura = (array) $leitura;
 
                 $sensor->setValorAtual($leitura['valor']);
+
                 $sensor->setUnidade($leitura['unidade']);
+
+                $valorAtual = $leitura['valor'];
+
+                if($valorAtual >= $sensor->getLimiteCritico())
+                {
+                    $statusMaquina = 'critico';
+
+                    $idSensorResponsavel = $sensor->getId();
+                }
+                elseif(
+                    $valorAtual >= $sensor->getLimiteAlerta()
+                    && $statusMaquina != 'critico'
+                )
+                {
+                    $statusMaquina = 'alerta';
+
+                    $idSensorResponsavel = $sensor->getId();
+                }
             }
 
             $sensores[] = $sensor;
         }
 
+        if($statusAtualMaquina != $statusMaquina)
+        {
+            $this->salvarHistorico(
+                $idMaquina,
+                $idSensorResponsavel,
+                $statusAtualMaquina,
+                $statusMaquina
+            );
+
+            $this->atualizarStatusMaquina(
+                $idMaquina,
+                $statusMaquina
+            );
+        }
+
         return $sensores;
+    }
+
+    private function atualizarStatusMaquina($idMaquina, $status)
+    {
+        $stmt = $this->conn->prepare(
+            "
+                UPDATE maquinas
+                SET status = ?
+                WHERE id_maquina = ?
+            "
+        );
+
+        $stmt->execute([
+            $status,
+            $idMaquina
+        ]);
+    }
+
+    private function salvarHistorico(
+        $idMaquina,
+        $idSensor,
+        $statusAnterior,
+        $novoStatus
+    )
+    {
+        $stmt = $this->conn->prepare(
+            "
+                INSERT INTO historico_status_maquinas
+                (
+                    status_anterior,
+                    novo_status,
+                    id_maquina,
+                    id_sensor
+                )
+                VALUES
+                (
+                    ?,
+                    ?,
+                    ?,
+                    ?
+                )
+            "
+        );
+
+        $stmt->execute([
+            $statusAnterior,
+            $novoStatus,
+            $idMaquina,
+            $idSensor
+        ]);
     }
 
     // DESATIVAR SENSOR

@@ -165,6 +165,37 @@
             ON DELETE CASCADE
     );
 
+    CREATE TABLE historico_status_maquinas (
+    id_historico INT AUTO_INCREMENT PRIMARY KEY,
+
+    status_anterior ENUM(
+        'operando',
+        'alerta',
+        'critico'
+    ),
+
+    novo_status ENUM(
+        'operando',
+        'alerta',
+        'critico'
+    ),
+
+    valor_sensor DECIMAL(10,2),
+
+    mensagem TEXT,
+
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    id_maquina INT NOT NULL,
+    id_sensor INT NOT NULL,
+
+    FOREIGN KEY (id_maquina)
+        REFERENCES maquinas(id_maquina),
+
+    FOREIGN KEY (id_sensor)
+        REFERENCES sensores(id_sensor)
+);
+
     -- =========================
     -- USUÁRIOS
     -- =========================
