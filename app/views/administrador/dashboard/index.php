@@ -192,69 +192,332 @@
             ============================== -->
             <div class="grid grid-cols-1 gap-6"> <!-- responsividade -->
 
-                <!-- tabela do gráfico -->
-                <div class="w-full bg-white border border-outline-variant/50 rounded-xl p-4 md:p-6 overflow-x-auto">
-                    <div class="flex justify-between items-center mb-10">
-                        <h3 class="font-bold text-primary">Manutenções ao longo do tempo</h3>
+                <!-- ==============================
+                    GRÁFICOS
+                ============================== -->
+                <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+
+                    <!-- =====================================
+                        GRÁFICO 1 — STATUS DAS MÁQUINAS
+                    ====================================== -->
+                    <?php
+                    require_once __DIR__ . '/../../../models/Maquina.php';
+
+                    /** @var Maquina $maquinas */
+
+                        $operacional = 0;
+                        $alerta = 0;
+                        $critico = 0;
+
+                        foreach($maquinas as $maquina)
+                        {
+                            $status = strtolower(trim($maquina->getStatus()));
+
+                            switch($status)
+                            {
+                                case 'operacional':
+                                case 'operando':
+                                    $operacional++;
+                                    break;
+
+                                case 'alerta':
+                                    $alerta++;
+                                    break;
+
+                                case 'critico':
+                                case 'crítico':
+                                    $critico++;
+                                    break;
+                            }
+                        }
+
+                        // =========================
+                        // MAIOR VALOR
+                        // =========================
+
+                        $maior = max($operacional, $alerta, $critico);
+
+                        // evita divisão por zero
+                        if($maior <= 0)
+                        {
+                            $maior = 1;
+                        }
+
+                        // =========================
+                        // ALTURAS DAS BARRAS
+                        // altura máxima = 160
+                        // =========================
+
+                        $alturaOperacional = ($operacional / $maior) * 160;
+                        $alturaAlerta      = ($alerta / $maior) * 160;
+                        $alturaCritico     = ($critico / $maior) * 160;
+
+                        // =========================
+                        // POSIÇÃO Y
+                        // base do gráfico = 240
+                        // =========================
+
+                        $yOperacional = 240 - $alturaOperacional;
+                        $yAlerta      = 240 - $alturaAlerta;
+                        $yCritico     = 240 - $alturaCritico;
+
+                    ?>
+
+                    <div class="w-full bg-white border border-outline-variant/50 rounded-xl p-4 md:p-6">
+
+                        <!-- Cabeçalho -->
+                        <div class="flex items-center justify-between mb-6">
+
+                            <div>
+                                <h3 class="font-bold text-primary text-lg">
+                                    Status das Máquinas
+                                </h3>
+
+                                <p class="text-sm text-on-surface-variant">
+                                    Quantidade de equipamentos por estado
+                                </p>
+                            </div>
+
+                        </div>
+
+                        <!-- Gráfico -->
+                        <div class="w-full h-[320px]">
+
+                            <svg
+                                class="w-full h-full"
+                                viewBox="0 0 500 300"
+                                preserveAspectRatio="xMidYMid meet"
+                            >
+
+                                <!-- Eixos -->
+                                <line x1="60" y1="40" x2="60" y2="240" stroke="#c3c6d0"/>
+                                <line x1="60" y1="240" x2="460" y2="240" stroke="#c3c6d0"/>
+
+                                <!-- Grade -->
+                                <line x1="60" y1="80"  x2="460" y2="80"  stroke="#f0f1f2"/>
+                                <line x1="60" y1="120" x2="460" y2="120" stroke="#f0f1f2"/>
+                                <line x1="60" y1="160" x2="460" y2="160" stroke="#f0f1f2"/>
+                                <line x1="60" y1="200" x2="460" y2="200" stroke="#f0f1f2"/>
+
+                                <!-- =========================
+                                    OPERACIONAL
+                                ========================== -->
+
+                                <rect
+                                    x="90"
+                                    y="<?= $yOperacional ?>"
+                                    width="70"
+                                    height="<?= $alturaOperacional ?>"
+                                    rx="8"
+                                    fill="#16a34a"
+                                ></rect>
+
+                                <!-- =========================
+                                    ALERTA
+                                ========================== -->
+
+                                <rect
+                                    x="210"
+                                    y="<?= $yAlerta ?>"
+                                    width="70"
+                                    height="<?= $alturaAlerta ?>"
+                                    rx="8"
+                                    fill="#eab308"
+                                ></rect>
+
+                                <!-- =========================
+                                    CRÍTICO
+                                ========================== -->
+
+                                <rect
+                                    x="330"
+                                    y="<?= $yCritico ?>"
+                                    width="70"
+                                    height="<?= $alturaCritico ?>"
+                                    rx="8"
+                                    fill="#dc2626"
+                                ></rect>
+
+                                <!-- Valores -->
+
+                                <text
+                                    x="125"
+                                    y="<?= $yOperacional - 10 ?>"
+                                    text-anchor="middle"
+                                    font-size="14"
+                                    fill="#191c1d"
+                                    font-weight="bold"
+                                >
+                                    <?= $operacional ?>
+                                </text>
+
+                                <text
+                                    x="245"
+                                    y="<?= $yAlerta - 10 ?>"
+                                    text-anchor="middle"
+                                    font-size="14"
+                                    fill="#191c1d"
+                                    font-weight="bold"
+                                >
+                                    <?= $alerta ?>
+                                </text>
+
+                                <text
+                                    x="365"
+                                    y="<?= $yCritico - 10 ?>"
+                                    text-anchor="middle"
+                                    font-size="14"
+                                    fill="#191c1d"
+                                    font-weight="bold"
+                                >
+                                    <?= $critico ?>
+                                </text>
+
+                                <!-- Labels -->
+
+                                <text
+                                    x="125"
+                                    y="265"
+                                    text-anchor="middle"
+                                    font-size="13"
+                                    fill="#737780"
+                                >
+                                    Operacional
+                                </text>
+
+                                <text
+                                    x="245"
+                                    y="265"
+                                    text-anchor="middle"
+                                    font-size="13"
+                                    fill="#737780"
+                                >
+                                    Alerta
+                                </text>
+
+                                <text
+                                    x="365"
+                                    y="265"
+                                    text-anchor="middle"
+                                    font-size="13"
+                                    fill="#737780"
+                                >
+                                    Crítico
+                                </text>
+
+                            </svg>
+
+                        </div>
+
                     </div>
 
-                    <div class="h-80 relative w-full overflow-x-auto"> 
-                        <svg class="w-full h-full overflow-visible" viewBox="0 0 800 240">
-                            <!-- Linhas de grade -->
-                            <line stroke="#f0f1f2" stroke-width="1" x1="0" x2="800" y1="0"   y2="0"></line>
-                            <line stroke="#f0f1f2" stroke-width="1" x1="0" x2="800" y1="40"  y2="40"></line>
-                            <line stroke="#f0f1f2" stroke-width="1" x1="0" x2="800" y1="80"  y2="80"></line>
-                            <line stroke="#f0f1f2" stroke-width="1" x1="0" x2="800" y1="120" y2="120"></line>
-                            <line stroke="#f0f1f2" stroke-width="1" x1="0" x2="800" y1="160" y2="160"></line>
-                            <line stroke="#f0f1f2" stroke-width="1" x1="0" x2="800" y1="200" y2="200"></line>
+                    <!-- =====================================
+                        GRÁFICO 2 — MANUTENÇÕES
+                    ====================================== -->
+                    <div class="w-full bg-white border border-outline-variant/50 rounded-xl p-4 md:p-6">
 
-                            <!-- Labels do eixo Y -->
-                            <text fill="#737780" font-size="10" text-anchor="end" x="-15" y="5">25</text>
-                            <text fill="#737780" font-size="10" text-anchor="end" x="-15" y="45">20</text>
-                            <text fill="#737780" font-size="10" text-anchor="end" x="-15" y="85">15</text>
-                            <text fill="#737780" font-size="10" text-anchor="end" x="-15" y="125">10</text>
-                            <text fill="#737780" font-size="10" text-anchor="end" x="-15" y="165">5</text>
-                            <text fill="#737780" font-size="10" text-anchor="end" x="-15" y="205">0</text>
+                        <!-- Cabeçalho -->
+                        <div class="flex justify-between items-center mb-6">
 
-                            <!-- Linha Azul -->
-                            <path d="M20,180 L130,160 L240,140 L350,170 L460,110 L570,140 L680,120"
-                                  fill="none" stroke="#005eb3" stroke-width="3"></path>
+                            <div>
+                                <h3 class="font-bold text-primary text-lg">
+                                    Manutenções ao longo do tempo
+                                </h3>
 
-                            <!-- Linha Vermelha -->
-                            <path d="M20,220 L130,210 L240,215 L350,205 L460,200 L570,215 L680,195"
-                                  fill="none" stroke="#ba1a1a" stroke-width="2"></path>
+                                <p class="text-sm text-on-surface-variant">
+                                    Concluídas x Pendentes
+                                </p>
+                            </div>
 
-                            <!-- Pontos — Azul -->
-                            <circle cx="20"  cy="180" fill="#005eb3" r="4"></circle>
-                            <circle cx="130" cy="160" fill="#005eb3" r="4"></circle>
-                            <circle cx="240" cy="140" fill="#005eb3" r="4"></circle>
-                            <circle cx="350" cy="170" fill="#005eb3" r="4"></circle>
-                            <circle cx="460" cy="110" fill="#005eb3" r="4"></circle>
-                            <circle cx="570" cy="140" fill="#005eb3" r="4"></circle>
-                            <circle cx="680" cy="120" fill="#005eb3" r="4"></circle>
+                        </div>
 
-                            <!-- Pontos — Vermelho -->
-                            <circle cx="20"  cy="220" fill="#ba1a1a" r="4"></circle>
-                            <circle cx="130" cy="210" fill="#ba1a1a" r="4"></circle>
-                            <circle cx="240" cy="215" fill="#ba1a1a" r="4"></circle>
-                            <circle cx="350" cy="205" fill="#ba1a1a" r="4"></circle>
-                            <circle cx="460" cy="200" fill="#ba1a1a" r="4"></circle>
-                            <circle cx="570" cy="215" fill="#ba1a1a" r="4"></circle>
-                            <circle cx="680" cy="195" fill="#ba1a1a" r="4"></circle>
+                        <!-- Legenda -->
+                        <div class="flex gap-6 mb-6 flex-wrap">
 
-                            <!-- Labels do eixo X -->
-                            <text fill="#737780" font-size="10" text-anchor="middle" x="20"  y="235">12/05</text>
-                            <text fill="#737780" font-size="10" text-anchor="middle" x="130" y="235">13/05</text>
-                            <text fill="#737780" font-size="10" text-anchor="middle" x="240" y="235">14/05</text>
-                            <text fill="#737780" font-size="10" text-anchor="middle" x="350" y="235">15/05</text>
-                            <text fill="#737780" font-size="10" text-anchor="middle" x="460" y="235">16/05</text>
-                            <text fill="#737780" font-size="10" text-anchor="middle" x="570" y="235">17/05</text>
-                            <text fill="#737780" font-size="10" text-anchor="middle" x="680" y="235">18/05</text>
-                        </svg>
+                            <div class="flex items-center gap-2">
+                                <div class="w-3 h-3 rounded-full bg-secondary"></div>
+                                <span class="text-sm text-on-surface-variant">
+                                    Concluídas
+                                </span>
+                            </div>
+
+                            <div class="flex items-center gap-2">
+                                <div class="w-3 h-3 rounded-full bg-error"></div>
+                                <span class="text-sm text-on-surface-variant">
+                                    Pendentes
+                                </span>
+                            </div>
+
+                        </div>
+
+                        <!-- Gráfico -->
+                        <div class="h-[320px] w-full">
+
+                            <svg
+                                class="w-full h-full"
+                                viewBox="0 0 800 260"
+                                preserveAspectRatio="xMidYMid meet"
+                            >
+
+                                <!-- Grade -->
+                                <line stroke="#f0f1f2" stroke-width="1" x1="0" x2="800" y1="0" y2="0"/>
+                                <line stroke="#f0f1f2" stroke-width="1" x1="0" x2="800" y1="40" y2="40"/>
+                                <line stroke="#f0f1f2" stroke-width="1" x1="0" x2="800" y1="80" y2="80"/>
+                                <line stroke="#f0f1f2" stroke-width="1" x1="0" x2="800" y1="120" y2="120"/>
+                                <line stroke="#f0f1f2" stroke-width="1" x1="0" x2="800" y1="160" y2="160"/>
+                                <line stroke="#f0f1f2" stroke-width="1" x1="0" x2="800" y1="200" y2="200"/>
+
+                                <!-- Linha Azul -->
+                                <path
+                                    d="M20,180 L130,160 L240,140 L350,170 L460,110 L570,140 L680,120"
+                                    fill="none"
+                                    stroke="#005eb3"
+                                    stroke-width="4"
+                                    stroke-linecap="round"
+                                />
+
+                                <!-- Linha Vermelha -->
+                                <path
+                                    d="M20,220 L130,210 L240,215 L350,205 L460,200 L570,215 L680,195"
+                                    fill="none"
+                                    stroke="#ba1a1a"
+                                    stroke-width="4"
+                                    stroke-linecap="round"
+                                />
+
+                                <!-- Pontos -->
+                                <circle cx="20" cy="180" fill="#005eb3" r="5"/>
+                                <circle cx="130" cy="160" fill="#005eb3" r="5"/>
+                                <circle cx="240" cy="140" fill="#005eb3" r="5"/>
+                                <circle cx="350" cy="170" fill="#005eb3" r="5"/>
+                                <circle cx="460" cy="110" fill="#005eb3" r="5"/>
+                                <circle cx="570" cy="140" fill="#005eb3" r="5"/>
+                                <circle cx="680" cy="120" fill="#005eb3" r="5"/>
+
+                                <circle cx="20" cy="220" fill="#ba1a1a" r="5"/>
+                                <circle cx="130" cy="210" fill="#ba1a1a" r="5"/>
+                                <circle cx="240" cy="215" fill="#ba1a1a" r="5"/>
+                                <circle cx="350" cy="205" fill="#ba1a1a" r="5"/>
+                                <circle cx="460" cy="200" fill="#ba1a1a" r="5"/>
+                                <circle cx="570" cy="215" fill="#ba1a1a" r="5"/>
+                                <circle cx="680" cy="195" fill="#ba1a1a" r="5"/>
+
+                                <!-- Datas -->
+                                <text fill="#737780" font-size="11" text-anchor="middle" x="20" y="245">12/05</text>
+                                <text fill="#737780" font-size="11" text-anchor="middle" x="130" y="245">13/05</text>
+                                <text fill="#737780" font-size="11" text-anchor="middle" x="240" y="245">14/05</text>
+                                <text fill="#737780" font-size="11" text-anchor="middle" x="350" y="245">15/05</text>
+                                <text fill="#737780" font-size="11" text-anchor="middle" x="460" y="245">16/05</text>
+                                <text fill="#737780" font-size="11" text-anchor="middle" x="570" y="245">17/05</text>
+                                <text fill="#737780" font-size="11" text-anchor="middle" x="680" y="245">18/05</text>
+
+                            </svg>
+
+                        </div>
+
                     </div>
+
                 </div>
-            </div>
-
             <!-- ==============================
                  LINHA INFERIOR: Equipamentos e Manutenções
             ============================== -->
@@ -349,92 +612,91 @@
 
                 <!-- ---- Card: Manutenções Recentes ---- -->
                 <div class="bg-white border border-outline-variant/50 rounded-xl flex flex-col" style="height: 400px;">
+
                     <div class="p-6 flex flex-col h-full">
 
                         <h3 class="font-bold text-primary mb-4">Manutenções Recentes</h3>
 
-                        <!-- Lista de manutenções com scroll e hover clicável -->
                         <div class="flex-1 overflow-y-auto min-h-0 space-y-2">
 
-                            <!-- Manutenção 1: Troca de óleo — redireciona para detalhes -->
-                            <a href="index.php?acao=manutencoes&id=1"
-                               class="flex justify-between items-center p-3 rounded-lg border border-outline-variant/20 hover:bg-surface-container-low transition-colors cursor-pointer">
-                                <div>
-                                    <p class="text-sm font-medium text-on-surface">Troca de óleo - Filtro 2</p>
-                                    <p class="text-xs text-outline">Tec: Ricardo Silva</p>
-                                </div>
-                                <div class="flex items-center gap-2 text-right flex-shrink-0">
-                                    <div>
-                                        <p class="text-xs font-medium text-on-surface-variant">18/05/2026</p>
-                                        <p class="text-[10px] text-outline">Concluído</p>
-                                    </div>
-                                    <span class="material-symbols-outlined text-outline text-[16px]">chevron_right</span>
-                                </div>
-                            </a>
+                            <?php if(empty($manutencoesRecentes)): ?>
 
-                            <!-- Manutenção 2: Calibração — redireciona para detalhes -->
-                            <a href="index.php?acao=manutencoes&id=2"
-                               class="flex justify-between items-center p-3 rounded-lg border border-outline-variant/20 hover:bg-surface-container-low transition-colors cursor-pointer">
-                                <div>
-                                    <p class="text-sm font-medium text-on-surface">Calibração de sensores</p>
-                                    <p class="text-xs text-outline">Tec: Ana Costa</p>
-                                </div>
-                                <div class="flex items-center gap-2 text-right flex-shrink-0">
-                                    <div>
-                                        <p class="text-xs font-medium text-on-surface-variant">17/07/2025</p>
-                                        <p class="text-[10px] text-outline">Concluído</p>
-                                    </div>
-                                    <span class="material-symbols-outlined text-outline text-[16px]">chevron_right</span>
-                                </div>
-                            </a>
+                                <p class="text-sm text-on-surface-variant">
+                                    Nenhuma manutenção recente.
+                                </p>
 
-                            <!-- Manutenção 3: Ajuste de correia — redireciona para detalhes -->
-                            <a href="index.php?acao=manutencoes&id=3"
-                               class="flex justify-between items-center p-3 rounded-lg border border-outline-variant/20 hover:bg-surface-container-low transition-colors cursor-pointer">
-                                <div>
-                                    <p class="text-sm font-medium text-on-surface">Ajuste de correia</p>
-                                    <p class="text-xs text-outline">Tec: Marcos Souza</p>
-                                </div>
-                                <div class="flex items-center gap-2 text-right flex-shrink-0">
-                                    <div>
-                                        <p class="text-xs font-medium text-on-surface-variant">16/11/2024</p>
-                                        <p class="text-[10px] text-outline">Concluído</p>
-                                    </div>
-                                    <span class="material-symbols-outlined text-outline text-[16px]">chevron_right</span>
-                                </div>
-                            </a>
+                            <?php else: ?>
 
-                            <!-- Manutenção 4: Limpeza preventiva — redireciona para detalhes -->
-                            <a href="index.php?acao=manutencoes&id=4"
-                               class="flex justify-between items-center p-3 rounded-lg border border-outline-variant/20 hover:bg-surface-container-low transition-colors cursor-pointer">
-                                <div>
-                                    <p class="text-sm font-medium text-on-surface">Limpeza preventiva</p>
-                                    <p class="text-xs text-outline">Tec: Ricardo Silva</p>
-                                </div>
-                                <div class="flex items-center gap-2 text-right flex-shrink-0">
-                                    <div>
-                                        <p class="text-xs font-medium text-on-surface-variant">15/05/2024</p>
-                                        <p class="text-[10px] text-outline">Concluído</p>
-                                    </div>
-                                    <span class="material-symbols-outlined text-outline text-[16px]">chevron_right</span>
-                                </div>
-                            </a>
+                                <?php foreach($manutencoesRecentes as $manutencoes): ?>
+
+                                    <?php
+                                        $status = strtolower(trim($manutencoes->getStatus()));
+
+                                        // Define tipo e cor
+                                        if ($status === 'pendente') {
+                                            $statusLabel = 'Pendente';
+                                            $statusClass = 'text-amber-600';
+                                            $data = $manutencoes->getDataAgendada();
+                                        } 
+                                        elseif ($status === 'em_andamento') {
+                                            $statusLabel = 'Em Andamento';
+                                            $statusClass = 'text-blue-600';
+                                            $data = $manutencoes->getDataInicio() ?? $manutencoes->getDataAgendada();
+                                        } 
+                                        else { // concluida
+                                            $statusLabel = 'Concluído';
+                                            $statusClass = 'text-green-600';
+                                            $data = $manutencoes->getDataConclusao();
+                                        }
+                                    ?>
+
+                                    <a href="index.php?acao=detalhes-manutencao&id=<?= $manutencoes->getId() ?>"
+                                    class="flex justify-between items-center p-3 rounded-lg border border-outline-variant/20 hover:bg-surface-container-low transition-colors">
+
+                                        <div>
+                                            <p class="text-sm font-medium text-on-surface">
+                                                <?= htmlspecialchars($manutencoes->getTitulo()) ?>
+                                            </p>
+
+                                            <p class="text-xs text-outline">
+                                                Tec: <?= htmlspecialchars($manutencoes->getNomeTecnico() ?? 'Não atribuído') ?>
+                                            </p>
+                                        </div>
+
+                                        <div class="text-right">
+
+                                            <p class="text-xs font-medium text-on-surface-variant">
+                                                <?= $data ? (new DateTime($data))->format('d/m/Y') : '--' ?>
+                                            </p>
+
+                                            <p class="text-[10px] <?= $statusClass ?> font-semibold">
+                                                <?= $statusLabel ?>
+                                            </p>
+
+                                        </div>
+
+                                    </a>
+
+                                <?php endforeach; ?>
+
+                            <?php endif; ?>
 
                         </div>
-                        <!-- Fim: Lista de manutenções -->
 
-                        <!-- Rodapé fixo: link para todas as manutenções -->
-                        <div class="mt-4 pt-4 border-t border-outline-variant/30 flex-shrink-0">
+                        <div class="mt-4 pt-4 border-t border-outline-variant/30">
+
                             <a href="index.php?acao=manutencoes"
-                               class="text-secondary text-xs font-semibold hover:underline flex items-center justify-center gap-1">
+                            class="text-secondary text-xs font-semibold hover:underline flex items-center justify-center gap-1">
+
                                 Ver mais
                                 <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
                             </a>
+
                         </div>
 
                     </div>
+
                 </div>
-                <!-- Fim: Card de Manutenções -->
 
             </div>
             <!-- Fim: Linha Inferior -->

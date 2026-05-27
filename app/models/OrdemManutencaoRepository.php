@@ -71,6 +71,11 @@ class OrdemManutencaoRepository
                     ON om.id_maquina = m.id_maquina
 
                 WHERE om.deleted_at IS NULL
+                ORDER BY 
+                CASE 
+                    WHEN om.status = 'concluida' THEN om.data_conclusao 
+                    ELSE om.data_agendada 
+                END DESC
             "
         );
 
@@ -97,6 +102,13 @@ class OrdemManutencaoRepository
             $ordem->setNomeTecnico($linha['nome_tecnico']);
 
             $ordem->setNomeMaquina($linha['nome_maquina']);
+
+            if (isset($linha['data_inicio'])) {
+                $ordem->setDataInicio($linha['data_inicio']);
+            }
+            if (isset($linha['data_conclusao'])) {
+                $ordem->setDataConclusao($linha['data_conclusao']);
+            }
 
             $ordens[] = $ordem;
         }

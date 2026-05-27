@@ -60,7 +60,7 @@ class ManutencaoController
 
         $maquinas = $this->maquinaRepository->listarMaquinas();
 
-        $usuario = $this->usuarioRepository->listarFuncionarios();
+        $usuarios = $this->usuarioRepository->listarTecnicos();
 
         require_once __DIR__ . "/../views/administrador/manutencoes/cadastro.php";
     }
@@ -155,6 +155,57 @@ class ManutencaoController
         }
     }
 
+    public function resumoManutencoesRecentes()
+    {
+        $ordens = $this->ordemRepository->listarOrdens();
+
+        $manutencoesRecentes = [];
+
+        $hoje = new DateTime();
+
+        foreach($ordens as $ordem)
+        {
+            $status = strtolower(trim($ordem->getStatus()));
+
+            $dataConclusao = $ordem->getDataConclusao();
+
+            // =========================
+            // PENDENTES + EM ANDAMENTO
+            // =========================
+            if($status === 'pendente' || $status === 'em_andamento')
+            {
+                $manutencoesRecentes[] = $ordem;
+                continue;
+            }
+
+            // =========================
+            // CONCLUÍDAS - ÚLTIMOS 7 DIAS (melhorado)
+            // =========================
+            if($status === 'concluida')
+            {
+                if(!empty($dataConclusao))
+                {
+                    try {
+                        $data = new DateTime($dataConclusao);
+
+                        $diff = $hoje->diff($data)->days;
+
+                        // Aumentei para 7 dias (mais útil)
+                        if($diff <= 7)
+                        {
+                            $manutencoesRecentes[] = $ordem;
+                        }
+                    } catch (Exception $e) {
+                        // Ignora datas inválidas
+                        continue;
+                    }
+                }
+            }
+        }
+
+        return $manutencoesRecentes;
+    }
+
     // =========================
     // MANUTENÇÕES EXECUTADAS
     // =========================
@@ -184,17 +235,19 @@ class ManutencaoController
         Auth::check();
 
         try {
-
-            if(!isset($_SESSION['ordem_finalizada']))
-            {
-                throw new Exception("Nenhuma ordem finalizada.");
+            if (!isset($_SESSION['ordem_finalizada'])) {
+                throw new Exception("Nenhuma ordem selecionada para finalização.");
             }
 
-            $descricaoServico = trim($_POST['descricao_servico']);
-
-            $observacoes = trim($_POST['observacoes']);
-
             $idOrdem = $_SESSION['ordem_finalizada'];
+
+            $descricaoServico = trim($_POST['descricao_servico'] ?? '');
+            
+            $observacoes = trim($_POST['observacoes'] ?? '');
+
+            if (empty($descricaoServico)) {
+                throw new Exception("Descrição do serviço é obrigatória.");
+            }
 
             $idUsuario = $_SESSION['usuario']['id'];
 
@@ -207,9 +260,12 @@ class ManutencaoController
 
             $this->manutencaoRepository->createManutencao($manutencao);
 
-            unset($_SESSION['ordem_finalizada']);
+            $this->ordemRepository->concluirOrdem($idOrdem);
 
-            $_SESSION['sucesso'] = "Manutenção cadastrada com sucesso.";
+            unset($_SESSION['ordem_finalizada']);
+            unset($_SESSION['data_conclusao']);
+
+            $_SESSION['sucesso'] = "Manutenção finalizada e cadastrada com sucesso.";
 
             header("Location: index.php?acao=manutencoes");
 
@@ -301,8 +357,6 @@ class ManutencaoController
         }
 
         $id = (int) $_GET['id'];
-
-        $this->ordemRepository->concluirOrdem($id);
 
         $_SESSION['ordem_finalizada'] = $id;
 

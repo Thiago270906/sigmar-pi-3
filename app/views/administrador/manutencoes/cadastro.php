@@ -121,9 +121,9 @@
 
             <?php foreach($usuarios as $usuario): ?>
 
-                <option value="<?= $usuario['id_usuario']; ?>">
+                <option value="<?= $usuario->getId(); ?>">
 
-                    <?= $usuario->getId() . "# ".  $usuario['nome']; ?>
+                    <?= $usuario->getId() . "# " . $usuario->getNome(); ?>
 
                 </option>
 

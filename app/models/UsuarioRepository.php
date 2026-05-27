@@ -172,7 +172,7 @@ class UsuarioRepository
             $usuario = new Usuario(
                 $linha['nome'],
                 $linha['email'],
-                $linha['senha'],
+                $linha['senha_hash'],
                 $linha['cargo'],
                 $linha['telefone']
             );
