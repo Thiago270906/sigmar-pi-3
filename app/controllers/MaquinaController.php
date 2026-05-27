@@ -139,4 +139,34 @@ public function index()
 
         require_once __DIR__ . "/../views/administrador/maquinas/detalhes.php";
     }
+
+    public function formSimularMaquina()
+    {
+        Auth::admin();
+
+        if(!isset($_GET['id']))
+        {
+            $_SESSION['erro'] = "Máquina não encontrada.";
+
+            header("Location: index.php?acao=maquinas");
+
+            exit;
+        }
+
+        $id = (int) $_GET['id'];
+
+        $maquina = $this->repository->buscarIdMaquina($id);
+
+        if(!$maquina)
+        {
+            $_SESSION['erro'] = "Máquina não encontrada.";
+
+            header("Location: index.php?acao=maquinas");
+
+            exit;
+        }
+
+        require_once __DIR__ .
+        "/../views/administrador/maquinas/simular.php";
+    }
 }

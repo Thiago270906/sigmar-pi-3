@@ -102,6 +102,65 @@ class SensorController
             exit;
         }
     }
+
+    public function simularLeituras()
+    {
+        Auth::admin();
+
+        try
+        {
+            if(!isset($_POST['sensores']))
+            {
+                $_SESSION['erro'] =
+                    "Nenhum sensor enviado.";
+
+                header("Location: index.php?acao=maquinas");
+
+                exit;
+            }
+
+            foreach($_POST['sensores'] as $dadosSensor)
+            {
+                $idSensor = (int) $dadosSensor['id'];
+
+                $valor = (float) $dadosSensor['valor'];
+
+                // IGNORA CAMPOS VAZIOS
+                if($valor <= 0)
+                {
+                    continue;
+                }
+
+                $sensor = $this->repository
+                    ->buscarIdSensor($idSensor);
+
+                if(!$sensor)
+                {
+                    continue;
+                }
+
+                $this->repository->inserirLeitura(
+                    $sensor,
+                    $valor
+                );
+            }
+
+            $_SESSION['sucesso'] =
+                "Leituras simuladas com sucesso.";
+
+            header("Location: index.php?acao=maquinas");
+
+            exit;
+        }
+        catch(Exception $e)
+        {
+            $_SESSION['erro'] = $e->getMessage();
+
+            header("Location: index.php?acao=maquinas");
+
+            exit;
+        }
+    }
 }
 
 ?>

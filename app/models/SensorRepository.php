@@ -114,6 +114,7 @@ class SensorRepository
                 SELECT *
                 FROM sensores
                 WHERE id_maquina = ?
+                AND status = 'ativo'
             "
         );
 
@@ -186,7 +187,8 @@ class SensorRepository
             $sensores[] = $sensor;
         }
 
-        if($statusAtualMaquina != $statusMaquina)
+        if($statusAtualMaquina != $statusMaquina
+        && $idSensorResponsavel)
         {
             $this->salvarHistorico(
                 $idMaquina,
@@ -262,6 +264,7 @@ class SensorRepository
                 UPDATE sensores
                 SET status = 'inativo'
                 WHERE id_sensor = ?
+                
             "
         );
 
@@ -279,6 +282,7 @@ class SensorRepository
             ]
         );
     }
+
     public function createMongoSensores(Sensor $sensor)
     {
         $unidade = '';
@@ -297,6 +301,31 @@ class SensorRepository
         $this->mongoCollection->insertOne([
             'id_sensor' => $sensor->getId(),
             'valor' => 0,
+            'unidade' => $unidade,
+            'timestamp' => date('Y-m-d H:i:s')
+        ]);
+    }
+
+    public function inserirLeitura(
+        Sensor $sensor,
+        $valor
+    )
+    {
+        $unidade = '';
+
+        if($sensor->getTipo() == 'temperatura')
+        {
+            $unidade = '°C';
+        }
+
+        if($sensor->getTipo() == 'vibracao')
+        {
+            $unidade = 'Hz';
+        }
+
+        $this->mongoCollection->insertOne([
+            'id_sensor' => $sensor->getId(),
+            'valor' => $valor,
             'unidade' => $unidade,
             'timestamp' => date('Y-m-d H:i:s')
         ]);

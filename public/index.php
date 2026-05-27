@@ -104,6 +104,18 @@ switch($acao)
         $controller->detalhesMaquina();
     break;
 
+    case 'form-simular-maquina':
+        $controller = new MaquinaController();
+        $controller->formSimularMaquina();
+
+    break;
+
+    case 'simular-leituras':
+        $controller = new SensorController();
+        $controller->simularLeituras();
+
+    break;
+
     case 'form-sensor':
 
         Auth::admin();
