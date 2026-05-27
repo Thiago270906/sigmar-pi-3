@@ -154,7 +154,7 @@ class MaquinaRepository
     }
 
     // UPDATE
-    public function atualizarMaquina(Maquina $maquina)
+    public function upadateMaquina(Maquina $maquina)
     {
         $stmt = $this->conn->prepare(
             "

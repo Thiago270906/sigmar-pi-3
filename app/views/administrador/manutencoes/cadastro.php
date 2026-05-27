@@ -117,13 +117,13 @@
             Selecione o técnico
         </option>
 
-        <?php if(!empty($tecnicos)): ?>
+        <?php if(!empty($usuarios)): ?>
 
-            <?php foreach($tecnicos as $tecnico): ?>
+            <?php foreach($usuarios as $usuario): ?>
 
-                <option value="<?= $tecnico['id_usuario']; ?>">
+                <option value="<?= $usuario['id_usuario']; ?>">
 
-                    <?= $maquina->getId() . "# ".  $tecnico['nome']; ?>
+                    <?= $usuario->getId() . "# ".  $usuario['nome']; ?>
 
                 </option>
 

@@ -119,10 +119,7 @@
         <!-- Logo -->
         <div class="px-6 mb-12">
             <div class="flex flex-col items-center">
-
-                <!-- Imagem da logo -->
-                <img src="./assets/img/logo-sigmar.png">
-
+                <img src="./assets/img/logo-sigmar.png" alt="Logo SIGMAR" class="w-36 h-auto mb-2">
             </div>
         </div>
 

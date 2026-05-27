@@ -60,7 +60,7 @@ class ManutencaoController
 
         $maquinas = $this->maquinaRepository->listarMaquinas();
 
-        $tecnicos = $this->usuarioRepository->listarTecnicos();
+        $usuario = $this->usuarioRepository->listarFuncionarios();
 
         require_once __DIR__ . "/../views/administrador/manutencoes/cadastro.php";
     }

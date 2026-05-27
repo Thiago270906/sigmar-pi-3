@@ -134,34 +134,6 @@
         FOREIGN KEY (id_usuario)
             REFERENCES usuarios(id_usuario)
     );
-        
-
-    CREATE TABLE notificacoes (
-        id_notificacao INT AUTO_INCREMENT PRIMARY KEY,
-        
-        titulo VARCHAR(100),
-        mensagem TEXT NOT NULL,
-        
-        tipo ENUM(
-            'alerta',
-            'manutencao',
-            'sistema',
-            'critico'
-        ),
-        
-        lida BOOLEAN DEFAULT FALSE,
-        
-        data_envio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        
-        id_usuario INT,
-        id_maquina INT,
-        
-        FOREIGN KEY (id_usuario)
-            REFERENCES usuarios(id_usuario),
-            
-        FOREIGN KEY (id_maquina)
-            REFERENCES maquinas(id_maquina)
-    );
 
     CREATE TABLE sensores (
         id_sensor INT AUTO_INCREMENT PRIMARY KEY,

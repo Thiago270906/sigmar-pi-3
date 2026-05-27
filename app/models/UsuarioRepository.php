@@ -160,7 +160,6 @@ class UsuarioRepository
                 SELECT *
                 FROM usuarios
                 WHERE cargo = 'tecnico'
-                AND ativo = 1
             "
         );
 
