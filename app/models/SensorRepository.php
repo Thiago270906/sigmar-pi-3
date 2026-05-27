@@ -160,27 +160,45 @@ class SensorRepository
             if ($leitura)
             {
                 $leitura = (array) $leitura;
-
-                $sensor->setValorAtual($leitura['valor']);
-
+                
                 $sensor->setUnidade($leitura['unidade']);
+                
+                $sensor->setValorAtual($leitura['valor']);
 
                 $valorAtual = $leitura['valor'];
 
-                if($valorAtual >= $sensor->getLimiteCritico())
+                if($sensor->getTipo() == 'temperatura')
                 {
-                    $statusMaquina = 'critico';
+                    // MAIOR = PIOR
 
-                    $idSensorResponsavel = $sensor->getId();
+                    if($valorAtual >= $sensor->getLimiteCritico())
+                    {
+                        $statusMaquina = 'critico';
+
+                        $idSensorResponsavel = $sensor->getId();
+                    }
+                    elseif(
+                        $valorAtual >= $sensor->getLimiteAlerta()
+                        && $statusMaquina != 'critico'
+                    )
+                    {
+                        $statusMaquina = 'alerta';
+
+                        $idSensorResponsavel = $sensor->getId();
+                    }
                 }
-                elseif(
-                    $valorAtual >= $sensor->getLimiteAlerta()
-                    && $statusMaquina != 'critico'
-                )
-                {
-                    $statusMaquina = 'alerta';
 
-                    $idSensorResponsavel = $sensor->getId();
+                if($sensor->getTipo() == 'vibracao')
+                {
+                    if($valorAtual <= $sensor->getLimiteAlerta())
+                    {
+                        if($statusMaquina != 'critico')
+                        {
+                            $statusMaquina = 'alerta';
+
+                            $idSensorResponsavel = $sensor->getId();
+                        }
+                    }
                 }
             }
 
@@ -295,12 +313,12 @@ class SensorRepository
         }
         elseif($tipo === 'vibracao')
         {
-            $unidade = 'Hz';
+            $unidade = 'V';
         }
 
         $this->mongoCollection->insertOne([
             'id_sensor' => $sensor->getId(),
-            'valor' => 0,
+            'valor' => 5,
             'unidade' => $unidade,
             'timestamp' => date('Y-m-d H:i:s')
         ]);
@@ -320,7 +338,7 @@ class SensorRepository
 
         if($sensor->getTipo() == 'vibracao')
         {
-            $unidade = 'Hz';
+            $unidade = 'V';
         }
 
         $this->mongoCollection->insertOne([

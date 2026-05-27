@@ -125,8 +125,7 @@ class SensorController
 
                 $valor = (float) $dadosSensor['valor'];
 
-                // IGNORA CAMPOS VAZIOS
-                if($valor <= 0)
+                if($dadosSensor['valor'] === '')
                 {
                     continue;
                 }

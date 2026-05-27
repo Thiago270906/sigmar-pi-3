@@ -6,7 +6,7 @@ class Sensor
     private $modelo;
     private $tipo;
     private $limiteAlerta;
-    private $limiteCritico;
+    private ?float $limiteCritico;
     private $status = 'ativo';
     private $dataInstalacao;
     private $dataTroca;
@@ -18,7 +18,7 @@ class Sensor
         string $modelo,
         string $tipo,
         float $limiteAlerta,
-        float $limiteCritico,
+        ?float $limiteCritico,
         int $idMaquina
     )
     {
@@ -53,7 +53,7 @@ class Sensor
         return $this->limiteAlerta;
     }
 
-    public function getLimiteCritico(): float
+    public function getLimiteCritico(): ?float
     {
         return $this->limiteCritico;
     }
@@ -139,7 +139,7 @@ class Sensor
 
     public function setLimiteAlerta(float $limiteAlerta)
     {
-        if ($limiteAlerta <= 0)
+        if ($limiteAlerta < 0)
         {
             throw new Exception("Limite de alerta inválido.");
         }
@@ -147,8 +147,16 @@ class Sensor
         $this->limiteAlerta = $limiteAlerta;
     }
 
-    public function setLimiteCritico(float $limiteCritico)
+    public function setLimiteCritico(?float $limiteCritico)
     {
+        // SENSOR SEM LIMITE CRÍTICO
+        if($limiteCritico === null)
+        {
+            $this->limiteCritico = null;
+
+            return;
+        }
+
         if ($limiteCritico <= 0)
         {
             throw new Exception("Limite crítico inválido.");
@@ -156,7 +164,9 @@ class Sensor
 
         if ($limiteCritico <= $this->limiteAlerta)
         {
-            throw new Exception("Limite crítico deve ser maior que o alerta.");
+            throw new Exception(
+                "Limite crítico deve ser maior que o alerta."
+            );
         }
 
         $this->limiteCritico = $limiteCritico;

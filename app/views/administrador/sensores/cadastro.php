@@ -48,21 +48,45 @@
 
     <br><br>
 
-    <input
-        type="number"
-        step="0.01"
-        name="limite_critico"
-        placeholder="Limite crítico"
-        required
-    >
+    <div id="campo-critico">
 
-    <br><br>
+        <input
+            type="number"
+            step="0.01"
+            name="limite_critico"
+            placeholder="Limite crítico"
+        >
+
+    </div>
+
+    <br>
 
     <button type="submit">
         Adicionar Sensor
     </button>
 
 </form>
+
+<script>
+
+const tipo = document.getElementById('tipo');
+
+const campoCritico =
+    document.getElementById('campo-critico');
+
+tipo.addEventListener('change', function()
+{
+    if(this.value === 'vibracao')
+    {
+        campoCritico.style.display = 'none';
+    }
+    else
+    {
+        campoCritico.style.display = 'block';
+    }
+});
+
+</script>
 
 </body>
 </html>

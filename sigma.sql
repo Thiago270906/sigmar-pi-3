@@ -147,7 +147,7 @@
 
         limite_alerta DECIMAL(10,2),
 
-        limite_critico DECIMAL(10,2),
+        limite_critico DECIMAL(10,2) NULL,
         
         status ENUM(
             'ativo',
@@ -297,20 +297,20 @@
     INSERT INTO sensores
     (modelo, tipo, limite_alerta, limite_critico, status, id_maquina)
     VALUES
-    ('TMP-X100', 'temperatura', 70.00, 90.00, 'ativo', 1),
-    ('VIB-S200', 'vibracao', 5.00, 8.00, 'ativo', 1),
+    ('LM-35', 'temperatura', 70.00, 90.00, 'ativo', 1),
+    ('SW-240', 'vibracao', 0.00, Null, 'ativo', 1),
 
-    ('TMP-X100', 'temperatura', 65.00, 85.00, 'ativo', 2),
-    ('VIB-S200', 'vibracao', 4.50, 7.50, 'ativo', 2),
+    ('LM-35', 'temperatura', 65.00, 85.00, 'ativo', 2),
+    ('SW-240', 'vibracao', 0.00, Null, 'ativo', 2),
 
-    ('TMP-X100', 'temperatura', 60.00, 80.00, 'ativo', 3),
+    ('LM-35', 'temperatura', 60.00, 80.00, 'ativo', 3),
 
-    ('TMP-X100', 'temperatura', 75.00, 95.00, 'ativo', 4),
-    ('VIB-S200', 'vibracao', 6.00, 9.00, 'ativo', 4),
+    ('LM-35', 'temperatura', 75.00, 95.00, 'ativo', 4),
+    ('SW-240', 'vibracao', 0.00, Null, 'ativo', 4),
 
-    ('TMP-X100', 'temperatura', 68.00, 88.00, 'ativo', 5),
+    ('LM-35', 'temperatura', 68.00, 88.00, 'ativo', 5),
 
-    ('VIB-S200', 'vibracao', 5.50, 8.50, 'ativo', 6);
+    ('SW-240', 'vibracao', 0.00, Null, 'ativo', 6);
 
     -- =========================
     -- ORDENS DE MANUTENÇÃO
