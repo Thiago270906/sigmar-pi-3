@@ -107,5 +107,10 @@ require_once __DIR__ . '/../../../models/Maquina.php';
     <a href="index.php?acao=form-simular-maquina&id=<?= $maquina->getId(); ?>">
         simular
     </a>
+    <br>
+    <br>
+    <a href="index.php?acao=form-editar-maquina&id=<?= $maquina->getId(); ?>">
+        editar
+    </a>
 </body>
 </html>

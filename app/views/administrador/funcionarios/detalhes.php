@@ -106,8 +106,8 @@ require_once __DIR__ . '/../../../models/Usuario.php';
 
     |
 
-    <a href="index.php?acao=editar-funcionario&id=<?= $usuario->getId() ?>">
-        Editar
+    <a href="index.php?acao=form-editar-funcionario&id=<?= $usuario->getId(); ?>">
+        editar
     </a>
 
     |

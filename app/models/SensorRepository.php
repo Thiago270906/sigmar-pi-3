@@ -275,18 +275,16 @@ class SensorRepository
     }
 
     // DESATIVAR SENSOR
-    public function desativarSensor($id)
+    public function desativarSensorParaTroca($idSensor)
     {
         $stmt = $this->conn->prepare(
-            "
-                UPDATE sensores
-                SET status = 'inativo'
-                WHERE id_sensor = ?
-                
-            "
+            "UPDATE sensores 
+            SET status = 'inativo', 
+                data_troca = CURRENT_TIMESTAMP 
+            WHERE id_sensor = ?"
         );
 
-        $stmt->execute([$id]);
+        $stmt->execute([$idSensor]);
     }
 
     private function buscarUltimaLeitura($idSensor)

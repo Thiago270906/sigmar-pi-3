@@ -257,25 +257,58 @@ class UsuarioRepository
         }
     }
 
-    public function atualizarFuncionario(Usuario $usuario)
+    public function updateFuncionario(Usuario $usuario, Endereco $endereco)
     {
-        $stmt = $this->conn->prepare(
-            "UPDATE usuarios
-            SET
-                nome = ?,
-                email = ?,
-                cargo = ?,
-                telefone = ?
-            WHERE id_usuario = ?"
-        );
+        try {
+            $this->conn->beginTransaction();
 
-        $stmt->execute([
-            $usuario->getNome(),
-            $usuario->getEmail(),
-            $usuario->getCargo(),
-            $usuario->getTelefone(),
-            $usuario->getId()
-        ]);
+            // Atualiza Usuário
+            $stmtUsuario = $this->conn->prepare(
+                "UPDATE usuarios SET
+                    nome = ?,
+                    email = ?,
+                    cargo = ?,
+                    telefone = ?
+                WHERE id_usuario = ?"
+            );
+
+            $stmtUsuario->execute([
+                $usuario->getNome(),
+                $usuario->getEmail(),
+                $usuario->getCargo(),
+                $usuario->getTelefone(),
+                $usuario->getId()
+            ]);
+
+            $stmtEndereco = $this->conn->prepare(
+                "UPDATE enderecos SET
+                    cep = ?,
+                    cidade = ?,
+                    bairro = ?,
+                    rua = ?,
+                    estado = ?,
+                    numero = ?
+                WHERE id_usuario = ?"
+            );
+
+            $stmtEndereco->execute([
+                $endereco->getCep(),
+                $endereco->getCidade(),
+                $endereco->getBairro(),
+                $endereco->getRua(),
+                $endereco->getEstado(),
+                $endereco->getNumero(),
+                $usuario->getId()
+            ]);
+
+            $this->conn->commit();
+
+            return true;
+
+        } catch (Exception $e) {
+            $this->conn->rollBack();
+            throw new Exception("Erro ao atualizar funcionário: " . $e->getMessage());
+        }
     }
 
     public function excluirFuncionario($id)

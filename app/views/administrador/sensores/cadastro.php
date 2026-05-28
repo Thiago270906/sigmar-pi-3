@@ -1,3 +1,10 @@
+<?php
+/** 
+ * @var bool $isEdicao 
+ * @var int|null $idMaquina 
+ */
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -10,6 +17,12 @@
 <h1>Cadastrar Sensor</h1>
 
 <form action="index.php?acao=adicionar-sensor" method="POST">
+
+    <input type="hidden" name="is_edicao" value="<?= $isEdicao ? 1 : 0 ?>">
+
+    <?php if($isEdicao && $idMaquina > 0): ?>
+        <input type="hidden" name="id_maquina" value="<?= $idMaquina ?>">
+    <?php endif; ?>
 
     <input
         type="text"

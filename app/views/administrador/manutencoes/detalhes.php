@@ -3,7 +3,7 @@
 require_once __DIR__ . '/../../../models/OrdemManutencao.php';
 
 /** @var OrdemManutencao $ordem */
-/** @var Manutenccao $manutencao */
+/** @var Manutencao $manutencao */
 
 ?>
 
@@ -115,6 +115,13 @@ require_once __DIR__ . '/../../../models/OrdemManutencao.php';
     <a href="index.php?acao=manutencoes">
         Voltar
     </a>
+    <br>
+    <br>
+    <?php if($ordem->getStatus() === 'agendada' || $ordem->getStatus() === 'pendente' ):?>
+        <a href="index.php?acao=form-editar-ordem&id=<?= $ordem->getId(); ?>">
+            editar
+        </a>
+    <?php endif; ?>
 
 </body>
 </html>

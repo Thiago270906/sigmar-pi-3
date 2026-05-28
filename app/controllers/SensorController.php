@@ -18,7 +18,37 @@ class SensorController
     {
         Auth::admin();
 
+        // Define as variáveis ANTES de carregar a view
+        $isEdicao = isset($_GET['is_edicao']) && $_GET['is_edicao'] == 1;
+        $idMaquina = $isEdicao ? (int) ($_GET['id_maquina'] ?? 0) : null;
+
+        // Passa as variáveis para a view (melhor prática)
         require_once __DIR__ . "/../views/administrador/sensores/cadastro.php";
+    }
+
+    public function trocarSensor()
+    {
+        Auth::admin();
+
+        if (!isset($_GET['id_sensor']) || !isset($_GET['id_maquina'])) {
+            $_SESSION['erro'] = "Dados insuficientes para troca.";
+            header("Location: index.php?acao=maquinas");
+            exit;
+        }
+
+        $idSensorAntigo = (int) $_GET['id_sensor'];
+        $idMaquina = (int) $_GET['id_maquina'];
+
+        // Apenas salva a intenção na sessão
+        $_SESSION['sensor_troca_pendente'] = [
+            'antigo_id' => $idSensorAntigo,
+            'id_maquina' => $idMaquina
+        ];
+
+        $_SESSION['sucesso'] = "Sensor selecionado para troca. Agora cadastre o novo sensor.";
+
+        header("Location: index.php?acao=form-sensor&is_edicao=1&id_maquina=" . $idMaquina);
+        exit;
     }
 
     public function adicionarSensorSessao()
@@ -26,32 +56,52 @@ class SensorController
         Auth::admin();
 
         try {
+            $modelo = trim($_POST['modelo'] ?? '');
+            $tipo = trim($_POST['tipo'] ?? '');
+            $limiteAlerta = $_POST['limite_alerta'] ?? '';
+            $limiteCritico = $_POST['limite_critico'] ?? '';
 
-            $modelo = trim($_POST['modelo']);
-            $tipo = trim($_POST['tipo']);
+            if (empty($modelo) || empty($tipo)) {
+                throw new Exception("Modelo e tipo são obrigatórios.");
+            }
 
-            $limiteAlerta = $_POST['limite_alerta'];
-            $limiteCritico = $_POST['limite_critico'];
-
-            $_SESSION['sensores'][] = [
+            $novoSensor = [
                 'modelo' => $modelo,
                 'tipo' => $tipo,
                 'limite_alerta' => $limiteAlerta,
                 'limite_critico' => $limiteCritico
             ];
 
-            $_SESSION['sucesso'] = "Sensor adicionado com sucesso.";
+            // Se existe troca pendente
+            if (isset($_SESSION['sensor_troca_pendente'])) {
+                $_SESSION['sensores_troca'][] = [
+                    'antigo_id' => $_SESSION['sensor_troca_pendente']['antigo_id'],
+                    'novo'      => $novoSensor
+                ];
 
-            header("Location: index.php?acao=form-maquina");
+                unset($_SESSION['sensor_troca_pendente']); // limpa pendência
+            } else {
+                // Cadastro normal (sem troca)
+                $_SESSION['sensores'][] = $novoSensor;
+            }
 
+            $_SESSION['sucesso'] = "Sensor preparado para salvamento.";
+
+            $redirect = isset($_POST['is_edicao']) && $_POST['is_edicao'] == 1 
+                ? "form-editar-maquina&id=" . $_POST['id_maquina'] 
+                : "form-maquina";
+
+            header("Location: index.php?acao=" . $redirect);
             exit;
 
-        } catch(Exception $e) {
-
+        } catch (Exception $e) {
             $_SESSION['erro'] = $e->getMessage();
 
-            header("Location: index.php?acao=form-sensor");
+            $redirect = isset($_POST['is_edicao']) && $_POST['is_edicao'] == 1 
+                ? "form-editar-maquina&id=" . ($_POST['id_maquina'] ?? '') 
+                : "form-maquina";
 
+            header("Location: index.php?acao=" . $redirect);
             exit;
         }
     }
@@ -60,16 +110,19 @@ class SensorController
     {
         Auth::admin();
 
-        $index = $_GET['index'];
+        $index = (int) $_GET['index'];
 
-        unset($_SESSION['sensores'][$index]);
+        if (isset($_SESSION['sensores'][$index])) {
+            unset($_SESSION['sensores'][$index]);
+            $_SESSION['sensores'] = array_values($_SESSION['sensores']);
+        }
 
-        $_SESSION['sensores'] = array_values(
-            $_SESSION['sensores']
-        );
+        // Verifica origem (edição ou cadastro)
+        $redirect = isset($_GET['is_edicao']) && $_GET['is_edicao'] == 1 
+            ? "editar-maquina&id=" . $_GET['id_maquina'] 
+            : "form-maquina";
 
-        header("Location: index.php?acao=form-maquina");
-
+        header("Location: index.php?acao=" . $redirect);
         exit;
     }
 
@@ -85,7 +138,7 @@ class SensorController
         {
             $id = $_GET['id'];
 
-            $this->repository->desativarSensor($id);
+            $this->repository->desativarSensorParaTroca($id);
 
             $_SESSION['sucesso'] = "Sensor desativado com sucesso.";
 

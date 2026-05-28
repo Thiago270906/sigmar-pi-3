@@ -217,37 +217,52 @@ class OrdemManutencaoRepository
     }
 
     // UPDATE
-    public function atualizarOrdem(OrdemManutencao $ordem)
+    public function updateOrdem(OrdemManutencao $ordem)
     {
-        $stmt = $this->conn->prepare(
-            "
-                UPDATE ordens_manutencao
-                SET
+        try {
+            $stmt = $this->conn->prepare(
+                "UPDATE ordens_manutencao SET
                     titulo = ?,
                     descricao = ?,
                     tipo = ?,
                     prioridade = ?,
-                    status = ?,
                     data_agendada = ?,
                     id_maquina = ?,
                     id_usuario = ?
-                WHERE id_ordem = ?
-            "
-        );
+                WHERE id_ordem = ?"
+            );
 
-        $stmt->execute([
-            $ordem->getTitulo(),
-            $ordem->getDescricao(),
-            $ordem->getTipo(),
-            $ordem->getPrioridade(),
-            $ordem->getStatus(),
-            $ordem->getDataAgendada(),
-            $ordem->getIdMaquina(),
-            $ordem->getIdUsuario(),
-            $ordem->getId()
-        ]);
+            $stmt->execute([
+                $ordem->getTitulo(),
+                $ordem->getDescricao(),
+                $ordem->getTipo(),
+                $ordem->getPrioridade(),
+                $ordem->getDataAgendada(),
+                $ordem->getIdMaquina(),
+                $ordem->getIdUsuario(),
+                $ordem->getId()   // ID obrigatório
+            ]);
+
+            return $stmt->rowCount() > 0; // Retorna true se atualizou algo
+
+        } catch (Exception $e) {
+            throw new Exception("Erro ao atualizar ordem: " . $e->getMessage());
+        }
     }
 
+    public function ordensagendadas()
+    {
+        $sql = "
+            UPDATE ordens_manutencao
+            SET status = 'agendada'
+            WHERE status = 'pendente'
+            AND data_agendada > CURDATE()
+        ";
+
+        $stmt = $this->conn->prepare($sql);
+
+        $stmt->execute();
+    }
     public function ordensPendentes()
     {
         $sql = "

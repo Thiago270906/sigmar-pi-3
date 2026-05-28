@@ -119,6 +119,26 @@ break;
 
     break;
 
+    case 'form-editar-maquina':
+
+        Auth::admin();
+
+        $controller = new MaquinaController();
+
+        $controller->formEditarMaquina();
+
+    break;
+
+    case 'editar-maquina':
+
+        Auth::admin();
+
+        $controller = new MaquinaController();
+
+        $controller->editarMaquina();
+
+    break;
+
     case 'form-sensor':
 
         Auth::admin();
@@ -147,6 +167,16 @@ break;
 
         $controller->removerSensorSessao();
 
+    break;
+
+    case 'trocar-sensor':
+
+        Auth::admin();
+    
+        $controller = new SensorController();
+    
+        $controller->trocarSensor();        // método que criamos anteriormente
+    
     break;
 
     // =========================
@@ -190,6 +220,26 @@ break;
 
         $controller->detalhesFuncionario();
         
+    break;
+
+    case 'form-editar-funcionario':
+
+        Auth::admin();
+
+        $controller = new UsuarioController();
+
+        $controller->formEditarFuncionario();
+
+    break;
+
+    case 'editar-funcionario':
+
+        Auth::admin();
+
+        $controller = new UsuarioController();
+
+        $controller->editarFuncionario();
+
     break;
     // =========================
     // MANUTENÇÕES
@@ -242,6 +292,26 @@ break;
         $controller = new ManutencaoController();
 
         $controller->detalhesOrdem();
+
+    break;
+
+    case 'form-editar-ordem':
+
+        Auth::admin();
+
+        $controller = new ManutencaoController();
+
+        $controller->formEditarOrdem();
+
+    break;
+
+    case 'editar-ordem':
+
+        Auth::admin();
+
+        $controller = new ManutencaoController();
+
+        $controller->editarOrdem();
 
     break;
 

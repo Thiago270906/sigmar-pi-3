@@ -207,25 +207,29 @@ class MaquinaRepository
     }
 
     // UPDATE
-    public function upadateMaquina(Maquina $maquina)
+    public function updateMaquina(Maquina $maquina)
     {
-        $stmt = $this->conn->prepare(
-            "
-                UPDATE maquinas
-                SET
+        try {
+            $stmt = $this->conn->prepare(
+                "UPDATE maquinas SET
                     nome = ?,
                     tipo = ?,
-                    status = ?,
-                WHERE id_maquina = ?
-            "
-        );
+                    status = ?
+                WHERE id_maquina = ?"
+            );
 
-        $stmt->execute([
-            $maquina->getNome(),
-            $maquina->getTipo(),
-            $maquina->getStatus(),
-            $maquina->getId()
-        ]);
+            $stmt->execute([
+                $maquina->getNome(),
+                $maquina->getTipo(),
+                $maquina->getStatus(),
+                $maquina->getId()   // ID obrigatório
+            ]);
+
+            return $stmt->rowCount() > 0;
+
+        } catch (Exception $e) {
+            throw new Exception("Erro ao atualizar máquina: " . $e->getMessage());
+        }
     }
 
     // DELETE LÓGICO

@@ -37,6 +37,7 @@ class ManutencaoController
         Auth::admin();
 
         $this->ordemRepository->ordensPendentes();
+        $this->ordemRepository->ordensagendadas();
 
         $ordens = $this->ordemRepository->listarOrdens();
 
@@ -204,6 +205,94 @@ class ManutencaoController
         }
 
         return $manutencoesRecentes;
+    }
+    
+    public function formEditarOrdem()
+    {
+        Auth::admin();
+
+        if (!isset($_GET['id'])) {
+            $_SESSION['erro'] = "ID da ordem não informado.";
+            header("Location: index.php?acao=manutencoes");
+            exit;
+        }
+
+        $id = (int) $_GET['id'];
+
+        $ordem = $this->ordemRepository->buscarIdOrdem($id);
+
+        if (!$ordem) {
+            $_SESSION['erro'] = "Ordem não encontrada.";
+            header("Location: index.php?acao=manutencoes");
+            exit;
+        }
+
+        $status = strtolower(trim($ordem->getStatus()));
+
+        if ($status === 'concluida' || $status === 'em_andamento') {
+            $_SESSION['erro'] = "Não é possível editar ordens com status '{$status}'.";
+            header("Location: index.php?acao=manutencoes");
+            exit;
+        }
+
+        $maquinas = $this->maquinaRepository->listarMaquinas();
+        $usuarios = $this->usuarioRepository->listarTecnicos();
+
+        require_once __DIR__ . "/../views/administrador/manutencoes/editar.php";
+    }
+
+    public function editarOrdem()
+    {
+        Auth::admin();
+
+        try {
+            $id = (int) $_POST['id_ordem'];
+
+            $ordemAtual = $this->ordemRepository->buscarIdOrdem($id);
+
+            if (!$ordemAtual) {
+                throw new Exception("Ordem não encontrada.");
+            }
+
+            // Bloqueio de segurança (caso alguém tente editar via POST)
+            $status = strtolower(trim($ordemAtual->getStatus()));
+            if ($status === 'concluida' || $status === 'em_andamento') {
+                throw new Exception("Não é possível editar ordens com status '{$status}'.");
+            }
+
+            $titulo = trim($_POST['titulo']);
+            $descricao = trim($_POST['descricao']);
+            $tipo = trim($_POST['tipo']);
+            $prioridade = trim($_POST['prioridade']);
+            $dataAgendada = $_POST['data_agendada'];
+            $idMaquina = $_POST['id_maquina'];
+            $idUsuario = $_POST['id_usuario'];
+
+            $ordem = new OrdemManutencao(
+                $titulo,
+                $descricao,
+                $tipo,
+                $prioridade,
+                'agendada',           // Reseta status conforme solicitado
+                $dataAgendada,
+                $idMaquina,
+                $idUsuario
+            );
+
+            $ordem->setId($id);
+
+            $this->ordemRepository->updateOrdem($ordem);
+
+            $_SESSION['sucesso'] = "Ordem atualizada com sucesso.";
+
+            header("Location: index.php?acao=manutencoes");
+            exit;
+
+        } catch (Exception $e) {
+            $_SESSION['erro'] = $e->getMessage();
+            header("Location: index.php?acao=editar-ordem&id=" . $_POST['id_ordem']);
+            exit;
+        }
     }
 
     // =========================
