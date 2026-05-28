@@ -39,7 +39,16 @@ class ManutencaoController
         $this->ordemRepository->ordensPendentes();
         $this->ordemRepository->ordensagendadas();
 
-        $ordens = $this->ordemRepository->listarOrdens();
+            $status = $_GET['status'] ?? null;
+
+            if($status)
+            {
+                $ordens = $this->ordemRepository->filtrarStatusOrdem($status);
+            }
+            else
+            {
+                $ordens = $this->ordemRepository->listarOrdens();
+            }
 
         require_once __DIR__ . '/../views/administrador/manutencoes/index.php';
     }

@@ -176,7 +176,64 @@ class OrdemManutencaoRepository
         $ordem->setDataConclusao($dados['data_conclusao']);
         return $ordem;
     }
+        
+    public function filtrarStatusOrdem($status)
+    {
+        $stmt = $this->conn->prepare(
+            "
+            SELECT 
+                om.*,
+                u.nome AS nome_tecnico,
+                m.nome AS nome_maquina,
+                m.tipo AS tipo_maquina,
+                m.status AS status_maquina
 
+            FROM ordens_manutencao om
+
+            INNER JOIN usuarios u
+                ON om.id_usuario = u.id_usuario
+
+            INNER JOIN maquinas m
+                ON om.id_maquina = m.id_maquina
+
+            WHERE om.status = ?
+            AND om.deleted_at IS NULL
+            "
+        );
+
+        $stmt->execute([$status]);
+
+        $dados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $ordens = [];
+
+        foreach($dados as $linha)
+        {
+            $ordem = new OrdemManutencao(
+                $linha['titulo'],
+                $linha['descricao'],
+                $linha['tipo'],
+                $linha['prioridade'],
+                $linha['status'],
+                $linha['data_agendada'],
+                $linha['id_maquina'],
+                $linha['id_usuario']
+            );
+
+            $ordem->setId($linha['id_ordem']);
+
+            $ordem->setNomeTecnico($linha['nome_tecnico']);
+            $ordem->setNomeMaquina($linha['nome_maquina']);
+            $ordem->setTipoMaquina($linha['tipo_maquina']);
+            $ordem->setStatusMaquina($linha['status_maquina']);
+            $ordem->setDataInicio($linha['data_inicio']);
+            $ordem->setDataConclusao($linha['data_conclusao']);
+
+            $ordens[] = $ordem;
+        }
+
+        return $ordens;
+    }
     public function listarOrdemTecnico($idUsuario)
     {
         $stmt = $this->conn->prepare(

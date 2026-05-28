@@ -153,7 +153,7 @@ class MaquinaRepository
         return $maquina;
     }
 
-    public function filtrarStatus($status)
+    public function filtrarStatusMaquina($status)
     {
         $stmt = $this->conn->prepare(
             "

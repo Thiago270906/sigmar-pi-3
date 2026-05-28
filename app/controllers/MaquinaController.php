@@ -29,7 +29,7 @@ public function index()
 
     if($status)
     {
-        $maquinas = $this->repository->filtrarStatus($status);
+        $maquinas = $this->repository->filtrarStatusMaquina($status);
     }
     else
     {
