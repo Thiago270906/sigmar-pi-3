@@ -432,7 +432,22 @@ require_once __DIR__ . '/../../../models/ordemManutencao.php';
                             </tr>
 
                         </thead>
+                        
 
+                        <tbody>
+
+                            <?php
+                            /** @var array $ordens */
+                            usort($ordens, function($a, $b){
+
+                                return
+                                    $a->getId()
+                                    <=>
+                                    $b->getId();
+
+                            });
+
+                            ?>
                         <tbody>
 
                             <?php foreach($ordens as $ordem): ?>

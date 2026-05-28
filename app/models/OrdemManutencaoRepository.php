@@ -176,6 +176,30 @@ class OrdemManutencaoRepository
         $ordem->setDataConclusao($dados['data_conclusao']);
         return $ordem;
     }
+
+    public function graficoManutencoesConcluidas()
+    {
+        $stmt = $this->conn->prepare(
+            "
+            SELECT 
+                DATE(data_conclusao) AS dia,
+                COUNT(*) AS total
+            FROM ordens_manutencao
+            WHERE status = 'concluida'
+            AND deleted_at IS NULL
+            AND data_conclusao IS NOT NULL
+            AND data_conclusao >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+
+            GROUP BY DATE(data_conclusao)
+
+            ORDER BY dia ASC
+            "
+        );
+
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
         
     public function filtrarStatusOrdem($status)
     {
@@ -234,6 +258,7 @@ class OrdemManutencaoRepository
 
         return $ordens;
     }
+
     public function listarOrdemTecnico($idUsuario)
     {
         $stmt = $this->conn->prepare(

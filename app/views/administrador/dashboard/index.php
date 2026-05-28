@@ -414,43 +414,104 @@
                     <!-- =====================================
                         GRÁFICO 2 — MANUTENÇÕES
                     ====================================== -->
+                    <?php
+                    /** @var array $grafico */
+
+                    $datas = [];
+                    $totais = [];
+
+                    foreach($grafico as $item)
+                    {
+                        $datas[] =
+                            date(
+                                "d/m",
+                                strtotime($item['dia'])
+                            );
+
+                        $totais[] =
+                            (int)$item['total'];
+                    }
+
+                    $max = max($totais ?: [1]);
+
+                    $quantidade = count($totais);
+
+                    $espacamento =
+                        $quantidade > 1
+                        ? 660 / ($quantidade - 1)
+                        : 1;
+
+                    $pontos = [];
+
+                    foreach($totais as $i => $valor)
+                    {
+                        $x =
+                            20 +
+                            ($i * $espacamento);
+
+                        $y =
+                            200 -
+                            (
+                                ($valor / $max)
+                                * 150
+                            );
+
+                        $pontos[] = "$x,$y";
+                    }
+
+                    $caminho =
+                        count($pontos)
+                        ? "M" . implode(" L ", $pontos)
+                        : "";
+
+                    ?>
+
                     <div class="w-full bg-white border border-outline-variant/50 rounded-xl p-4 md:p-6">
 
                         <!-- Cabeçalho -->
+
                         <div class="flex justify-between items-center mb-6">
 
                             <div>
+
                                 <h3 class="font-bold text-primary text-lg">
-                                    Manutenções ao longo do tempo
+
+                                    Manutenções concluídas por dia
+
                                 </h3>
 
                                 <p class="text-sm text-on-surface-variant">
-                                    Concluídas x Pendentes
+
+                                    Últimos 7 dias
+
                                 </p>
+
                             </div>
 
                         </div>
 
-                        <!-- Legenda -->
-                        <div class="flex gap-6 mb-6 flex-wrap">
+
+                        <!-- legenda -->
+
+                        <div class="flex gap-6 mb-6">
 
                             <div class="flex items-center gap-2">
+
                                 <div class="w-3 h-3 rounded-full bg-secondary"></div>
-                                <span class="text-sm text-on-surface-variant">
-                                    Concluídas
-                                </span>
-                            </div>
 
-                            <div class="flex items-center gap-2">
-                                <div class="w-3 h-3 rounded-full bg-error"></div>
                                 <span class="text-sm text-on-surface-variant">
-                                    Pendentes
+
+                                    Concluídas
+
                                 </span>
+
                             </div>
 
                         </div>
 
-                        <!-- Gráfico -->
+
+                        <!-- gráfico -->
+
                         <div class="h-[320px] w-full">
 
                             <svg
@@ -459,64 +520,109 @@
                                 preserveAspectRatio="xMidYMid meet"
                             >
 
-                                <!-- Grade -->
-                                <line stroke="#f0f1f2" stroke-width="1" x1="0" x2="800" y1="0" y2="0"/>
-                                <line stroke="#f0f1f2" stroke-width="1" x1="0" x2="800" y1="40" y2="40"/>
-                                <line stroke="#f0f1f2" stroke-width="1" x1="0" x2="800" y1="80" y2="80"/>
-                                <line stroke="#f0f1f2" stroke-width="1" x1="0" x2="800" y1="120" y2="120"/>
-                                <line stroke="#f0f1f2" stroke-width="1" x1="0" x2="800" y1="160" y2="160"/>
-                                <line stroke="#f0f1f2" stroke-width="1" x1="0" x2="800" y1="200" y2="200"/>
+                                <!-- grade -->
 
-                                <!-- Linha Azul -->
-                                <path
-                                    d="M20,180 L130,160 L240,140 L350,170 L460,110 L570,140 L680,120"
-                                    fill="none"
-                                    stroke="#005eb3"
-                                    stroke-width="4"
-                                    stroke-linecap="round"
-                                />
+                                <?php for($i=0;$i<=5;$i++): ?>
 
-                                <!-- Linha Vermelha -->
-                                <path
-                                    d="M20,220 L130,210 L240,215 L350,205 L460,200 L570,215 L680,195"
-                                    fill="none"
-                                    stroke="#ba1a1a"
-                                    stroke-width="4"
-                                    stroke-linecap="round"
-                                />
+                                    <line
+                                        stroke="#f0f1f2"
+                                        stroke-width="1"
+                                        x1="0"
+                                        x2="800"
+                                        y1="<?= $i*40 ?>"
+                                        y2="<?= $i*40 ?>"
+                                    />
 
-                                <!-- Pontos -->
-                                <circle cx="20" cy="180" fill="#005eb3" r="5"/>
-                                <circle cx="130" cy="160" fill="#005eb3" r="5"/>
-                                <circle cx="240" cy="140" fill="#005eb3" r="5"/>
-                                <circle cx="350" cy="170" fill="#005eb3" r="5"/>
-                                <circle cx="460" cy="110" fill="#005eb3" r="5"/>
-                                <circle cx="570" cy="140" fill="#005eb3" r="5"/>
-                                <circle cx="680" cy="120" fill="#005eb3" r="5"/>
+                                <?php endfor; ?>
 
-                                <circle cx="20" cy="220" fill="#ba1a1a" r="5"/>
-                                <circle cx="130" cy="210" fill="#ba1a1a" r="5"/>
-                                <circle cx="240" cy="215" fill="#ba1a1a" r="5"/>
-                                <circle cx="350" cy="205" fill="#ba1a1a" r="5"/>
-                                <circle cx="460" cy="200" fill="#ba1a1a" r="5"/>
-                                <circle cx="570" cy="215" fill="#ba1a1a" r="5"/>
-                                <circle cx="680" cy="195" fill="#ba1a1a" r="5"/>
 
-                                <!-- Datas -->
-                                <text fill="#737780" font-size="11" text-anchor="middle" x="20" y="245">12/05</text>
-                                <text fill="#737780" font-size="11" text-anchor="middle" x="130" y="245">13/05</text>
-                                <text fill="#737780" font-size="11" text-anchor="middle" x="240" y="245">14/05</text>
-                                <text fill="#737780" font-size="11" text-anchor="middle" x="350" y="245">15/05</text>
-                                <text fill="#737780" font-size="11" text-anchor="middle" x="460" y="245">16/05</text>
-                                <text fill="#737780" font-size="11" text-anchor="middle" x="570" y="245">17/05</text>
-                                <text fill="#737780" font-size="11" text-anchor="middle" x="680" y="245">18/05</text>
+                                <!-- linha -->
+
+                                <?php if($caminho): ?>
+
+                                    <path
+                                        d="<?= $caminho ?>"
+                                        fill="none"
+                                        stroke="#005eb3"
+                                        stroke-width="4"
+                                        stroke-linecap="round"
+                                    />
+
+                                <?php endif; ?>
+
+
+                                <!-- pontos -->
+
+                                <?php foreach($pontos as $i => $coord): ?>
+
+                                    <?php
+
+                                    list($x,$y)=explode(",",$coord);
+
+                                    $valor =
+                                        $totais[$i];
+
+                                    ?>
+
+                                    <!-- valor -->
+
+                                    <text
+                                        x="<?= $x ?>"
+                                        y="<?= $y - 12 ?>"
+                                        text-anchor="middle"
+                                        font-size="12"
+                                        font-weight="bold"
+                                        fill="#005eb3"
+                                    >
+
+                                        <?= $valor ?>
+
+                                    </text>
+
+
+                                    <!-- círculo -->
+
+                                    <circle
+                                        cx="<?= $x ?>"
+                                        cy="<?= $y ?>"
+                                        r="5"
+                                        fill="#005eb3"
+                                    />
+
+                                <?php endforeach; ?>
+
+
+                                <!-- datas -->
+
+                                <?php foreach($datas as $i=>$data): ?>
+
+                                    <?php
+
+                                    $x =
+                                        20 +
+                                        ($i*$espacamento);
+
+                                    ?>
+
+                                    <text
+                                        fill="#737780"
+                                        font-size="11"
+                                        text-anchor="middle"
+                                        x="<?= $x ?>"
+                                        y="245"
+                                    >
+
+                                        <?= $data ?>
+
+                                    </text>
+
+                                <?php endforeach; ?>
 
                             </svg>
 
                         </div>
 
                     </div>
-
                 </div>
             <!-- ==============================
                  LINHA INFERIOR: Equipamentos e Manutenções
@@ -619,6 +725,26 @@
 
                         <div class="flex-1 overflow-y-auto min-h-0 space-y-2">
 
+                            <?php
+                            /** @var array $manutencoesRecentes */
+
+                            usort($manutencoesRecentes, function($a, $b){
+
+                                $ordemStatus = [
+                                    'pendente'=>1,
+                                    'em_andamento'=>2,
+                                    'concluida'=>3
+                                ];
+
+                                return
+                                    ($ordemStatus[strtolower(trim($a->getStatus()))] ?? 999)
+                                    <=>
+                                    ($ordemStatus[strtolower(trim($b->getStatus()))] ?? 999);
+
+                            });
+
+                            ?>
+
                             <?php if(empty($manutencoesRecentes)): ?>
 
                                 <p class="text-sm text-on-surface-variant">
@@ -646,7 +772,7 @@
                                         else { // concluida
                                             $statusLabel = 'Concluído';
                                             $statusClass = 'text-green-600';
-                                            $data = $manutencoes->getDataConclusao();
+                                            $data = $manutencoes->getDataConclusao();   
                                         }
                                     ?>
 

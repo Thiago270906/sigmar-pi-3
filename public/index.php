@@ -44,28 +44,48 @@ switch($acao)
     // DASHBOARD
     // =========================
 
-case 'dashboard':
+    case 'dashboard':
 
-    Auth::check();
+        Auth::check();
 
-    if($_SESSION['usuario']['cargo'] === 'admin')
-    {
-        $maquinaRepository = new MaquinaRepository();
-        $maquinas = $maquinaRepository->listarMaquinas();
+        if($_SESSION['usuario']['cargo'] === 'admin')
+        {
+            $maquinaRepository =
+                new MaquinaRepository();
 
-        require_once __DIR__ . '/../app/controllers/ManutencaoController.php';
+            $maquinas =
+                $maquinaRepository
+                    ->listarMaquinas();
 
-        $manutencaoController = new ManutencaoController();
-        $manutencoesRecentes = $manutencaoController->resumoManutencoesRecentes();
+            require_once
+                __DIR__ .
+                '/../app/controllers/ManutencaoController.php';
 
-        require '../app/views/administrador/dashboard/index.php';
-    }
-    else
-    {
-        require '../app/views/tecnico/dashboard/index.php';
-    }
+            $manutencaoController =
+                new ManutencaoController();
 
-break;
+            $manutencoesRecentes =
+                $manutencaoController
+                    ->resumoManutencoesRecentes();
+
+            // NOVO
+            $ordemRepository =
+                new OrdemManutencaoRepository();
+
+            $grafico =
+                $ordemRepository
+                    ->graficoManutencoesConcluidas();
+
+            require
+                '../app/views/administrador/dashboard/index.php';
+        }
+        else
+        {
+            require
+                '../app/views/tecnico/dashboard/index.php';
+        }
+
+    break;
 
 
     // =========================

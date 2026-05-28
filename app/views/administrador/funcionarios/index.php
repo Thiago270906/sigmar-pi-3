@@ -205,7 +205,7 @@ require_once __DIR__ . '/../../../models/Usuario.php';
                 </p>
             </div>
 
-            <a href="index.php?acao=form-usuario">
+            <a href="index.php?acao=form-funcionario">
                 <button class="bg-primary-container hover:bg-primary text-white rounded-lg flex items-center justify-center gap-2 transition-all active:scale-95 px-6 py-3 font-bold shadow-md">
 
                     <span class="material-symbols-outlined">add</span>
@@ -401,7 +401,7 @@ require_once __DIR__ . '/../../../models/Usuario.php';
                                     <!-- Detalhes -->
                                     <td class="px-6 py-4 text-right">
 
-                                        <a href="index.php?acao=detalhes-usuario&id=<?= $usuario->getId(); ?>">
+                                        <a href="index.php?acao=detalhes-funcionario&id=<?= $usuario->getId(); ?>">
 
                                             <button class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg hover:bg-gray-100 text-secondary font-semibold transition-all">
 
