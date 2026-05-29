@@ -362,7 +362,7 @@
         'preventiva',
         'media',
         'agendada',
-        '2026-05-28',
+        '2026-06-10',
         NULL,
         NULL,
         3,
