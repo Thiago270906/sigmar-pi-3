@@ -776,7 +776,7 @@
                                         }
                                     ?>
 
-                                    <a href="index.php?acao=detalhes-manutencao&id=<?= $manutencoes->getId() ?>"
+                                    <a href="index.php?acao=detalhes-ordem&id=<?= $manutencoes->getId() ?>"
                                     class="flex justify-between items-center p-3 rounded-lg border border-outline-variant/20 hover:bg-surface-container-low transition-colors">
 
                                         <div>

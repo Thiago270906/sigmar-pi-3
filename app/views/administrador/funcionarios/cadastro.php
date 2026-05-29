@@ -176,16 +176,7 @@
         <main class="flex-1 p-4 md:p-8 space-y-8 overflow-y-auto">
 
             <!-- Cabeçalho -->
-             <div>
                 <div class="flex items-center gap-3">
-
-                    <a href="javascript:history.back()" class="flex items-center text-primary hover:opacity-70 transition">
-
-                        <span class="material-symbols-outlined text-[32px]">
-                            arrow_back
-                        </span>
-
-                    </a>
                     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
                         
                         <div>
@@ -198,7 +189,6 @@
                         </div>
                     </div>    
                 </div>
-            </div>
 
             <!-- Feedback de sessão: erro -->
             <?php if (isset($_SESSION['erro'])): ?>
