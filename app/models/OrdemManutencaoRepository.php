@@ -261,42 +261,153 @@ class OrdemManutencaoRepository
 
     public function listarOrdemTecnico($idUsuario)
     {
-        $stmt = $this->conn->prepare(
-            "
-                SELECT *
-                FROM ordens_manutencao
-                WHERE id_usuario = ?
-                AND deleted_at IS NULL
-                AND status != 'concluida'
-            "
+    $stmt = $this->conn->prepare(
+    "
+    SELECT
+    om.*,
+    m.nome AS nome_maquina,
+    m.tipo AS tipo_maquina
+
+            FROM ordens_manutencao om
+
+            INNER JOIN maquinas m
+                ON om.id_maquina = m.id_maquina
+
+            WHERE om.id_usuario = ?
+            AND om.deleted_at IS NULL
+            AND om.status != 'concluida'
+
+            ORDER BY
+            CASE
+                WHEN om.status = 'em_andamento' THEN 1
+                WHEN om.prioridade = 'alta' THEN 2
+                WHEN om.status = 'pendente' THEN 3
+                ELSE 4
+            END,
+
+            om.data_agendada ASC
+
+        "
+    );
+
+    $stmt->execute([$idUsuario]);
+
+    $dados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $ordens = [];
+
+    foreach($dados as $linha)
+    {
+        $ordem = new OrdemManutencao(
+            $linha['titulo'],
+            $linha['descricao'],
+            $linha['tipo'],
+            $linha['prioridade'],
+            $linha['status'],
+            $linha['data_agendada'],
+            $linha['id_maquina'],
+            $linha['id_usuario']
         );
 
-        $stmt->execute([$idUsuario]);
+        $ordem->setId($linha['id_ordem']);
 
-        $dados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $ordem->setNomeMaquina($linha['nome_maquina']);
 
-        $ordens = [];
+        $ordem->setTipoMaquina($linha['tipo_maquina']);
 
-        foreach($dados as $linha)
-        {
-            $ordem = new OrdemManutencao(
-                $linha['titulo'],
-                $linha['descricao'],
-                $linha['tipo'],
-                $linha['prioridade'],
-                $linha['status'],
-                $linha['data_agendada'],
-                $linha['id_maquina'],
-                $linha['id_usuario']
-            );
-
-            $ordem->setId($linha['id_ordem']);
-
-            $ordens[] = $ordem;
-        }
-
-        return $ordens;
+        $ordens[] = $ordem;
     }
+
+    return $ordens;
+    }
+
+    public function graficoTecnicoMensal($idUsuario)
+    {
+    $stmt = $this->conn->prepare(
+    "
+    SELECT
+    MONTH(data_conclusao) AS mes,
+    DATE_FORMAT(data_conclusao, '%b') AS mes_nome,
+    COUNT(*) AS total
+
+            FROM ordens_manutencao
+
+            WHERE status = 'concluida'
+            AND id_usuario = ?
+            AND deleted_at IS NULL
+            AND data_conclusao IS NOT NULL
+            AND data_conclusao >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
+
+            GROUP BY MONTH(data_conclusao)
+
+            ORDER BY MONTH(data_conclusao)
+        "
+    );
+
+    $stmt->execute([$idUsuario]);
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
+    public function atividadesRecentesTecnico($idUsuario)
+    {
+    $stmt = $this->conn->prepare(
+    "
+    SELECT
+    om.*,
+    m.nome AS nome_maquina,
+    m.tipo AS tipo_maquina
+
+            FROM ordens_manutencao om
+
+            INNER JOIN maquinas m
+                ON om.id_maquina = m.id_maquina
+
+            WHERE om.id_usuario = ?
+            AND om.status = 'concluida'
+            AND om.deleted_at IS NULL
+
+            ORDER BY om.data_conclusao DESC
+
+            LIMIT 5
+        "
+    );
+
+    $stmt->execute([$idUsuario]);
+
+    $dados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $ordens = [];
+
+    foreach($dados as $linha)
+    {
+        $ordem = new OrdemManutencao(
+            $linha['titulo'],
+            $linha['descricao'],
+            $linha['tipo'],
+            $linha['prioridade'],
+            $linha['status'],
+            $linha['data_agendada'],
+            $linha['id_maquina'],
+            $linha['id_usuario']
+        );
+
+        $ordem->setId($linha['id_ordem']);
+
+        $ordem->setNomeMaquina($linha['nome_maquina']);
+
+        $ordem->setTipoMaquina($linha['tipo_maquina']);
+
+        $ordem->setDataConclusao($linha['data_conclusao']);
+
+        $ordens[] = $ordem;
+    }
+
+    return $ordens;
+
+    }
+
 
     // UPDATE
     public function updateOrdem(OrdemManutencao $ordem)

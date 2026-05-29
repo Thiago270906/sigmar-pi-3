@@ -69,7 +69,21 @@ switch($acao)
         }
         else
         {
-            require '../app/views/tecnico/dashboard/index.php';
+        $idUsuario = $_SESSION['usuario']['id'];
+
+        $ordemRepository = new OrdemManutencaoRepository();
+
+        // Ordens pendentes
+        $ordens = $ordemRepository->listarOrdemTecnico($idUsuario);
+
+        // Gráfico mensal
+        $grafico = $ordemRepository->graficoTecnicoMensal($idUsuario);
+
+        // Atividades recentes
+        $atividadesRecentes = $ordemRepository->atividadesRecentesTecnico($idUsuario);
+
+        require '../app/views/tecnico/dashboard/index.php';
+
         }
 
     break;

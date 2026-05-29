@@ -167,154 +167,357 @@
 
     <div class="flex-1 flex flex-col min-w-0 bg-white">
 
-        <!-- ==============================
-             CONTEÚDO PRINCIPAL
-        ============================== -->
-        
-    <!-- Gráfico de Manutenções -->
-    <div class="bg-surface-container-lowest rounded-xl card-border p-card-inner-padding">
-        <div class="flex justify-between items-center mb-6">
-            <h3 class="font-h3-card-title text-h3-card-title text-primary">
-                Manutenções realizadas nos últimos meses
-            </h3>
+    <!-- ==============================
+        CONTEÚDO PRINCIPAL
+    ================================ -->
+
+    <main class="flex-1 p-6 lg:p-8 bg-background space-y-6 overflow-auto">
+    <!-- Header -->
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+
+        <div>
+            <h1 class="text-3xl font-bold text-primary">
+                Dashboard do Técnico
+            </h1>
+
+            <p class="text-on-surface-variant mt-1">
+                Acompanhe suas manutenções e atividades recentes.
+            </p>
         </div>
 
-        <div class="h-[280px] relative w-full flex items-end justify-between gap-3 px-4">
-            <?php 
-            $grafico = $grafico ?? [];   // Proteção contra variável indefinida
-            $max = !empty($grafico) ? max(array_column($grafico, 'total')) : 0;
-            $max = max($max, 1);
-            ?>
-
-            <?php if (!empty($grafico)): ?>
-                <?php foreach($grafico as $item): ?>
-                    <?php 
-                    $altura = ($item['total'] / $max) * 100;
-                    $altura = max($altura, 8);
-                    ?>
-                    <div class="flex-1 flex flex-col items-center group">
-                        <div class="text-xs font-bold text-on-surface-variant mb-1">
-                            <?= $item['total'] ?>
-                        </div>
-                        <div class="w-full bg-secondary/30 rounded-t-lg hover:bg-secondary/70 transition-all"
-                            style="height: <?= $altura ?>%;">
-                        </div>
-                        <div class="text-[10px] font-medium text-on-surface-variant mt-3">
-                            <?= ucfirst($item['mes_nome']) ?>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <!-- Mensagem quando não há dados -->
-                <div class="flex-1 flex items-center justify-center h-full text-on-surface-variant/60">
-                    <p>Nenhuma manutenção concluída nos últimos meses.</p>
-                </div>
-            <?php endif; ?>
+        <div class="bg-surface-container-low px-5 py-3 rounded-xl border border-outline-variant/30">
+            <p class="text-sm text-on-surface-variant">
+                <?= date('d/m/Y') ?>
+            </p>
         </div>
+
     </div>
 
-           <!-- ==============================
-                PRÓXIMAS TAREFAS
-            ============================== -->
-            <section class="grid grid-cols-1 w-full gap-gutter items-start">
+    <!-- ==============================
+        GRID SUPERIOR
+    ============================== -->
+    <section class="w-full">
 
-                <div class="w-full">
-                    <div class="bg-surface-container-lowest rounded-xl card-border p-card-inner-padding w-full">
+        <!-- ==============================
+            GRÁFICO
+        ============================== -->
+        <div class="xl:col-span-2 bg-surface-container-lowest rounded-xl card-border p-card-inner-padding">
 
-                        <!-- Cabeçalho -->
-                        <div class="flex items-center justify-between mb-6 w-full">
-                            <h3 class="font-h3-card-title text-h3-card-title text-primary">
-                                Próximas Tarefas
-                            </h3>
-                            <span class="text-xs text-on-surface-variant">Hoje / Pendentes</span>
-                        </div>
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h3 class="font-bold text-xl text-primary">
+                        Atividades Realizadas
+                    </h3>
 
-                        <!-- Lista de tarefas -->
-                        <div class="space-y-5 w-full">
-
-                            <?php if (!empty($ordens)): ?>
-
-                                <?php foreach ($ordens as $ordem): ?>
-
-                                    <?php
-                                        $tipo = strtolower($ordem->getTipo());
-                                        $prioridade = strtolower($ordem->getPrioridade());
-
-                                        $corTipo = $tipo === 'corretiva' 
-                                            ? 'bg-error-container text-on-error-container' 
-                                            : 'bg-secondary-fixed text-on-secondary-fixed-variant';
-
-                                        $corPrioridade = $prioridade === 'alta' 
-                                            ? 'text-error' 
-                                            : ($prioridade === 'media' ? 'text-warning' : 'text-secondary');
-                                    ?>
-
-                                    <div class="w-full p-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 
-                                                bg-surface-container-lowest border border-outline-variant/30 rounded-xl
-                                                hover:border-primary/50 hover:shadow-md transition-all">
-
-                                        <!-- Informações -->
-                                        <div class="flex-1 min-w-0">
-                                            <div class="flex flex-wrap items-center gap-3 mb-3">
-                                                <h4 class="font-bold text-lg text-primary">
-                                                    <?= htmlspecialchars($ordem->getTitulo()) ?>
-                                                </h4>
-
-                                                <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded <?= $corTipo ?>">
-                                                    <?= ucfirst($tipo) ?>
-                                                </span>
-
-                                                <span class="text-xs font-semibold <?= $corPrioridade ?>">
-                                                    ● <?= ucfirst($prioridade) ?>
-                                                </span>
-                                            </div>
-
-                                            <p class="text-on-surface-variant text-sm line-clamp-2">
-                                                <?= htmlspecialchars($ordem->getDescricao()) ?>
-                                            </p>
-
-                                            <?php if ($ordem->getNomeMaquina()): ?>
-                                                <p class="text-xs text-on-surface-variant mt-2">
-                                                    <strong>Máquina:</strong> <?= htmlspecialchars($ordem->getNomeMaquina()) ?>
-                                                </p>
-                                            <?php endif; ?>
-                                        </div>
-
-                                        <!-- Botão -->
-                                        <div class="flex-shrink-0">
-                                            <a href="index.php?acao=detalhes-manutencao&id=<?= $ordem->getId() ?>"
-                                            class="inline-flex items-center justify-center px-6 py-3 bg-secondary text-white rounded-lg font-semibold hover:opacity-90 transition">
-                                                Ver Ordem
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                <?php endforeach; ?>
-
-                            <?php else: ?>
-
-                                <div class="w-full p-12 text-center rounded-xl border border-dashed border-outline-variant text-on-surface-variant">
-                                    <p class="text-lg">🎉 Nenhuma tarefa pendente no momento.</p>
-                                    <p class="text-sm mt-2">Ótimo trabalho!</p>
-                                </div>
-
-                            <?php endif; ?>
-
-                        </div>
-
-                        <!-- Botão inferior -->
-                        <a href="index.php?acao=manutencoes"
-                        class="block w-full mt-8 py-4 text-center border border-outline-variant/30 rounded-xl font-bold hover:bg-surface-container-high transition-all">
-                            Ver Todas as Ordens de Manutenção
-                        </a>
-
-                    </div>
+                    <p class="text-sm text-on-surface-variant mt-1">
+                        Últimos 6 meses
+                    </p>
                 </div>
 
-            </section>
+                <span class="material-symbols-outlined text-secondary text-3xl">
+                    analytics
+                </span>
+            </div>
 
-        </main>
-        <!-- Fim: Conteúdo Principal (main) -->
+            <div class="h-[320px] flex items-end justify-between gap-4 px-2">
+
+                <?php 
+                /** @var array $ordens */
+                /** @var array $atividadesRecentes */
+
+                    $grafico = $grafico ?? [];
+                    $max = !empty($grafico)
+                        ? max(array_column($grafico, 'total'))
+                        : 1;
+
+                    $max = max($max, 1);
+                ?>
+
+                <?php if (!empty($grafico)): ?>
+
+                    <?php foreach($grafico as $item): ?>
+
+                        <?php
+                            $altura = ($item['total'] / $max) * 100;
+                            $altura = max($altura, 10);
+                        ?>
+
+                        <div class="flex-1 h-full flex flex-col items-center justify-end group">
+
+                            <!-- Valor -->
+                            <span class="text-sm font-bold text-primary mb-3">
+                                <?= $item['total'] ?>
+                            </span>
+
+                            <!-- Barra -->
+                            <div
+                                class="w-full rounded-t-xl bg-secondary/30 hover:bg-secondary transition-all duration-300"
+                                style="height: <?= $altura ?>%;"
+                            ></div>
+
+                            <!-- Label -->
+                            <span class="text-xs font-medium text-on-surface-variant mt-3 uppercase">
+                                <?= htmlspecialchars($item['mes_nome']) ?>
+                            </span>
+
+                        </div>
+
+                    <?php endforeach; ?>
+
+                <?php else: ?>
+
+                    <div class="w-full h-full flex items-center justify-center">
+                        <div class="text-center">
+
+                            <span class="material-symbols-outlined text-6xl text-outline-variant mb-3">
+                                bar_chart
+                            </span>
+
+                            <p class="text-on-surface-variant">
+                                Nenhuma atividade concluída encontrada.
+                            </p>
+
+                        </div>
+                    </div>
+
+                <?php endif; ?>
+
+            </div>
+        </div>
+
+    </section>
+
+    <!-- ==============================
+        PRÓXIMAS TAREFAS
+    ============================== -->
+    <section class="bg-surface-container-lowest rounded-xl card-border p-card-inner-padding">
+
+        <div class="flex items-center justify-between mb-8">
+
+            <div>
+                <h3 class="font-bold text-xl text-primary">
+                    Próxima Tarefa
+                </h3>
+
+                <p class="text-sm text-on-surface-variant mt-1">
+                    Ordens pendentes e em andamento
+                </p>
+            </div>
+
+            <a href="index.php?acao=manutencoes"
+            class="text-secondary font-semibold text-sm hover:underline">
+                Ver todas
+            </a>
+
+        </div>
+
+        <div class="space-y-5">
+
+            <?php if (!empty($ordens)): ?>
+
+<?php
+    $ordem = $ordens[0];
+
+    $tipo = strtolower($ordem->getTipo());
+    $prioridade = strtolower($ordem->getPrioridade());
+    $status = strtolower($ordem->getStatus());
+
+    $corTipo = $tipo === 'corretiva'
+        ? 'bg-error-container text-on-error-container'
+        : 'bg-secondary-fixed text-on-secondary-fixed-variant';
+
+    $corPrioridade = $prioridade === 'urgente' || $prioridade === 'alta'
+        ? 'text-error'
+        : ($prioridade === 'media'
+            ? 'text-warning-yellow'
+            : 'text-secondary');
+
+    $corStatus = match($status) {
+        'em_andamento' => 'bg-secondary text-white',
+        'pendente' => 'bg-warning-yellow/20 text-warning-yellow',
+        'agendada' => 'bg-surface-container-high text-on-surface',
+        default => 'bg-surface-container text-on-surface'
+    };
+?>
+
+    <div class="w-full p-6 rounded-xl border border-outline-variant/30 
+                hover:border-primary/40 hover:shadow-md transition-all
+                bg-surface-container-lowest">
+
+        <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6">
+
+            <!-- Informações -->
+            <div class="flex-1">
+
+                <div class="flex flex-wrap items-center gap-3 mb-3">
+
+                    <h4 class="text-lg font-bold text-primary">
+                        <?= htmlspecialchars($ordem->getTitulo()) ?>
+                    </h4>
+
+                    <!-- Tipo -->
+                    <span class="px-3 py-1 rounded-full text-[11px] font-bold uppercase <?= $corTipo ?>">
+                        <?= ucfirst($tipo) ?>
+                    </span>
+
+                    <!-- Prioridade -->
+                    <span class="text-sm font-semibold <?= $corPrioridade ?>">
+                        ● <?= ucfirst($prioridade) ?>
+                    </span>
+
+                    <!-- Status -->
+                    <span class="px-3 py-1 rounded-full text-[11px] font-bold uppercase <?= $corStatus ?>">
+                        <?= str_replace('_', ' ', ucfirst($status)) ?>
+                    </span>
+
+                </div>
+
+                <p class="text-on-surface-variant text-sm leading-relaxed">
+                    <?= htmlspecialchars($ordem->getDescricao()) ?>
+                </p>
+
+                <?php if ($ordem->getNomeMaquina()): ?>
+
+                    <div class="flex items-center gap-2 mt-4 text-sm text-on-surface-variant">
+
+                        <span class="material-symbols-outlined text-base">
+                            precision_manufacturing
+                        </span>
+
+                        <span>
+                            <?= htmlspecialchars($ordem->getNomeMaquina()) ?>
+                        </span>
+
+                    </div>
+
+                <?php endif; ?>
+
+            </div>
+
+            <!-- Botão -->
+            <div class="flex-shrink-0">
+
+                <a href="index.php?acao=detalhes-manutencao&id=<?= $ordem->getId() ?>"
+                class="inline-flex items-center justify-center px-6 py-3 rounded-xl
+                        bg-secondary text-white font-semibold
+                        hover:opacity-90 transition-all">
+
+                    Ver Ordem
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+            <?php else: ?>
+
+                <div class="border border-dashed border-outline-variant rounded-xl p-14 text-center">
+
+                    <span class="material-symbols-outlined text-6xl text-success-green mb-4">
+                        task_alt
+                    </span>
+
+                    <h4 class="text-xl font-bold text-primary mb-2">
+                        Nenhuma tarefa pendente
+                    </h4>
+
+                    <p class="text-on-surface-variant">
+                        Excelente trabalho! Você está em dia.
+                    </p>
+
+                </div>
+
+            <?php endif; ?>
+
+        </div>
+
+    </section>
+
+    <!-- ==============================
+        ATIVIDADES RECENTES
+    ============================== -->
+    <section class="bg-surface-container-lowest rounded-xl card-border p-card-inner-padding">
+
+        <div class="flex items-center justify-between mb-8">
+
+            <div>
+                <h3 class="font-bold text-xl text-primary">
+                    Atividades Recentes
+                </h3>
+
+                <p class="text-sm text-on-surface-variant mt-1">
+                    Últimas manutenções concluídas
+                </p>
+            </div>
+
+        </div>
+
+        <div class="space-y-4">
+
+            <?php if (!empty($atividadesRecentes)): ?>
+
+                <?php foreach($atividadesRecentes as $atividade): ?>
+
+                    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between
+                                gap-4 p-5 rounded-xl border border-outline-variant/20
+                                bg-surface-container-low">
+
+                        <div>
+
+                            <div class="flex items-center gap-3 mb-2">
+
+                                <span class="material-symbols-outlined text-success-green">
+                                    check_circle
+                                </span>
+
+                                <h4 class="font-semibold text-primary">
+                                    <?= htmlspecialchars($atividade->getTitulo()) ?>
+                                </h4>
+
+                            </div>
+
+                            <p class="text-sm text-on-surface-variant">
+                                <?= htmlspecialchars($atividade->getNomeMaquina()) ?>
+                            </p>
+
+                        </div>
+
+                        <div class="text-sm text-on-surface-variant">
+
+                            <?= date('d/m/Y H:i', strtotime($atividade->getDataConclusao())) ?>
+
+                        </div>
+
+                    </div>
+
+                <?php endforeach; ?>
+
+            <?php else: ?>
+
+                <div class="text-center py-12">
+
+                    <span class="material-symbols-outlined text-6xl text-outline-variant mb-3">
+                        history
+                    </span>
+
+                    <p class="text-on-surface-variant">
+                        Nenhuma atividade recente encontrada.
+                    </p>
+
+                </div>
+
+            <?php endif; ?>
+
+        </div>
+
+    </section>
+
+    </main>
+
 
     </div>
     <!-- Fim: Área Principal -->
