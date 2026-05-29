@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>SIGMAR - Ordens de Manutenção</title>
+    <title>SIGMAR - Cadastrar Ordens de Manutenção</title>
 
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 

@@ -11,7 +11,7 @@ require_once __DIR__ . '/../../../models/OrdemManutencao.php';
 <html lang="en">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SIGMAR - Dashboard</title>
+<title>SIGMAR - Detalhes da Ordem de Manutenção</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 
@@ -356,13 +356,50 @@ require_once __DIR__ . '/../../../models/OrdemManutencao.php';
          <?php endif; ?>
 
 
-          <div class="flex justify-start items-center gap-4 py-6 mt-4 justify-end">
+                <div class="flex flex-wrap gap-4 pt-2">
 
-            <!-- Cancelar -->
-            <a href="index.php?acao=manutencoes" class="px-6 py-2.5 rounded-lg font-medium text-body-main text-on-surface-variant hover:bg-surface-container-high transition-colors">
-                Voltar
-            </a>
-        </div>
+                    <a
+                        href="index.php?acao=manutencoes"
+                        class="px-6 py-2 rounded-lg hover:bg-surface-container-high transition-all"
+                    >
+
+                        Voltar
+
+                    </a>
+
+                    <?php if ($ordem->getStatus() != 'concluida' && $ordem->getStatus() != 'em_andamento'): ?>
+                    <a
+                        href="index.php?acao=form-editar-ordem&id=<?= $ordem->getId(); ?>"
+                        class="px-6 py-2 bg-secondary text-white rounded-lg flex items-center gap-2"
+                    >
+
+                        <span class="material-symbols-outlined">
+
+                            edit
+
+                        </span>
+
+                        Editar
+
+                    </a>
+                    
+                    <a
+                    href="index.php?acao=form-remover-ordem&id=<?= $ordem->getId(); ?>"
+                    class="px-6 py-2 bg-red-600 text-white rounded-lg flex items-center gap-2"
+                    >
+                    
+                    <span class="material-symbols-outlined">
+                        
+                        delete
+                        
+                    </span>
+                    
+                    Remover
+                    
+                    
+                    </a>
+                    <?php endif; ?>
+                </div>
 
       </div>
     </main>

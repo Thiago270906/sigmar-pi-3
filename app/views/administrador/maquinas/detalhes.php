@@ -478,6 +478,22 @@ require_once __DIR__ . '/../../../models/Maquina.php';
 
                     </a>
 
+                    <a
+                        href="index.php?acao=form-remover-maquina&id=<?= $maquina->getId(); ?>"
+                        class="px-6 py-2 bg-red-600 text-white rounded-lg flex items-center gap-2"
+                    >
+
+                        <span class="material-symbols-outlined">
+
+                            delete
+
+                        </span>
+
+                        Remover
+
+                    </a>
+
+
                 </div>
 
             </div>

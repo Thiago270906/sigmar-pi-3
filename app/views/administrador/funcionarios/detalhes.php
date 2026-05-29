@@ -10,7 +10,7 @@ require_once __DIR__ . '/../../../models/Usuario.php';
 <html lang="en">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SIGMAR - Dashboard</title>
+<title>SIGMAR - Detalhes Funcionário</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 
@@ -185,14 +185,6 @@ require_once __DIR__ . '/../../../models/Usuario.php';
                     <!-- Título + seta -->
                     <div class="flex items-center gap-3">
 
-                        <a href="javascript:history.back()" class="flex items-center text-primary hover:opacity-70 transition">
-
-                            <span class="material-symbols-outlined text-[32px]">
-                                arrow_back
-                            </span>
-
-                        </a>
-
                         <h2 class="text-4xl font-bold text-primary">
                             Detalhes do Funcionário
                         </h2>
@@ -205,27 +197,6 @@ require_once __DIR__ . '/../../../models/Usuario.php';
 
                 </div>
 
-                <!-- Botões de Editar e Remover -->
-                <div class="flex gap-3">
-
-                    <!-- Botão Editar -->
-                    <a href="index.php?acao=form-editar-funcionario&id=<?= $usuario->getId() ?>">
-                        <button class="flex items-center gap-2 px-4 md:px-6 py-2.5 rounded-xl border border-outline-variant hover:bg-surface-container-high transition-all font-label-sm text-on-surface">
-                            <span class="material-symbols-outlined text-[20px]">edit</span>
-                            <span>Editar</span>
-                        </button>
-                    </a>
-                    
-
-                    <!-- Botão Remover (ação destrutiva: cor de erro) -->
-                    <a href="index.php?acao=remover-funcionario&id=<?= $usuario->getId() ?>" onclick="return confirm('Deseja realmente remover este funcionário?')">
-                        
-                        <button class="flex items-center gap-2 px-4 md:px-6 py-2.5 rounded-xl bg-error text-on-error hover:opacity-90 transition-all font-label-sm shadow-lg shadow-error/10">
-                            <span class="material-symbols-outlined text-[20px]">delete</span>
-                            <span>Remover</span>
-                        </button>
-                    </a>
-                </div>
             </div>
 
       <!-- ============
@@ -364,6 +335,48 @@ require_once __DIR__ . '/../../../models/Usuario.php';
 
             </div>
           </section>
+                          <div class="flex flex-wrap gap-4 pt-2">
+
+                    <a
+                        href="index.php?acao=funcionarios"
+                        class="px-6 py-2 rounded-lg hover:bg-surface-container-high transition-all"
+                    >
+
+                        Voltar
+
+                    </a>
+
+                    <a
+                        href="index.php?acao=form-editar-funcionario&id=<?= $usuario->getId(); ?>"
+                        class="px-6 py-2 bg-secondary text-white rounded-lg flex items-center gap-2"
+                    >
+                        <span class="material-symbols-outlined">
+
+                            edit
+
+                        </span>
+
+                        Editar
+
+                    </a>
+
+                    <a
+                        href="index.php?acao=form-remover-funcionario&id=<?= $usuario->getId(); ?>"
+                        class="px-6 py-2 bg-red-600 text-white rounded-lg flex items-center gap-2"
+                    >
+
+                        <span class="material-symbols-outlined">
+
+                            delete
+
+                        </span>
+
+                        Remover
+
+                    </a>
+
+
+                </div>
       </div>
     </main>
   </div>
