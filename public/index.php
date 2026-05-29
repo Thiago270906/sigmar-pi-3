@@ -50,39 +50,26 @@ switch($acao)
 
         if($_SESSION['usuario']['cargo'] === 'admin')
         {
-            $maquinaRepository =
-                new MaquinaRepository();
+            $maquinaRepository = new MaquinaRepository();
 
-            $maquinas =
-                $maquinaRepository
-                    ->listarMaquinas();
+            $maquinas =$maquinaRepository->listarMaquinas();
 
-            require_once
-                __DIR__ .
-                '/../app/controllers/ManutencaoController.php';
+            require_once __DIR__ . '/../app/controllers/ManutencaoController.php';
 
-            $manutencaoController =
-                new ManutencaoController();
+            $manutencaoController = new ManutencaoController();
 
-            $manutencoesRecentes =
-                $manutencaoController
-                    ->resumoManutencoesRecentes();
+            $manutencoesRecentes = $manutencaoController->resumoManutencoesRecentes();
 
             // NOVO
-            $ordemRepository =
-                new OrdemManutencaoRepository();
+            $ordemRepository = new OrdemManutencaoRepository();
 
-            $grafico =
-                $ordemRepository
-                    ->graficoManutencoesConcluidas();
+            $grafico = $ordemRepository->graficoManutencoesConcluidas();
 
-            require
-                '../app/views/administrador/dashboard/index.php';
+            require '../app/views/administrador/dashboard/index.php';
         }
         else
         {
-            require
-                '../app/views/tecnico/dashboard/index.php';
+            require '../app/views/tecnico/dashboard/index.php';
         }
 
     break;

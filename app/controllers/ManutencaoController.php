@@ -9,6 +9,7 @@ require_once __DIR__ . "/../models/OrdemManutencaoRepository.php";
 require_once __DIR__ . "/../models/ManutencaoRepository.php";
 require_once __DIR__ . "/../models/MaquinaRepository.php";
 require_once __DIR__ . "/../models/UsuarioRepository.php";
+require_once __DIR__ . "/../models/SensorRepository.php";
 
 class ManutencaoController
 {
