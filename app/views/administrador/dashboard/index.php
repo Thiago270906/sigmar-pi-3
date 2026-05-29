@@ -497,7 +497,7 @@
 
                             <div class="flex items-center gap-2">
 
-                                <div class="w-3 h-3 rounded-full bg-secondary"></div>
+                                <div class="w-3 h-3 rounded-full bg-green-600"></div>
 
                                 <span class="text-sm text-on-surface-variant">
 
@@ -543,7 +543,7 @@
                                     <path
                                         d="<?= $caminho ?>"
                                         fill="none"
-                                        stroke="#005eb3"
+                                        stroke="#16a34a"
                                         stroke-width="4"
                                         stroke-linecap="round"
                                     />
@@ -572,7 +572,7 @@
                                         text-anchor="middle"
                                         font-size="12"
                                         font-weight="bold"
-                                        fill="#005eb3"
+                                        fill="#16a34a"
                                     >
 
                                         <?= $valor ?>
@@ -586,7 +586,7 @@
                                         cx="<?= $x ?>"
                                         cy="<?= $y ?>"
                                         r="5"
-                                        fill="#005eb3"
+                                        fill="#16a34a"
                                     />
 
                                 <?php endforeach; ?>

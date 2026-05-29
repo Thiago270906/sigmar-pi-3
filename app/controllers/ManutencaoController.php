@@ -16,6 +16,7 @@ class ManutencaoController
     private $manutencaoRepository;
     private $maquinaRepository;
     private $usuarioRepository;
+    private $sensorRepository;
 
     public function __construct()
     {
@@ -26,6 +27,8 @@ class ManutencaoController
         $this->maquinaRepository = new MaquinaRepository();
 
         $this->usuarioRepository = new UsuarioRepository();
+
+        $this->sensorRepository = new SensorRepository();
     }
 
     // =========================
@@ -359,6 +362,13 @@ class ManutencaoController
             $this->manutencaoRepository->createManutencao($manutencao);
 
             $this->ordemRepository->concluirOrdem($idOrdem);
+
+            $ordem = $this->ordemRepository->buscarIdOrdem($idOrdem);
+
+            $idMaquina = $ordem->getIdMaquina();
+
+            // reseta sensores
+            $this->sensorRepository->resetarSensoresMaquina($idMaquina);
 
             unset($_SESSION['ordem_finalizada']);
             unset($_SESSION['data_conclusao']);

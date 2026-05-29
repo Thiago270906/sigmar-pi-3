@@ -299,6 +299,24 @@ class SensorRepository
         );
     }
 
+public function resetarSensoresMaquina($idMaquina)
+{
+    $sensores = $this->listarSensoresMaquina(
+        $idMaquina
+    );
+
+    foreach($sensores as $sensor)
+    {
+        $this->inserirLeitura(
+            $sensor,
+            5
+        );
+    }
+
+    // recalcula status usando novas leituras
+    $this->listarSensoresMaquina($idMaquina);
+}
+
     public function createMongoSensores(Sensor $sensor)
     {
         $unidade = '';

@@ -260,8 +260,8 @@
     (nome, tipo, status)
     VALUES
     (
-        'Motor Universal',
-        'Motor Elétriico',
+        'Bubina de Rotação',
+        'Bubina Industrial',
         'alerta'
     ),
     (
@@ -331,8 +331,9 @@
         id_usuario
     )
     VALUES
+    -- Registros Originais
     (
-        'Ruído estranho no Motor Elétrico',
+        'Ruído estranho na Bubina de rotação',
         'Operador informou ruído metálico durante funcionamento',
         'corretiva',
         'alta',
@@ -372,8 +373,8 @@
         'Sistema apresentou aquecimento acima do normal',
         'preditiva',
         'alta',
-        'pendente',
-        '2026-05-26',
+        'agendada',
+        '2026-05-30',
         NULL,
         NULL,
         4,
@@ -390,6 +391,80 @@
         '2026-05-27 12:40:00',
         6,
         5
+    ),
+
+    -- Novos Registros Adicionados
+    (
+        'Troca de óleo da Prensa',
+        'Substituição do fluido hidráulico conforme cronograma de 1000 horas',
+        'preventiva',
+        'baixa',
+        'agendada',
+        '2026-05-30',
+        NULL,
+        NULL,
+        2,
+        4
+    ),
+    (
+        'Calibração de sensores da Injetora',
+        'Ajuste fino dos sensores de temperatura da zona de fusão',
+        'preventiva',
+        'media',
+        'em_andamento',
+        '2026-05-28',
+        '2026-05-28 14:00:00',
+        NULL,
+        6,
+        3
+    ),
+    (
+        'Vazamento de ar no Compressor',
+        'Identificado vazamento na mangueira de saída principal',
+        'corretiva',
+        'alta',
+        'pendente',
+        '2026-05-28',
+        NULL,
+        NULL,
+        4,
+        4
+    ),
+    (
+        'Análise de vibração no Esteira Transportadora',
+        'Coleta de dados manuais para relatório de preditiva trimestral',
+        'preditiva',
+        'baixa',
+        'concluida',
+        '2026-05-20',
+        '2026-05-20 10:00:00',
+        '2026-05-20 11:30:00',
+        5,
+        2
+    ),
+    (
+        'Painel elétrico não liga',
+        'Máquina 1 parou de responder aos comandos do operador repentinamente',
+        'corretiva',
+        'urgente',
+        'em_andamento',
+        '2026-05-28',
+        '2026-05-28 19:15:00',
+        NULL,
+        1,
+        5
+    ),
+    (
+        'Lubrificação dos mancais',
+        'Rotina semanal de lubrificação de eixos e mancais',
+        'preventiva',
+        'baixa',
+        'concluida',
+        '2026-05-24',
+        '2026-05-24 07:30:00',
+        '2026-05-24 08:45:00',
+        3,
+        4
     );
 
     -- =========================
