@@ -211,7 +211,7 @@
         '(19) 99999-0001'
     ),
     (
-        'Técnico',
+        'Thiago Técnico',
         'tecnico@sigmar.com',
         '$2y$10$rJLBU0YwQ1dzUasWKWXez.hmoUp4HFm5kZePYg.3830B3Rqf1RaHq',
         'tecnico',
@@ -447,10 +447,10 @@
         'Máquina 1 parou de responder aos comandos do operador repentinamente',
         'corretiva',
         'urgente',
-        'em_andamento',
-        '2026-05-28',
-        '2026-05-28 19:15:00',
-        NULL,
+        'concluida',
+        '2026-05-15',
+        '2026-05-15 19:15:00',
+        '2026-05-20 12:34:00',
         1,
         5
     ),

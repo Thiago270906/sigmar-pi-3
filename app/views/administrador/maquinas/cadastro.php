@@ -169,97 +169,197 @@
     ============================== -->
     <div class="flex-1 flex flex-col min-w-0 bg-white">
     
-        <main class="flex-1 p-6 lg:p-10">
+<main class="flex-1 p-4 md:p-8 space-y-8 overflow-y-auto">
 
-            
+    <!-- Header -->
+    <div>
+        <h2 class="font-h1-display text-h1-display text-primary">
+            Cadastrar Máquina
+        </h2>
 
-            <h1 class="font-h1-display text-h1-display text-primary">Cadastrar Máquina</h1>
+        <p class="text-body-main text-on-surface-variant mt-1">
+            Registre uma nova máquina e associe sensores de monitoramento.
+        </p>
+    </div>
 
-                <?php if(isset($_SESSION['erro'])): ?>
+    <!-- Feedback -->
+    <?php if(isset($_SESSION['erro'])): ?>
 
-                    <p>
-                        <?= $_SESSION['erro'] ?>
+        <div class="px-4 py-3 rounded-lg bg-error-container text-on-error-container font-medium text-body-main">
+            <?= $_SESSION['erro'] ?>
+        </div>
+
+        <?php unset($_SESSION['erro']); ?>
+
+    <?php endif; ?>
+
+    <form action="index.php?acao=cadastrar-maquina" method="POST" class="space-y-8">
+
+        <!-- =====================================
+             CARD: DADOS DA MÁQUINA
+        ====================================== -->
+        <div class="form-card rounded-xl p-6">
+
+            <h3 class="font-h2-subtitle text-h2-subtitle text-primary mb-6 flex items-center gap-2">
+                <span class="material-symbols-outlined text-secondary">
+                    settings_input_component
+                </span>
+
+                Identificação Técnica
+            </h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <!-- Nome -->
+                <div class="space-y-2">
+                    <label class="text-label-sm font-label-sm text-on-surface-variant">
+                        Nome do Equipamento
+                    </label>
+
+                    <input
+                        type="text"
+                        name="nome"
+                        placeholder="Ex: Torno CNC-04"
+                        class="w-full rounded-lg border-outline-variant focus:border-secondary focus:ring-1 focus:ring-secondary py-2.5 text-body-main"
+                    >
+                </div>
+
+                <!-- Tipo -->
+                <div class="space-y-2">
+                    <label class="text-label-sm font-label-sm text-on-surface-variant">
+                        Tipo
+                    </label>
+
+                    <input
+                        type="text"
+                        name="tipo"
+                        placeholder="Ex: Bobina"
+                        class="w-full rounded-lg border-outline-variant focus:border-secondary focus:ring-1 focus:ring-secondary py-2.5 text-body-main"
+                    >
+                </div>
+
+                <!-- Descrição -->
+                <div class="space-y-2 md:col-span-2">
+                    <label class="text-label-sm font-label-sm text-on-surface-variant">
+                        Descrição
+                    </label>
+
+                    <textarea
+                        name="descricao"
+                        rows="4"
+                        placeholder="Ex: Máquina de usinagem industrial"
+                        class="w-full rounded-lg border-outline-variant focus:border-secondary focus:ring-1 focus:ring-secondary py-2.5 text-body-main"
+                    ></textarea>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- =====================================
+             CARD: SENSORES
+        ====================================== -->
+        <div class="form-card rounded-xl p-6">
+
+            <!-- Header -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+
+                <div>
+                    <h3 class="font-h2-subtitle text-h2-subtitle text-primary flex items-center gap-2">
+                        <span class="material-symbols-outlined text-secondary">
+                            sensors
+                        </span>
+
+                        Sensores Associados
+                    </h3>
+
+                    <p class="text-sm text-on-surface-variant mt-1">
+                        Gerencie os sensores vinculados à máquina.
                     </p>
+                </div>
 
-                    <?php unset($_SESSION['erro']); ?>
+                <!-- Botão -->
+                <a
+                    href="index.php?acao=form-sensor"
+                    class="px-6 py-2.5 bg-secondary text-on-secondary rounded-lg font-bold text-body-main shadow-md hover:opacity-90 active:scale-95 transition-all flex items-center gap-2"
+                >
+                    <span class="material-symbols-outlined text-lg">
+                        add
+                    </span>
 
-                <?php endif; ?>
+                    Adicionar Sensor
+                </a>
 
-                <form action="index.php?acao=cadastrar-maquina" method="POST">
+            </div>
 
+            <!-- Tabela -->
+            <?php if(!empty($_SESSION['sensores'])): ?>
 
-                    <form class="space-y-6">
-                        <div class="grid grid-cols-12 gap-card-gap">
-                            <!-- Section 1: Identificação Técnica -->
-                            <div class="col-span-12">
-                                <div class="form-card rounded-xl p-6">
-                                    <h3 class="font-h2-subtitle text-h2-subtitle text-primary mb-6 flex items-center gap-2">
-                                        <span class="material-symbols-outlined text-secondary" data-icon="settings_input_component">settings_input_component</span>
-                                        Identificação Técnica
-                                    </h3>
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <div class="space-y-2">
-                                            <label class="text-label-sm font-label-sm text-on-surface-variant">Nome do Equipamento</label>
-                                            <input type="text" name="nome" class="w-full rounded-lg border-outline-variant focus:border-secondary focus:ring-1 focus:ring-secondary py-2.5 text-body-main" placeholder="Ex: Torno CNC-04" type="text"/>
-                                        </div>
-                                        <div class="space-y-2">
-                                            <label class="text-label-sm font-label-sm text-on-surface-variant">Tipo</label>
-                                            <input type="text" name="tipo" class="w-full rounded-lg border-outline-variant focus:border-secondary focus:ring-1 focus:ring-secondary py-2.5 text-body-main" placeholder="Ex: Bobina" type="text"/>
-                                        </div>
-                                        <div class="space-y-2">
-                                            <label class="text-label-sm font-label-sm text-on-surface-variant">Descrição</label>
-                                            <textarea class="w-full rounded-lg border-outline-variant focus:border-secondary focus:ring-1 focus:ring-secondary py-2.5 text-body-main" name="descricao" placeholder="Ex: Máquina de usinagem"></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>             
-            <br>
-            <br>
+                <div class="overflow-x-auto rounded-xl border border-outline-variant">
 
+                    <table class="min-w-full divide-y divide-outline-variant">
 
-                    <h3 class="font-h1-display text-h1-display text-primary">Sensores</h3>
-
-                    <a href="index.php?acao=form-sensor"class="w-full md:w-auto h-14 px-6 bg-primary-container hover:bg-primary text-white rounded-lg 
-                        items-center justify-center transition-all active:scale-[0.98] text-body-main font-medium">Cadastrar Sensor</a>
-                        
-                    <br><br>
-
-                    <?php if(!empty($_SESSION['sensores'])): ?>
-
-                        <table border="1" cellpadding="10">
+                        <!-- Cabeçalho -->
+                        <thead class="bg-surface-container-low">
 
                             <tr>
-                                <th>Modelo</th>
-                                <th>Tipo</th>
-                                <th>Alerta</th>
-                                <th>Crítico</th>
-                                <th>Ação</th>
+
+                                <th class="px-6 py-4 text-left text-label-sm text-on-surface-variant font-semibold">
+                                    Modelo
+                                </th>
+
+                                <th class="px-6 py-4 text-left text-label-sm text-on-surface-variant font-semibold">
+                                    Tipo
+                                </th>
+
+                                <th class="px-6 py-4 text-left text-label-sm text-on-surface-variant font-semibold">
+                                    Alerta
+                                </th>
+
+                                <th class="px-6 py-4 text-left text-label-sm text-on-surface-variant font-semibold">
+                                    Crítico
+                                </th>
+
+                                <th class="px-6 py-4 text-right text-label-sm text-on-surface-variant font-semibold">
+                                    Ações
+                                </th>
+
                             </tr>
+
+                        </thead>
+
+                        <!-- Corpo -->
+                        <tbody class="divide-y divide-outline-variant bg-white">
 
                             <?php foreach($_SESSION['sensores'] as $index => $sensor): ?>
 
-                                <tr>
+                                <tr class="hover:bg-surface-container-low transition-colors">
 
-                                    <td>
+                                    <td class="px-6 py-4 font-medium text-on-background">
                                         <?= $sensor['modelo'] ?>
                                     </td>
 
-                                    <td>
+                                    <td class="px-6 py-4 text-on-surface-variant">
                                         <?= ucfirst($sensor['tipo']) ?>
                                     </td>
 
-                                    <td>
+                                    <td class="px-6 py-4 text-on-surface-variant">
                                         <?= $sensor['limite_alerta'] ?>
                                     </td>
 
-                                    <td>
-                                        <?= $sensor['limite_critico'] ?>
+                                    <td class="px-6 py-4 text-on-surface-variant">
+                                        <?= $sensor['limite_critico'] ?? '-' ?>
                                     </td>
 
-                                    <td>
+                                    <td class="px-6 py-4 text-right">
 
-                                        <a href="index.php?acao=remover-sensor&index=<?= $index ?>">
+                                        <a
+                                            href="index.php?acao=remover-sensor&index=<?= $index ?>"
+                                            class="inline-flex items-center gap-1 text-error hover:underline font-medium"
+                                        >
+                                            <span class="material-symbols-outlined text-base">
+                                                delete
+                                            </span>
+
                                             Remover
                                         </a>
 
@@ -269,17 +369,65 @@
 
                             <?php endforeach; ?>
 
-                        </table>
+                        </tbody>
 
-                    <?php endif; ?>
+                    </table>
 
-                <a href="index.php?acao=cadastrar-maquina">
-                    <button class="bg-primary-container hover:bg-primary text-white rounded-lg flex items-center justify-center gap-2 transition-all active:scale-95 px-6 py-3 font-bold shadow-md">
-                        <span class="material-symbols-outlined">add</span>
-                        Cadastrar Máquina
-                    </button>
-                </a>
-        </main>
+                </div>
+
+            <?php else: ?>
+
+                <!-- Estado vazio -->
+                <div class="border border-dashed border-outline-variant rounded-xl p-10 text-center">
+
+                    <span class="material-symbols-outlined text-5xl text-on-surface-variant mb-3">
+                        sensors_off
+                    </span>
+
+                    <h4 class="text-lg font-semibold text-primary mb-2">
+                        Nenhum sensor cadastrado
+                    </h4>
+
+                    <p class="text-on-surface-variant">
+                        Adicione sensores para começar o monitoramento da máquina.
+                    </p>
+
+                </div>
+
+            <?php endif; ?>
+
+        </div>
+
+        <!-- =====================================
+             FOOTER AÇÕES
+        ====================================== -->
+        <div class="flex justify-end items-center gap-4 pt-2">
+
+            <!-- Cancelar -->
+            <a
+                href="index.php?acao=maquinas"
+                class="px-6 py-2.5 rounded-lg font-medium text-body-main text-on-surface-variant hover:bg-surface-container-high transition-colors"
+            >
+                Cancelar
+            </a>
+
+            <!-- Submit -->
+            <button
+                type="submit"
+                class="px-8 py-2.5 bg-secondary text-on-secondary rounded-lg font-bold text-body-main shadow-md hover:opacity-90 active:scale-95 transition-all flex items-center gap-2"
+            >
+                <span class="material-symbols-outlined text-lg">
+                    save
+                </span>
+
+                Cadastrar Máquina
+            </button>
+
+        </div>
+
+    </form>
+
+</main>
     </div>
 </form>
 
