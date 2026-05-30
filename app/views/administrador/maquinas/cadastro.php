@@ -2,6 +2,7 @@
 <html lang="pt-br">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="./assets/img/logo-icone.png">
 <title>SIGMAR - Máquinas</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script src="assets/js/cep.js"></script>

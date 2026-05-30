@@ -13,6 +13,7 @@ require_once __DIR__ . '/../../../models/Maquina.php';
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="./assets/img/logo-icone.png">
 
     <title>SIGMAR - Detalhes da Máquina</title>
 
