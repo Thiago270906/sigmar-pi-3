@@ -271,7 +271,7 @@ require_once __DIR__ . '/../../../models/ordemManutencao.php';
 
                     <div>
                         <p class="text-sm text-gray-500">
-                            Concluidas(Mês)
+                            Concluidas
                         </p>
 
                         <h3 class="text-4xl font-bold text-primary mt-1">
